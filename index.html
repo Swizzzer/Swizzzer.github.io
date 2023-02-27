@@ -112,113 +112,7 @@
                       <div class="a-content-text">
                         
                         	<h3><a id="%E5%AF%B9%E8%B1%A1%E4%B8%8E%E5%AF%B9%E8%B1%A1%E5%8F%98%E9%87%8F" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>对象与对象变量</h3>
-<p>要想使用对象，就必领首先构造对象，并指定其初始状态。然后，对对象应用方法.Java中使用构造器构造新的实例.构造器的名称应与类名相同.例如,Date类构造器的名称为Date.要构造一个Date对象,需要在构造器前面加上new操作符,如下:</p>
-<pre><code class="language-Java">new Date()
-</code></pre>
-<p>如果希望构造的对象可以多次使用,那么需要把构造的对象储存在一个<u>对象变量</u>里.</p>
-<pre><code class="language-Java">Date birthday=new Date();
-</code></pre>
-<p>一个对象变量并没有实际包含一个对象而仅仅是引用一个对象.因此,在使用对象变量之前必须初始化对象变量.可以为一个对象变量构造一个新对象,也可以引用一个已经存在的对象.例如</p>
-<pre><code class="language-Java">    Date birthday=new Date();
-    Date deadline;
-    deadline=birthday;
-</code></pre>
-<p>或者</p>
-<pre><code class="language-Java">    Date birthday=new Date();
-    Date deadline;
-    deadline=new Date();
-</code></pre>
-<h3><a id="%E7%B1%BB%E7%9A%84%E5%A3%B0%E6%98%8E" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>类的声明</h3>
-<p>类的声明的格式如下:</p>
-<pre><code class="language-Java">[类修饰符] class 类名
-{
-    成员变量的声明;// 描述属性
-    成员方法的声明;// 描述功能
-}
-</code></pre>
-<p>一个简单的类的例子如下:</p>
-<pre><code class="language-Java">public class Student{
-    private String name;//姓名属性，私有
-    private int age;//年龄属性，私有
-    private int score;//学分属性，私有
-    /**
-     *构造函数(构造器)，读取姓名和年龄属性
-     */
-    public Student(String name,int age){
-         this.name = name;
-         this.age = age;
-    }
-    /**
-     *定义一个学习方法。每学习一次学分加1
-     */
-    public void study(){
-        score++;
-        System.out.println(name+&quot;正在学习中，学分是&quot;+score);
-    }
-}
-</code></pre>
-<p>构造器不写返回数据类型.构造器总是伴随着new操作符的执行被调用,因此不能对一个已经存在的对象调用构造器来达到重新设置实例域的目的.例如,使用</p>
-<pre><code class="language-Java"> Student Kunihiro=new Student(&quot;Kunihiro Hane&quot;,28);
-</code></pre>
-<p>创建实例后,执行以下语句将产生编译错误</p>
-<pre><code class="language-Java">Kunihiro.Student(&quot;Minoru&quot;,30);
-</code></pre>
-</br>
-<p><font size=4,font color=pink>构造器的注意事项</font></p>
-<ul>
-<li>构造器与类同名</li>
-<li>每个类可以有一个以上的构造器</li>
-<li>构造器可以有0个、1个或多个参数</li>
-<li>构造器没有返回值</li>
-<li>构造器总是伴随着new操作一起调用</li>
-</ul>
-</br>
-<p>当参数名和属性名相同的时候，Java会采用就近原则优先使用参数；如果要区分开来，那么可以使用this来区分，加上this.的表示属性，否则表示参数。<br />
-例子:</p>
-<pre><code class="language-Java">public class Student{
-    private String name;//姓名属性，私有
-    private int age;//年龄属性，私有
-    private int score;//学分属性，私有
-    /**
-     *构造函数，读取姓名和年龄属性
-     */
-    public Student(String name,int age){
-         this.name = name;
-         this.age = age;
-         System.out.println(&quot;有参数的构造方法&quot;);
-    }
-    /**
-     *构造方法的重载
-     */
-    public Student(){
-         System.out.println(&quot;没有参数的构造方法&quot;);
-    }
-    /**
-     *定义一个学习方法。每学习一次学分加1
-     */
-    public void study(){
-        score++;
-        System.out.println(name+&quot;正在学习中，学分是&quot;+score);
-    }
-    public void study(String book){
-        System.out.println(name+&quot;正在学习《&quot;+book+&quot;》中的内容&quot;);
-}
-}
-</code></pre>
-<h3><a id="%E5%AD%90%E7%B1%BB%E7%9A%84%E6%9E%84%E9%80%A0%E7%BB%A7%E6%89%BF" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>子类的构造-继承</h3>
-<p>Java使用关键字来实现继承.子类不能直接extends继承父类的构造方法,子类使用super语句继承父类的构造方法.</p>
-<h3><a id="%E7%B1%BB%E7%9A%84%E8%AE%BF%E9%97%AE%E5%9F%9F" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>类的访问域</h3>
-<ul>
-<li class="task-list-item"><input type="checkbox" disabled="" /> todo</li>
-</ul>
-<h3><a id="%E9%9D%99%E6%80%81%E6%88%90%E5%91%98" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>静态成员</h3>
-<p><u>在非静态成员方法中可以访问静态成员方法/属性,反正则不能.</u>即,static声明的方法不能访问非static的操作,非static声明的方法可以访问static声明的属性/方法.</p>
-<p><font color=pink>在下面两种情况下使用静态方法:</font></p>
-<ul>
-<li>一个方法不需要访问对象状态，其所需参数都是通过显式参数提供(例如:Math.pow).</li>
-<li>一个方法只需要访问类的静态域</li>
-</ul>
-<p>对数组静态赋初值时,必须在定义数组的同时就为数组元素分配空间并赋初值.</p>
+<p>要想使用对象，就必领首先构造对象，并指定其初始状态。然后，对对象应用方法.Java中使用构造器构造新的实例.构造器的名称应与类名相同.</p>
 
                         
                       </div>
@@ -226,7 +120,7 @@
                 </a>
                 <div class="read-more clearfix">
                   <div class="more-left left">
-                  
+                   <a href="16774846800615.html">Read more</a>&nbsp;&nbsp; 
                     <span class="date">2023/02/27</span>
                     <span>posted in&nbsp;</span> 
           				  
