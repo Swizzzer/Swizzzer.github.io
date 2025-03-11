@@ -19,28 +19,27 @@
   <meta name="author" content="Lambert Swizzer">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Rank 18th  又又又是印度佬的比赛，题目味道一如既往的咖喱。  你问我为什么要打？当然是因为前75有域名奖励啦！  因为exp什么的都在另一台设备上，这里就不一个个贴了，简单记录下思路吧。">
+    <meta name="description" content="听说TP&#x3D;Thu+Pku，但是题目质量有点名不副实...">
 <meta property="og:type" content="article">
-<meta property="og:title" content="2025-ApoorvCTF-Writeup">
-<meta property="og:url" content="https://eupho.me/9ad61849.html">
+<meta property="og:title" content="2025-TPCTF-Writeup">
+<meta property="og:url" content="https://eupho.me/828e6345.html">
 <meta property="og:site_name" content="Euphome">
-<meta property="og:description" content="Rank 18th  又又又是印度佬的比赛，题目味道一如既往的咖喱。  你问我为什么要打？当然是因为前75有域名奖励啦！  因为exp什么的都在另一台设备上，这里就不一个个贴了，简单记录下思路吧。">
+<meta property="og:description" content="听说TP&#x3D;Thu+Pku，但是题目质量有点名不副实...">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://eupho.me/assets/image-17.png">
-<meta property="og:image" content="https://eupho.me/assets/image-18.png">
-<meta property="article:published_time" content="2025-03-04T13:29:11.000Z">
-<meta property="article:modified_time" content="2025-03-04T20:00:45.755Z">
+<meta property="og:image" content="https://eupho.me/assets/image-19.png">
+<meta property="og:image" content="https://eupho.me/assets/image-20.png">
+<meta property="article:published_time" content="2025-03-11T09:37:54.000Z">
+<meta property="article:modified_time" content="2025-03-11T10:11:45.997Z">
 <meta property="article:author" content="Lambert Swizzer">
 <meta property="article:tag" content="CTF">
 <meta property="article:tag" content="Crypto">
-<meta property="article:tag" content="Misc">
 <meta property="article:tag" content="Reverse">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://eupho.me/assets/image-17.png">
+<meta name="twitter:image" content="https://eupho.me/assets/image-19.png">
   
   
   
-  <title>2025-ApoorvCTF-Writeup - Euphome</title>
+  <title>2025-TPCTF-Writeup - Euphome</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -210,7 +209,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="2025-ApoorvCTF-Writeup"></span>
+            <span id="subtitle" data-typed-text="2025-TPCTF-Writeup"></span>
           
         </div>
 
@@ -221,8 +220,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-03-04 21:29" pubdate>
-          2025年3月4日 晚上
+        <time datetime="2025-03-11 17:37" pubdate>
+          2025年3月11日 下午
         </time>
       </span>
     
@@ -233,7 +232,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.3k 字
+          2.2k 字
         
       </span>
     
@@ -244,7 +243,7 @@
         
         
         
-          3 分钟
+          4 分钟
         
       </span>
     
@@ -282,12 +281,12 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">2025-ApoorvCTF-Writeup</h1>
+            <h1 style="display: none">2025-TPCTF-Writeup</h1>
             
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2025年3月5日 凌晨
+                    本文最后更新于：2025年3月11日 晚上
                   
                 
               </p>
@@ -295,57 +294,49 @@
             
               <div class="markdown-body">
                 
-                <figure>
-<img src="../assets/image-17.png" srcset="/img/loading.gif" lazyload alt="Rank 18th" />
-<figcaption aria-hidden="true">Rank 18th</figcaption>
-</figure>
-<p>又又又是印度佬的比赛，题目味道一如既往的咖喱。</p>
-<blockquote>
-<p>你问我为什么要打？当然是因为前75有域名奖励啦！</p>
-</blockquote>
-<p>因为exp什么的都在另一台设备上，这里就不一个个贴了，简单记录下思路吧。</p>
+                <p>听说TP=Thu+Pku，但是题目质量有点名不副实...</p>
 <span id="more"></span>
-<h1 id="misc-forensics-hardware">Misc &amp; Forensics &amp;
-Hardware</h1>
-<h2 id="ramen-lockdown">Ramen lockdown</h2>
-<p>Zip
-Store压缩的加密压缩包，里面有个png文件。png文件头能抠出来16个连续的已知字节，足够直接bkcrack明文攻击了。</p>
-<p><code>bkcrack -C recipe.zip -c secret_recipe.png -x 0 89504E470D0A1A0A0000000D49484452 -U chall_dec.zip ""</code></p>
-<p>等1min左右就出了。</p>
-<h2 id="the-cursed-console---呪われたカセット">*The Cursed Console -
-呪われたカセット</h2>
-<p>这题是队友<a target="_blank" rel="noopener" href="https://oldkingok.cc"><span class="citation"
-data-cites="oldkingOK">@oldkingOK</span></a>出的，一血，也是全场唯一一解。我用VirusTotal检查了一下nes文件，从first
-submission日期可以确定问题不在于此，所以只需要看分发的emulator。</p>
-<p>IDA看一眼字符串找到对应的<a
-target="_blank" rel="noopener" href="https://github.com/amhndu/SimpleNES">项目</a>，跟队友讨论了一下觉得可以拖一个Action里的二进制出来bindiff，这样会方便逆向一点。</p>
-<p>按队友的说法最后是在<code>sn::PictureBus::read</code>里找到的神秘字符串，异或解密后包上flag格式就对了：</p>
-<figure>
-<img src="../assets/image-18.png" srcset="/img/loading.gif" lazyload alt="magic!" />
-<figcaption aria-hidden="true">magic!</figcaption>
-</figure>
-<p>主办方最初分发的附件是动态链接的并且链接的libsfml版本很低，为了跑起来这玩意儿，<a
-target="_blank" rel="noopener" href="https://oldkingok.cc"><span class="citation"
-data-cites="oldkingOK">@oldkingOK</span></a>整了点灵车手段才搞定<del>估计大部分人都没有相应的环境直接运行吧</del>，我猜在这儿卡住了不少人。</p>
-<p>本来以为是跟GeekGame 2025里mario那题类似的东西，结果判若云泥...</p>
-<h2 id="ghosted-on-the-14th">Ghosted on the 14th</h2>
-<p>流量包里俩人的聊天透露了个IP地址，还说这上面的blog被删除了。结合题面暗示的日期，拿去Wayback
-Machine查查看就能找到被删除的页面，检查源代码看到一串base64,解码即得。</p>
-<p>一个坑点是Wayback
-Machine不能直接用IP搜索，得加个<code>http://</code>前缀，不然完全找不到正确答案。</p>
-<h2 id="petah-hunt">Petah Hunt</h2>
-<p>图片提示用户名为<code>buffedpetah</code>，DuckDuckGo直接搜到对应的GitHub用户。稍微看看这人(人?)的repo就能发现<a
-target="_blank" rel="noopener" href="https://github.com/buffedpetah/freakQuest">问题</a></p>
-<p>结合代码和数值可以猜到<code>project.obj</code>里的数据前两列是双音多频，可以对应到按键。最后一列虽然不知道是在干嘛，但是可以注意到有<code>&#123;行数&#125;-&gt;&#123;行数*100&#125;</code>这两个集合之间的双射，所以按第三列数字的升序排列一下数据，然后提取按键，可以看出来是个英文9键输入法，再转换一下就是flag。</p>
-<h2 id="broken-tooth">Broken Tooth</h2>
-<p>RTP传输的音频，Wireshark直接就能从里面播放出音频，不过经过了很明显的慢放和降调。+6个半音&amp;1.15倍速后拿给队友听了听，一耳朵认出来是Billie
-Eilish的<code>Birds of a Feather</code>。</p>
 <h1 id="crypto">Crypto</h1>
-<p>开胃小菜都算不上，一个ECB逐分组字节爆破，一个misc(俩图按像素Add就有flag)，一个MT19937(还是直接照抄的<a
-target="_blank" rel="noopener" href="https://stackered.com/blog/python-random-prediction/">这个</a>)，一个MD5长度扩展攻击，还有一个更是直接按D-S-D-S走迷宫就拿下了(虽然后来好像把这个bug给修了)</p>
+<h2 id="randomized-random">randomized random</h2>
 <blockquote>
-<p>一坨</p>
+<p>chall.py</p>
 </blockquote>
+<figure class="highlight python"><i class="iconfont icon-github-fill" type="button" data-toggle="collapse" data-target="#collapse-wgzzx1m84c0ios"></i><span>python</span><div class="collapse show" id="collapse-wgzzx1m84c0ios"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># FROM python:3</span><br><span class="hljs-keyword">import</span> random<br><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;flag.txt&quot;</span>,<span class="hljs-string">&quot;rb&quot;</span>) <span class="hljs-keyword">as</span> f:<br>    flag=f.read()<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">2</span>**<span class="hljs-number">64</span>):<br>    <span class="hljs-built_in">print</span>(random.getrandbits(<span class="hljs-number">32</span>)+flag[random.getrandbits(<span class="hljs-number">32</span>)%<span class="hljs-built_in">len</span>(flag)])<br>    <span class="hljs-built_in">input</span>()<br></code></pre></td></tr></table></div></figure>
+<p>一眼MT19937,拿到足够的bit恢复初始状态就行。抄<a
+target="_blank" rel="noopener" href="https://huangx607087.online/2021/07/10/Explore-MT19937/">huangx607087师傅之前的exp</a>直接就出了。我这边是每轮交互取高8位，交互5000轮左右可以构造出一个满秩矩阵。后面的求解过程，在M4
+Pro上大概需要3min，使用内存11G左右。</p>
+<p>不过，既然MT19937在GF(2)下是线性的，我猜用maple佬的<a
+target="_blank" rel="noopener" href="https://github.com/maple3142/gf2bv">gf2bv</a>去解大概也是可以的？挖个坑，过几天试试看。</p>
+<h1 id="reverse">Reverse</h1>
+<h2 id="stone-game">stone-game</h2>
+<p>MacOS的可执行文件(还好我是Mac)，直接die检查看不出是PyInstaller打包，但是拖到BinaryNinja/直接执行，就会发现这是个打包后的可执行文件。</p>
+<p>pyinstxtractor解包后拿去PyLingual反编译，能拿到stone_game.pyc的反编译结果，但是game_logic.pyc没法成功反编译。</p>
+<p>总之先nc连接到题目：</p>
+<figure>
+<img src="../assets/image-19.png" srcset="/img/loading.gif" lazyload alt="你就猜吧" />
+<figcaption aria-hidden="true">你就猜吧</figcaption>
+</figure>
+<p>直接上手玩很容易触发<code>"Invalid move! Remember you cannot form cycles."</code>，考虑到题目的7个Segment，猜测可能是7段数码管(连我都佩服我的脑洞)——每次取stone时，每段上的stone数目如果为正数则相当于对应的一段数码管亮起，并且不允许亮起的数码管形成圈。</p>
+<p>Rev-&gt;Misc，写个脚本陪AI玩玩，发现AI好像每次只会取走1个石头(or
+not？反正很笨就是了)，那就直接一把梭吧。</p>
+<blockquote>
+<p>exp.py</p>
+</blockquote>
+<figure class="highlight python"><i class="iconfont icon-github-fill" type="button" data-toggle="collapse" data-target="#collapse-b9mmrtm84c0ios"></i><span>python</span><div class="collapse show" id="collapse-b9mmrtm84c0ios"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *<br><span class="hljs-keyword">from</span> tqdm <span class="hljs-keyword">import</span> trange<br>conn = remote(<span class="hljs-string">&#x27;1.95.128.179&#x27;</span>, <span class="hljs-string">&#x27;3316&#x27;</span>)<br>log.level=<span class="hljs-string">&#x27;debug&#x27;</span><br>conn.recvuntil(<span class="hljs-string">b&quot;Press Enter to start...&quot;</span>)<br>conn.sendline()<br><span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> trange(<span class="hljs-number">100</span>):<br>    conn.recvuntil(<span class="hljs-string">b&quot;Current stone count:\n&quot;</span>)<br>    res = []<br>    <span class="hljs-keyword">for</span> <span class="hljs-built_in">round</span> <span class="hljs-keyword">in</span> trange(<span class="hljs-number">7</span>):<br>        res.append(<span class="hljs-built_in">int</span>((conn.recvline().strip().split(<span class="hljs-string">b&quot; &quot;</span>)[<span class="hljs-number">2</span>]).decode()))<br>    <span class="hljs-built_in">print</span>(res)<br>    ans = <span class="hljs-built_in">str</span>(res[<span class="hljs-number">0</span>])+<span class="hljs-string">&quot; 0 0 &quot;</span>+<span class="hljs-built_in">str</span>(res[<span class="hljs-number">3</span>])+<span class="hljs-string">&quot; &quot;</span>+<span class="hljs-built_in">str</span>(res[<span class="hljs-number">4</span>])+<span class="hljs-string">&quot; &quot;</span>+<span class="hljs-built_in">str</span>(res[<span class="hljs-number">5</span>])+<span class="hljs-string">&quot; &quot;</span>+<span class="hljs-built_in">str</span>(res[<span class="hljs-number">6</span>])<br>    conn.sendline(ans.encode())<br>    conn.recvuntil(<span class="hljs-string">b&quot;Current player: AI&quot;</span>)<br>    conn.recvuntil(<span class="hljs-string">b&quot;Current stone count:\n&quot;</span>)<br>    res = []<br>    <span class="hljs-keyword">for</span> <span class="hljs-built_in">round</span> <span class="hljs-keyword">in</span> trange(<span class="hljs-number">7</span>):<br>        res.append(<span class="hljs-built_in">int</span>((conn.recvline().strip().split(<span class="hljs-string">b&quot; &quot;</span>)[<span class="hljs-number">2</span>]).decode()))<br><br>    <span class="hljs-built_in">print</span>(res)<br>    ans = <span class="hljs-string">&quot;0 &quot;</span>+<span class="hljs-built_in">str</span>(res[<span class="hljs-number">1</span>])+<span class="hljs-string">&quot; &quot;</span>+<span class="hljs-built_in">str</span>(res[<span class="hljs-number">2</span>])+<span class="hljs-string">&quot; &quot;</span>+<span class="hljs-string">&quot;0 0 0 0&quot;</span><br>    conn.sendline(ans.encode())<br>    conn.recvuntil(<span class="hljs-string">b&quot;Current player: AI&quot;</span>)<br><br>conn.interactive()<br></code></pre></td></tr></table></div></figure>
+<h2 id="portable">portable</h2>
+<p>原程序用的是<a
+target="_blank" rel="noopener" href="https://github.com/jart/cosmopolitan">这个项目</a>编译而成，但是知道这点也没什么用:P</p>
+<p>总之这个程序在Linux上能跑其实是有个ape
+loader把自身按某种妙妙操作处理后map到内存里然后再跑的。队友尝试用radare2去dump，不过也没得到什么有价值的玩意儿。</p>
+<p>直接静态分析的话，IDA根本看不到有些字符串的交叉引用，动调又隔了个loader，怎么想都不像是一个300+分数的题目应有的难度，所以我还是选择BinaryNinja嗯看：</p>
+<figure>
+<img src="../assets/image-20.png" srcset="/img/loading.gif" lazyload alt="总归是能盯帧出来的" />
+<figcaption aria-hidden="true">总归是能盯帧出来的</figcaption>
+</figure>
+<p>嗯，找到字符串后直接就能盯帧出来这一行，循环xor一下就出了。</p>
+<p>最坑的是data_46b2c0的最后有几个0x00,前面有个对flag长度的检查，需要长度为72,data_46b2c0的长度也是72,按理来讲0x00也应该在解密时算进去；但平台的flag是不包括这一串的😓</p>
+<p>把正确flag喂给二进制文件也不会提示正确，不确定是不是kitty
+terminal对字体支持的问题。</p>
 
                 
               </div>
@@ -383,8 +374,6 @@ target="_blank" rel="noopener" href="https://stackered.com/blog/python-random-pr
       
         <a href="/tags/Crypto/">#Crypto</a>
       
-        <a href="/tags/Misc/">#Misc</a>
-      
         <a href="/tags/Reverse/">#Reverse</a>
       
     </div>
@@ -397,8 +386,8 @@ target="_blank" rel="noopener" href="https://stackered.com/blog/python-random-pr
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>2025-ApoorvCTF-Writeup</div>
-      <div>https://eupho.me/9ad61849.html</div>
+      <div>2025-TPCTF-Writeup</div>
+      <div>https://eupho.me/828e6345.html</div>
     </div>
     <div class="license-meta">
       
@@ -410,7 +399,7 @@ target="_blank" rel="noopener" href="https://stackered.com/blog/python-random-pr
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2025年3月4日</div>
+          <div>2025年3月11日</div>
         </div>
       
       
@@ -454,18 +443,12 @@ target="_blank" rel="noopener" href="https://stackered.com/blog/python-random-pr
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/828e6345.html" title="2025-TPCTF-Writeup">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">2025-TPCTF-Writeup</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/e1345c95.html" title="Isogeny概览">
-                        <span class="hidden-mobile">Isogeny概览</span>
+                      <a href="/9ad61849.html" title="2025-ApoorvCTF-Writeup">
+                        <span class="hidden-mobile">2025-ApoorvCTF-Writeup</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
