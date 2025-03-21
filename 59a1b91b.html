@@ -1,0 +1,832 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=dark>
+
+
+
+<head>
+  <meta name="google-site-verification" content="vfJ2GJW1_Q4AOrJXuD5IJvdntHtM2T5hXhBiq3pLXiw" />
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Lambert Swizzer">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前几天开坑说要用gf2bv试验一下，就趁着这个机会稍微研究一下MT19937吧。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MT19937">
+<meta property="og:url" content="https://eupho.me/59a1b91b.html">
+<meta property="og:site_name" content="Euphome">
+<meta property="og:description" content="前几天开坑说要用gf2bv试验一下，就趁着这个机会稍微研究一下MT19937吧。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://eupho.me/assets/image-21.png">
+<meta property="og:image" content="https://eupho.me/assets/image-22.png">
+<meta property="article:published_time" content="2025-03-21T08:43:14.000Z">
+<meta property="article:modified_time" content="2025-03-21T11:28:14.522Z">
+<meta property="article:author" content="Lambert Swizzer">
+<meta property="article:tag" content="Crypto">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://eupho.me/assets/image-21.png">
+  
+  
+  
+  <title>MT19937 - Euphome</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/mac.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"eupho.me","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":false,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Euphome</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="MT19937"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-03-21 16:43" pubdate>
+          2025年3月21日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          14 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">MT19937</h1>
+            
+              <p class="note note-info">
+                
+                  
+                    本文最后更新于：2025年3月21日 晚上
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <p>前几天<a
+href="https://eupho.me/828e6345.html">开坑</a>说要用gf2bv试验一下，就趁着这个机会稍微研究一下MT19937吧。</p>
+<span id="more"></span>
+<h2 id="avant-填坑">Avant-填坑</h2>
+<p><a
+target="_blank" rel="noopener" href="https://github.com/maple3142/gf2bv">gf2bv</a>其实是maple佬写出来求解GF(2)上线性方程组的。恰好MT19937在GF(2)上关于初始状态也是线性递推，所以拿来搞MT也不是不行。</p>
+<p>跟maple给的例子对拍了一下，这个板子主要要改的就是</p>
+<figure class="highlight python"><i class="iconfont icon-github-fill" type="button" data-toggle="collapse" data-target="#collapse-oqtqrlm8ip6ews"></i><span>python</span><div class="collapse show" id="collapse-oqtqrlm8ip6ews"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">for</span> o <span class="hljs-keyword">in</span> out:<br>        zeros.append(rng.getrandbits(bs) ^ <span class="hljs-built_in">int</span>(o))<br>        rng.getrandbits(<span class="hljs-number">32</span>)<br></code></pre></td></tr></table></div></figure>
+<p>这里，zeros.append()的时候需要注意和题目中获取randbits的方式一致。本题中是每两个getrandbits(32)获取一个，所以循环里也是这么写的。其他地方几乎不用动。</p>
+<blockquote>
+<p>exp</p>
+</blockquote>
+<figure class="highlight python"><i class="iconfont icon-github-fill" type="button" data-toggle="collapse" data-target="#collapse-utt3iam8ip6ews"></i><span>python</span><div class="collapse show" id="collapse-utt3iam8ip6ews"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> tqdm <span class="hljs-keyword">import</span> trange<br><span class="hljs-keyword">from</span> gf2bv <span class="hljs-keyword">import</span> LinearSystem<br><span class="hljs-keyword">from</span> gf2bv.crypto.mt <span class="hljs-keyword">import</span> MT19937<br><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">mt19937</span>(<span class="hljs-params">bs, out</span>):<br>    lin = LinearSystem([<span class="hljs-number">32</span>] * <span class="hljs-number">624</span>)<br>    mt = lin.gens()<br>    rng = MT19937(mt)<br>    zeros = []<br>    <span class="hljs-keyword">for</span> o <span class="hljs-keyword">in</span> out:<br>        zeros.append(rng.getrandbits(bs) ^ <span class="hljs-built_in">int</span>(o))<br>        rng.getrandbits(<span class="hljs-number">32</span>)<br>    zeros.append(mt[<span class="hljs-number">0</span>] ^ <span class="hljs-built_in">int</span>(<span class="hljs-number">0x80000000</span>))<br>    sol = lin.solve_one(zeros)<br>    rng = MT19937(sol)<br>    pyrand = rng.to_python_random()<br>    <span class="hljs-keyword">return</span> pyrand<br>conn = remote(<span class="hljs-string">&#x27;127.0.0.1&#x27;</span>, <span class="hljs-number">1337</span>)<br>out = []<br>nums = <span class="hljs-number">5000</span><br><span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> trange(nums):<br>    out.append(<span class="hljs-built_in">int</span>(conn.recvline()) &gt;&gt; <span class="hljs-number">24</span>)<br>    conn.sendline(<span class="hljs-string">b&#x27;&#x27;</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">len</span>(out))<br>RNG = mt19937(<span class="hljs-number">8</span>, out)<br>prev = [RNG.getrandbits(<span class="hljs-number">32</span>) <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(nums * <span class="hljs-number">2</span>)]<br>predict = []<br>check = []<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> trange(<span class="hljs-number">32</span>):<br>    predict.append(RNG.getrandbits(<span class="hljs-number">32</span>)&gt;&gt;<span class="hljs-number">16</span>)<br>    RNG.getrandbits(<span class="hljs-number">32</span>)<br>    check.append(<span class="hljs-built_in">int</span>(conn.recvline())&gt;&gt;<span class="hljs-number">16</span>)<br>    conn.sendline(<span class="hljs-string">b&#x27;&#x27;</span>)<br><br><span class="hljs-built_in">print</span>(predict==check)<br></code></pre></td></tr></table></div></figure>
+<figure>
+<img src="../assets/image-21.png" srcset="/img/loading.gif" lazyload alt="大佬写的工具确实是快" />
+<figcaption aria-hidden="true">大佬写的工具确实是快</figcaption>
+</figure>
+<p>本地生成数据测了一下，比之前手搓<del>抄的</del>脚本快了好多🥹...</p>
+<h2 id="正片">正片</h2>
+<p>Python的MT19937中，getrandbits()是按照32bit为单位产生的。也就是说：</p>
+<ul>
+<li>如果getrandbits(0)，会直接返回0，不会调用随机数生成</li>
+<li>如果getrandbits(32k)，那么会连续产生k个32bit的数并拼接起来</li>
+<li>如果getrandbits(t)，<span
+class="math inline">\(0&lt;t&lt;32\)</span>，那么会先产生一个32bit的数字，然后截取其高t位作为本次随机数</li>
+</ul>
+<p>在生成随机数前，MT19937会初始化一个state，state由624个32bit的数字组成。往后所有getrandbits产生的数字，都是关于这个初始state模2下线性的。这里的<strong>线性</strong>，意思是把初试state的二进制展开记作向量<span
+class="math inline">\(\vec{v}\)</span>，那么对此后的getrandbits()产生的任意位置的bit，都存在一个向量<span
+class="math inline">\(\vec{t}\)</span>使得<span
+class="math inline">\(\vec{t}*\vec{s}=bit\)</span>。</p>
+<p>所以实际上我们只要获取输出中任意不同位置的19968个bit，就能通过构造矩阵解方程的方法拿到初始状态(假定矩阵满秩)：</p>
+<p><span class="math display">\[\vec{s}\cdot T = \vec{b}\]</span></p>
+<p>这里的<span
+class="math inline">\(\vec{b}\)</span>题目中就能直接拿到。至于<span
+class="math inline">\(T\)</span>，也可以通过设<span
+class="math inline">\(\vec{s}\)</span>为只有一个分量为1的向量的方式，按黑盒调用的想法逐行取出，跟很久以前做过的<a
+href="https://eupho.me/1cbd8855.html#moonjump">破解Xorshiro256**的题目</a>是一样的想法。</p>
+<blockquote>
+<p>exp copied from <a
+target="_blank" rel="noopener" href="https://huangx607087.online/2021/07/10/Explore-MT19937/#0x03-%E7%BB%99%E5%87%BA%E4%BB%BB%E6%84%8F19937%E4%B8%AAbit-upd-2025-01-22">huangx607087</a></p>
+</blockquote>
+<figure class="highlight python"><i class="iconfont icon-github-fill" type="button" data-toggle="collapse" data-target="#collapse-o1lxenm8ip6ews"></i><span>python</span><div class="collapse show" id="collapse-o1lxenm8ip6ews"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><code class="hljs python">Dall=<span class="hljs-built_in">list</span>(<span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>,<span class="hljs-built_in">open</span>(<span class="hljs-string">&#x27;data3.txt&#x27;</span>,<span class="hljs-string">&#x27;r&#x27;</span>).readlines()))<br><span class="hljs-keyword">from</span> Crypto.Util.number <span class="hljs-keyword">import</span> *<br><span class="hljs-keyword">from</span> random <span class="hljs-keyword">import</span> *<br><span class="hljs-keyword">from</span> tqdm <span class="hljs-keyword">import</span> *<br>n=<span class="hljs-number">1250</span><br>D=Dall[:n]<br>rng=Random()<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">getRows</span>(<span class="hljs-params">rng</span>):<br>    <span class="hljs-comment">#这一部分根据题目实际编写，必须和题目实际比特获取顺序和方式完全一致，且确保比特数大于19937，并且请注意zfill。</span><br>    row=[]<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n):<br>        row+=<span class="hljs-built_in">list</span>(<span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, (<span class="hljs-built_in">bin</span>(rng.getrandbits(<span class="hljs-number">16</span>))[<span class="hljs-number">2</span>:].zfill(<span class="hljs-number">16</span>))))<br>    <span class="hljs-keyword">return</span> row<br>M=[]<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> tqdm_notebook(<span class="hljs-built_in">range</span>(<span class="hljs-number">19968</span>)):<span class="hljs-comment">#这一部分为固定套路，具体原因已经写在注释中了</span><br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    referennce:</span><br><span class="hljs-string">    糖醋小鸡块 2025/1/21 20:26:51</span><br><span class="hljs-string">    这部分代码相当于取了一组线性基</span><br><span class="hljs-string"></span><br><span class="hljs-string">    糖醋小鸡块 2025/1/21 20:26:56</span><br><span class="hljs-string">    因为mt19937是线性的</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    state = [<span class="hljs-number">0</span>]*<span class="hljs-number">624</span><br>    temp = <span class="hljs-string">&quot;0&quot;</span>*i + <span class="hljs-string">&quot;1&quot;</span>*<span class="hljs-number">1</span> + <span class="hljs-string">&quot;0&quot;</span>*(<span class="hljs-number">19968</span>-<span class="hljs-number">1</span>-i)<br>    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">624</span>):<br>        state[j] = <span class="hljs-built_in">int</span>(temp[<span class="hljs-number">32</span>*j:<span class="hljs-number">32</span>*j+<span class="hljs-number">32</span>],<span class="hljs-number">2</span>)<br>    rng.setstate((<span class="hljs-number">3</span>,<span class="hljs-built_in">tuple</span>(state+[<span class="hljs-number">624</span>]),<span class="hljs-literal">None</span>)) <span class="hljs-comment">#这个setstate也是固定格式，已于2025.1.21测试</span><br>    M.append(getRows(rng))<br>M=Matrix(GF(<span class="hljs-number">2</span>),M)<br>y=[]<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n):<br>    y+=<span class="hljs-built_in">list</span>(<span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, (<span class="hljs-built_in">bin</span>(D[i])[<span class="hljs-number">2</span>:].zfill(<span class="hljs-number">16</span>))))<br>y=vector(GF(<span class="hljs-number">2</span>),y)<br>s=M.solve_left(y)<br><span class="hljs-comment">#print(s)</span><br>G=[]<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">624</span>):<br>    C=<span class="hljs-number">0</span><br>    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">32</span>):<br>        C&lt;&lt;=<span class="hljs-number">1</span><br>        C|=<span class="hljs-built_in">int</span>(s[<span class="hljs-number">32</span>*i+j])<br>    G.append(C)<br><span class="hljs-keyword">import</span> random<br>RNG1 = random.Random()<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">624</span>):<br>    G[i]=<span class="hljs-built_in">int</span>(G[i])<br>RNG1.setstate((<span class="hljs-built_in">int</span>(<span class="hljs-number">3</span>),<span class="hljs-built_in">tuple</span>(G+[<span class="hljs-built_in">int</span>(<span class="hljs-number">624</span>)]),<span class="hljs-literal">None</span>))<br><br><span class="hljs-built_in">print</span>([RNG1.getrandbits(<span class="hljs-number">16</span>) <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">75</span>)])<br><span class="hljs-built_in">print</span>(D[:<span class="hljs-number">75</span>])<br></code></pre></td></tr></table></div></figure>
+<h2 id="番外">番外</h2>
+<h3 id="seed-recovery">Seed Recovery</h3>
+<p>有篇<a
+target="_blank" rel="noopener" href="https://stackered.com/blog/python-random-prediction/#seed-recovery-from-few-outputs">博文</a>详细地讲解了MT19937的工作原理。文中特别提到，如果Python的MT19937是32bit整数的seed，那么只需要一轮624个输出中特定位置的6个即可恢复seed。当然恢复出的seed有两种可能，实际使用时还得做一些额外的判断。</p>
+<h4 id="apoorvctf">2025 ApoorvCTF</h4>
+<blockquote>
+<p>task</p>
+</blockquote>
+<figure class="highlight python"><i class="iconfont icon-github-fill" type="button" data-toggle="collapse" data-target="#collapse-usnx1qm8ip6ews"></i><span>python</span><div class="collapse show" id="collapse-usnx1qm8ip6ews"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> Crypto.Util.number <span class="hljs-keyword">import</span> getPrime, bytes_to_long, long_to_bytes<br><span class="hljs-keyword">import</span> random<br><br>flag = <span class="hljs-string">b&quot;apoorvctf&#123;fake_flag&#125;&quot;</span><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">secret</span>(<span class="hljs-params">p</span>):<br>    prime_bytes = p.to_bytes(<span class="hljs-number">64</span>, byteorder=<span class="hljs-string">&#x27;big&#x27;</span>)  <br>    keys = [bytes_to_long(prime_bytes[i:i+<span class="hljs-number">4</span>]) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>, <span class="hljs-number">64</span>, <span class="hljs-number">4</span>)] <br>    enc_p = []<br>    <span class="hljs-keyword">for</span> key <span class="hljs-keyword">in</span> keys:<br>        tp = []<br>        random.seed(key)<br>        indexes = [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">227</span>, <span class="hljs-number">228</span>, <span class="hljs-number">229</span>]<br>        random_arr = [random.getrandbits(<span class="hljs-number">32</span>) <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">624</span>)] <br>        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> indexes:<br>            tp.append(random_arr[j])<br>        enc_p.append(tp) <br>    <span class="hljs-keyword">return</span> enc_p<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">encrypt</span>():<br>    p = getPrime(<span class="hljs-number">512</span>)<br>    q = getPrime(<span class="hljs-number">512</span>)<br>    n = p * q<br>    e = <span class="hljs-number">65537</span><br>    c = <span class="hljs-built_in">pow</span>(bytes_to_long(flag), e, n)<br>    trash = secret(p)  <br>    <span class="hljs-keyword">return</span> n, c, trash  <br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">decrypt</span>(<span class="hljs-params">n,p,c</span>):<br>    q = n//p<br>    <span class="hljs-keyword">if</span> p*q != n:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Invalid n&quot;</span>)<br>        <span class="hljs-keyword">return</span><br>    phi = (p-<span class="hljs-number">1</span>)*(q-<span class="hljs-number">1</span>)<br>    d = <span class="hljs-built_in">pow</span>(<span class="hljs-number">65537</span>,-<span class="hljs-number">1</span>,phi)<br>    <span class="hljs-keyword">return</span> long_to_bytes(<span class="hljs-built_in">pow</span>(c,d,n))<br><br>n, c, trash = encrypt() <br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;n:&quot;</span>, n)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;c:&quot;</span>, c)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;trash:&quot;</span>, trash)<br><span class="hljs-comment">#print(&quot;flag:&quot;, decrypt(n,p,c)) </span><br></code></pre></td></tr></table></div></figure>
+<p>这道题完全就是照搬上面那篇博文，直接抄就行。</p>
+<blockquote>
+<p>exp</p>
+</blockquote>
+<figure class="highlight python"><i class="iconfont icon-github-fill" type="button" data-toggle="collapse" data-target="#collapse-eucparm8ip6ews"></i><span>python</span><div class="collapse show" id="collapse-eucparm8ip6ews"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">recover_Kj_from_Ii</span>(<span class="hljs-params">Ii, Ii1, Ii2, i</span>):<br>    <span class="hljs-comment"># Ii =&gt; I[i]</span><br>    <span class="hljs-comment"># Ii1 =&gt; I[i-1]</span><br>    <span class="hljs-comment"># Ii2 =&gt; I[i-2]</span><br>    <span class="hljs-comment"># Ji =&gt; J[i]</span><br>    <span class="hljs-comment"># Ji1 =&gt; J[i-1]</span><br>    Ji = recover_Ji_from_Ii(Ii, Ii1, i)<br>    Ji1 = recover_Ji_from_Ii(Ii1, Ii2, i-<span class="hljs-number">1</span>)<br>    <span class="hljs-keyword">return</span> recover_kj_from_Ji(Ji, Ji1, i)<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">recover_Ji_from_Ii</span>(<span class="hljs-params">Ii, Ii1, i</span>):<br>    <span class="hljs-comment"># Ii =&gt; I[i]</span><br>    <span class="hljs-comment"># Ii1 =&gt; I[i-1]</span><br>    ji = (Ii + i) ^ ((Ii1 ^ (Ii1 &gt;&gt; <span class="hljs-number">30</span>)) * <span class="hljs-number">1566083941</span>)<br>    ji &amp;= <span class="hljs-number">0xffffffff</span><br>    <span class="hljs-comment"># return J[i]</span><br>    <span class="hljs-keyword">return</span> ji<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">init_genrand</span>(<span class="hljs-params">seed</span>):<br>        MT = [<span class="hljs-number">0</span>] * <span class="hljs-number">624</span><br>        MT[<span class="hljs-number">0</span>] = seed &amp; <span class="hljs-number">0xffffffff</span><br>        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, <span class="hljs-number">623</span>+<span class="hljs-number">1</span>): <span class="hljs-comment"># loop over each element</span><br>            MT[i] = ((<span class="hljs-number">0x6c078965</span> * (MT[i-<span class="hljs-number">1</span>] ^ (MT[i-<span class="hljs-number">1</span>] &gt;&gt; <span class="hljs-number">30</span>))) + i) &amp; <span class="hljs-number">0xffffffff</span><br>        <span class="hljs-keyword">return</span> MT<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">recover_kj_from_Ji</span>(<span class="hljs-params">ji, ji1, i</span>):<br>    <span class="hljs-comment"># ji =&gt; J[i]</span><br>    <span class="hljs-comment"># ji1 =&gt; J[i-1]</span><br>    const = init_genrand(<span class="hljs-number">19650218</span>)<br>    key = ji - (const[i] ^ ((ji1 ^ (ji1 &gt;&gt; <span class="hljs-number">30</span>))*<span class="hljs-number">1664525</span>))<br>    key &amp;= <span class="hljs-number">0xffffffff</span><br>    <span class="hljs-comment"># return K[j] + j</span><br>    <span class="hljs-keyword">return</span> key<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">unshiftRight</span>(<span class="hljs-params">x, shift</span>):<br>    res = x<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">32</span>):<br>        res = x ^ res &gt;&gt; shift<br>    <span class="hljs-keyword">return</span> res<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">unshiftLeft</span>(<span class="hljs-params">x, shift, mask</span>):<br>    res = x<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">32</span>):<br>        res = x ^ (res &lt;&lt; shift &amp; mask)<br>    <span class="hljs-keyword">return</span> res<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">untemper</span>(<span class="hljs-params">v</span>):<br>    v = unshiftRight(v, <span class="hljs-number">18</span>)<br>    v = unshiftLeft(v, <span class="hljs-number">15</span>, <span class="hljs-number">0xefc60000</span>)<br>    v = unshiftLeft(v, <span class="hljs-number">7</span>, <span class="hljs-number">0x9d2c5680</span>)<br>    v = unshiftRight(v, <span class="hljs-number">11</span>)<br>    <span class="hljs-keyword">return</span> v<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">invertlitep</span>(<span class="hljs-params">si, si227</span>):<br>    <span class="hljs-comment"># li[i] ^ li[i-227] == (((I[i] &amp; 0x80000000) | (I[i+1] &amp; 0x7FFFFFFF)) &gt;&gt; 1) ^ (0x9908b0df if I[i+1] &amp; 1 else 0)</span><br>    X = si ^ si227<br>    <span class="hljs-comment"># we know the LliB of I[i+1] because MliB of 0x9908b0df is set, we can see if the XOR has been applied</span><br>    mti1 = (X &amp; <span class="hljs-number">0x80000000</span>) &gt;&gt; <span class="hljs-number">31</span><br>    <span class="hljs-keyword">if</span> mti1:<br>        X ^= <span class="hljs-number">0x9908b0df</span><br>    <span class="hljs-comment"># undo shift right</span><br>    X &lt;&lt;= <span class="hljs-number">1</span><br>    <span class="hljs-comment"># now recover MliB of state I[i]</span><br>    mti = X &amp; <span class="hljs-number">0x80000000</span><br>    <span class="hljs-comment"># recover the rest of state I[i+1]</span><br>    mti1 += X &amp; <span class="hljs-number">0x7FFFFFFF</span><br>    <span class="hljs-keyword">return</span> mti, mti1<br><br><br><span class="hljs-keyword">import</span> random<br><span class="hljs-keyword">import</span> ast<br><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;out.txt&quot;</span>) <span class="hljs-keyword">as</span> f:<br>    n = ast.literal_eval(f.readline())<br>    c = ast.literal_eval(f.readline())<br>    trash = ast.literal_eval(f.readline())<br>    <span class="hljs-comment"># k = 1</span><br>    <span class="hljs-comment"># K = [i]</span><br>    <span class="hljs-keyword">for</span> li <span class="hljs-keyword">in</span> trash:<br>        S = [untemper(li[i]) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">6</span>)]<br><br>        I_227_, I_228 = invertlitep(S[<span class="hljs-number">3</span>], S[<span class="hljs-number">0</span>])<br>        I_228_, I_229 = invertlitep(S[<span class="hljs-number">4</span>], S[<span class="hljs-number">1</span>])<br>        I_229_, I_230 = invertlitep(S[<span class="hljs-number">5</span>], S[<span class="hljs-number">2</span>])<br><br>        I_228 += I_228_<br>        I_229 += I_229_<br><br>        <span class="hljs-comment"># two possibilities for I_230</span><br>        seed1 = recover_Kj_from_Ii(I_230, I_229, I_228, <span class="hljs-number">230</span>)<br>        seed2 = recover_Kj_from_Ii(I_230+<span class="hljs-number">0x80000000</span>, I_229, I_228, <span class="hljs-number">230</span>)<br>        <span class="hljs-comment"># only the MliB differs</span><br>        <span class="hljs-built_in">print</span>(seed1, seed2)<br><span class="hljs-keyword">from</span> Crypto.Util.number <span class="hljs-keyword">import</span> *<br>plist = [<span class="hljs-number">2233556749</span>,<span class="hljs-number">1332779457</span>,<span class="hljs-number">3663810718</span>,<span class="hljs-number">1146419848</span>,<span class="hljs-number">2960081222</span>,<span class="hljs-number">3483469796</span>,<span class="hljs-number">2128181600</span>,<span class="hljs-number">3346153247</span>,<span class="hljs-number">61541386</span>,<span class="hljs-number">1190096622</span>,<span class="hljs-number">362663341</span>,<span class="hljs-number">784549194</span>,<span class="hljs-number">3375914009</span>,<span class="hljs-number">2922819453</span>,<span class="hljs-number">2926167818</span>,<span class="hljs-number">2960726147</span>]<br>pp = <span class="hljs-string">b&quot;&quot;</span><br><span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> plist:<br>    <span class="hljs-keyword">assert</span> <span class="hljs-built_in">len</span>(long_to_bytes(x)) == <span class="hljs-number">4</span><br>    pp+=long_to_bytes(x)<br>isPrime(bytes_to_long(pp))<br><span class="hljs-built_in">print</span>(pp)<br>p = bytes_to_long(pp)<br>q = n//p<br>e=<span class="hljs-number">65537</span><br>d = inverse(e,(p-<span class="hljs-number">1</span>)*(q-<span class="hljs-number">1</span>))<br><span class="hljs-built_in">print</span>(long_to_bytes(<span class="hljs-built_in">pow</span>(c,d,n)))<br></code></pre></td></tr></table></div></figure>
+<h3 id="对异或封闭">对异或封闭</h3>
+<p>之前打本部的405杯的时候<a
+href="https://eupho.me/80b6c266.html#yamato">提过这个事情</a>，也就是多个MT19937的输出异或后等价于一个MT19937的输出。如果把所有MT19937的输出流看作一个集合，无非就是说这个集合的元素对二进制异或封闭而已，原因在那篇blog里也简要阐明了。其实在本篇的观点下更容易，因为异或就是GF(2)上的加法嘛，而线性映射<span
+class="math inline">\(f\)</span>显然满足<span
+class="math inline">\(f(x_1)+f(x_2)=f(x_1+x_2)\)</span></p>
+<p>做个实验:</p>
+<figure class="highlight python"><i class="iconfont icon-github-fill" type="button" data-toggle="collapse" data-target="#collapse-3z1un0m8ip6ews"></i><span>python</span><div class="collapse show" id="collapse-3z1un0m8ip6ews"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/sage</span><br><span class="hljs-keyword">from</span> Crypto.Util.number <span class="hljs-keyword">import</span> *<br><span class="hljs-keyword">from</span> random <span class="hljs-keyword">import</span> *<br><span class="hljs-keyword">from</span> tqdm <span class="hljs-keyword">import</span> *<br>D = []<br>n = <span class="hljs-number">624</span><br>stream1 = Random()<br>stream2 = Random()<br><span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> trange(<span class="hljs-number">624</span>):<br>    D.append(stream1.getrandbits(<span class="hljs-number">32</span>)^^stream2.getrandbits(<span class="hljs-number">32</span>))<br>rng=Random()<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">getRows</span>(<span class="hljs-params">rng</span>):<br>    row=[]<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n):<br>        row+=<span class="hljs-built_in">list</span>(<span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, (<span class="hljs-built_in">bin</span>(rng.getrandbits(<span class="hljs-number">32</span>))[<span class="hljs-number">2</span>:].zfill(<span class="hljs-number">32</span>))))<br>    <span class="hljs-keyword">return</span> row<br>M=[]<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> trange(<span class="hljs-number">19968</span>):<br>    state = [<span class="hljs-number">0</span>]*<span class="hljs-number">624</span><br>    temp = <span class="hljs-string">&quot;0&quot;</span>*i + <span class="hljs-string">&quot;1&quot;</span>*<span class="hljs-number">1</span> + <span class="hljs-string">&quot;0&quot;</span>*(<span class="hljs-number">19968</span>-<span class="hljs-number">1</span>-i)<br>    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">624</span>):<br>        state[j] = <span class="hljs-built_in">int</span>(temp[<span class="hljs-number">32</span>*j:<span class="hljs-number">32</span>*j+<span class="hljs-number">32</span>],<span class="hljs-number">2</span>)<br>    rng.setstate((<span class="hljs-number">3</span>,<span class="hljs-built_in">tuple</span>(state+[<span class="hljs-number">624</span>]),<span class="hljs-literal">None</span>))<br>    M.append(getRows(rng))<br>M=Matrix(GF(<span class="hljs-number">2</span>),M)<br>y=[]<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n):<br>    y+=<span class="hljs-built_in">list</span>(<span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, (<span class="hljs-built_in">bin</span>(D[i])[<span class="hljs-number">2</span>:].zfill(<span class="hljs-number">32</span>))))<br>y=vector(GF(<span class="hljs-number">2</span>),y)<br>s=M.solve_left(y)<br><span class="hljs-comment">#print(s)</span><br>G=[]<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">624</span>):<br>    C=<span class="hljs-number">0</span><br>    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">32</span>):<br>        C&lt;&lt;=<span class="hljs-number">1</span><br>        C|=<span class="hljs-built_in">int</span>(s[<span class="hljs-number">32</span>*i+j])<br>    G.append(C)<br><span class="hljs-keyword">import</span> random<br>RNG1 = random.Random()<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">624</span>):<br>    G[i]=<span class="hljs-built_in">int</span>(G[i])<br>RNG1.setstate((<span class="hljs-built_in">int</span>(<span class="hljs-number">3</span>),<span class="hljs-built_in">tuple</span>(G+[<span class="hljs-built_in">int</span>(<span class="hljs-number">624</span>)]),<span class="hljs-literal">None</span>))<br><br><span class="hljs-built_in">print</span>([RNG1.getrandbits(<span class="hljs-number">32</span>) <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">75</span>)])<br><span class="hljs-built_in">print</span>(D[:<span class="hljs-number">75</span>])<br></code></pre></td></tr></table></div></figure>
+<figure>
+<img src="../assets/image-22.png" srcset="/img/loading.gif" lazyload alt="确实是对的" />
+<figcaption aria-hidden="true">确实是对的</figcaption>
+</figure>
+<p>两个MT输出流即使其中一个有"偏移"(先生成一些输出之后两者再开始异或)也是同样成立的，可以理解为MT生成一次输出后内部状态经过了一次线性递推。</p>
+<p>不过很奇怪的是，上面这个例子用maple的gf2bv就没办法求解出来，可能是zeros的写法需要进一步修正？</p>
+<h2 id="继续开坑">继续开坑</h2>
+<p>如果是多个不同bit数的MT19937输出流异或之后，有没有办法恢复初始状态呢？</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E9%9A%8F%E7%AC%94/" class="category-chain-item">随笔</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E9%9A%8F%E7%AC%94/%E6%8A%80%E6%9C%AF/" class="category-chain-item">技术</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Crypto/">#Crypto</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>MT19937</div>
+      <div>https://eupho.me/59a1b91b.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Lambert Swizzer</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年3月21日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/828e6345.html" title="2025-TPCTF-Writeup">
+                        <span class="hidden-mobile">2025-TPCTF-Writeup</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#comments', function() {
+      var light = 'github-light';
+      var dark = 'github-dark';
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema === 'dark') {
+        schema = dark;
+      } else {
+        schema = light;
+      }
+      window.UtterancesThemeLight = light;
+      window.UtterancesThemeDark = dark;
+      var s = document.createElement('script');
+      s.setAttribute('src', 'https://utteranc.es/client.js');
+      s.setAttribute('repo', 'Swizzzer/blogComments');
+      s.setAttribute('issue-term', 'pathname');
+      
+      s.setAttribute('label', 'utterances');
+      
+      s.setAttribute('theme', schema);
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('comments').appendChild(s);
+    })
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
