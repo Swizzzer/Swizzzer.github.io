@@ -1,771 +1,113 @@
-
-
-<!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=dark>
-
-
-
-<head>
-  <meta name="google-site-verification" content="vfJ2GJW1_Q4AOrJXuD5IJvdntHtM2T5hXhBiq3pLXiw" />
-  <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
-  <link rel="icon" href="/img/fluid.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-  
-  <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="Lambert Swizzer">
-  <meta name="keywords" content="">
-  
-    <meta name="description" content="Rank 18th  又又又是印度佬的比赛，题目味道一如既往的咖喱。  你问我为什么要打？当然是因为前75有域名奖励啦！  因为exp什么的都在另一台设备上，这里就不一个个贴了，简单记录下思路吧。">
-<meta property="og:type" content="article">
-<meta property="og:title" content="2025 ApoorvCTF Writeup">
-<meta property="og:url" content="https://eupho.me/9ad61849.html">
-<meta property="og:site_name" content="Euphome">
-<meta property="og:description" content="Rank 18th  又又又是印度佬的比赛，题目味道一如既往的咖喱。  你问我为什么要打？当然是因为前75有域名奖励啦！  因为exp什么的都在另一台设备上，这里就不一个个贴了，简单记录下思路吧。">
-<meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://eupho.me/assets/image-17.png">
-<meta property="og:image" content="https://eupho.me/assets/image-18.png">
-<meta property="article:published_time" content="2025-03-04T13:29:11.000Z">
-<meta property="article:modified_time" content="2025-03-31T16:38:45.529Z">
-<meta property="article:author" content="Lambert Swizzer">
-<meta property="article:tag" content="CTF">
-<meta property="article:tag" content="Crypto">
-<meta property="article:tag" content="Misc">
-<meta property="article:tag" content="Reverse">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://eupho.me/assets/image-17.png">
-  
-  
-  
-  <title>2025 ApoorvCTF Writeup - Euphome</title>
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
-
-
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
-
-
-<!-- 主题依赖的图标库，不要自行修改 -->
-<!-- Do not modify the link that theme dependent icons -->
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
-
-
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
-
-
-<link  rel="stylesheet" href="/css/main.css" />
-
-
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
-  
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
-  
-
-
-
-  
-<link rel="stylesheet" href="/css/mac.css">
-
-
-
-  <script id="fluid-configs">
-    var Fluid = window.Fluid || {};
-    Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"eupho.me","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":false,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
-
-    if (CONFIG.web_analytics.follow_dnt) {
-      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
-      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
-    }
-  </script>
-  <script  src="/js/utils.js" ></script>
-  <script  src="/js/color-schema.js" ></script>
-  
-
-
-  
-<meta name="generator" content="Hexo 6.3.0"></head>
-
-
-<body>
-  
-
-  <header>
-    
-
-<div class="header-inner" style="height: 70vh;">
-  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="/">
-      <strong>Euphome</strong>
-    </a>
-
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <div class="animated-icon"><span></span><span></span><span></span></div>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto text-center">
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/">
-                <i class="iconfont icon-home-fill"></i>
-                <span>首页</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/archives/">
-                <i class="iconfont icon-archive-fill"></i>
-                <span>归档</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/categories/">
-                <i class="iconfont icon-category-fill"></i>
-                <span>分类</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/tags/">
-                <i class="iconfont icon-tags-fill"></i>
-                <span>标签</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                <span>关于</span>
-              </a>
-            </li>
-          
-        
-        
-          <li class="nav-item" id="search-btn">
-            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              <i class="iconfont icon-search"></i>
-            </a>
-          </li>
-          
-        
-        
-          <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
-              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
-            </a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-</nav>
-
-  
-
-<div id="banner" class="banner" parallax=true
-     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
-  <div class="full-bg-img">
-    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-      <div class="banner-text text-center fade-in-up">
-        <div class="h2">
-          
-            <span id="subtitle" data-typed-text="2025 ApoorvCTF Writeup"></span>
-          
-        </div>
-
-        
-          
-  <div class="mt-3">
-    
-    
-      <span class="post-meta">
-        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-03-04 21:29" pubdate>
-          2025年3月4日 晚上
-        </time>
-      </span>
-    
-  </div>
-
-  <div class="mt-1">
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-chart"></i>
-        
-          1.3k 字
-        
-      </span>
-    
-
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-clock-fill"></i>
-        
-        
-        
-          3 分钟
-        
-      </span>
-    
-
-    
-    
-  </div>
-
-
-        
-      </div>
-
-      
-    </div>
-  </div>
-</div>
-
-</div>
-
-  </header>
-
-  <main>
-    
-      
-
-<div class="container-fluid nopadding-x">
-  <div class="row nomargin-x">
-    <div class="side-col d-none d-lg-block col-lg-2">
-      
-
-    </div>
-
-    <div class="col-lg-8 nopadding-x-md">
-      <div class="container nopadding-x-md" id="board-ctn">
-        <div id="board">
-          <article class="post-content mx-auto">
-            <!-- SEO header -->
-            <h1 style="display: none">2025 ApoorvCTF Writeup</h1>
-            
-              <p class="note note-info">
-                
-                  
-                    本文最后更新于：2025年4月1日 凌晨
-                  
-                
-              </p>
-            
-            
-              <div class="markdown-body">
-                
-                <figure>
-<img src="../assets/image-17.png" srcset="/img/loading.gif" lazyload alt="Rank 18th" />
-<figcaption aria-hidden="true">Rank 18th</figcaption>
-</figure>
-<p>又又又是印度佬的比赛，题目味道一如既往的咖喱。</p>
-<blockquote>
-<p>你问我为什么要打？当然是因为前75有域名奖励啦！</p>
-</blockquote>
-<p>因为exp什么的都在另一台设备上，这里就不一个个贴了，简单记录下思路吧。</p>
-<span id="more"></span>
-<h1 id="misc-forensics-hardware">Misc &amp; Forensics &amp;
-Hardware</h1>
-<h2 id="ramen-lockdown">Ramen lockdown</h2>
-<p>Zip
-Store压缩的加密压缩包，里面有个png文件。png文件头能抠出来16个连续的已知字节，足够直接bkcrack明文攻击了。</p>
-<p><code>bkcrack -C recipe.zip -c secret_recipe.png -x 0 89504E470D0A1A0A0000000D49484452 -U chall_dec.zip ""</code></p>
-<p>等1min左右就出了。</p>
-<h2 id="the-cursed-console---呪われたカセット">*The Cursed Console -
-呪われたカセット</h2>
-<p>这题是队友<a target="_blank" rel="noopener" href="https://oldkingok.cc"><span class="citation"
-data-cites="oldkingOK">@oldkingOK</span></a>出的，一血，也是全场唯一一解。我用VirusTotal检查了一下nes文件，从first
-submission日期可以确定问题不在于此，所以只需要看分发的emulator。</p>
-<p>IDA看一眼字符串找到对应的<a
-target="_blank" rel="noopener" href="https://github.com/amhndu/SimpleNES">项目</a>，跟队友讨论了一下觉得可以拖一个Action里的二进制出来bindiff，这样会方便逆向一点。</p>
-<p>按队友的说法最后是在<code>sn::PictureBus::read</code>里找到的神秘字符串，异或解密后包上flag格式就对了：</p>
-<figure>
-<img src="../assets/image-18.png" srcset="/img/loading.gif" lazyload alt="magic!" />
-<figcaption aria-hidden="true">magic!</figcaption>
-</figure>
-<p>主办方最初分发的附件是动态链接的并且链接的libsfml版本很低，为了跑起来这玩意儿，<a
-target="_blank" rel="noopener" href="https://oldkingok.cc"><span class="citation"
-data-cites="oldkingOK">@oldkingOK</span></a>整了点灵车手段才搞定<del>估计大部分人都没有相应的环境直接运行吧</del>，我猜在这儿卡住了不少人。</p>
-<p>本来以为是跟GeekGame 2025里mario那题类似的东西，结果判若云泥...</p>
-<h2 id="ghosted-on-the-14th">Ghosted on the 14th</h2>
-<p>流量包里俩人的聊天透露了个IP地址，还说这上面的blog被删除了。结合题面暗示的日期，拿去Wayback
-Machine查查看就能找到被删除的页面，检查源代码看到一串base64,解码即得。</p>
-<p>一个坑点是Wayback
-Machine不能直接用IP搜索，得加个<code>http://</code>前缀，不然完全找不到正确答案。</p>
-<h2 id="petah-hunt">Petah Hunt</h2>
-<p>图片提示用户名为<code>buffedpetah</code>，DuckDuckGo直接搜到对应的GitHub用户。稍微看看这人(人?)的repo就能发现<a
-target="_blank" rel="noopener" href="https://github.com/buffedpetah/freakQuest">问题</a></p>
-<p>结合代码和数值可以猜到<code>project.obj</code>里的数据前两列是双音多频，可以对应到按键。最后一列虽然不知道是在干嘛，但是可以注意到有<code>&#123;行数&#125;-&gt;&#123;行数*100&#125;</code>这两个集合之间的双射，所以按第三列数字的升序排列一下数据，然后提取按键，可以看出来是个英文9键输入法，再转换一下就是flag。</p>
-<h2 id="broken-tooth">Broken Tooth</h2>
-<p>RTP传输的音频，Wireshark直接就能从里面播放出音频，不过经过了很明显的慢放和降调。+6个半音&amp;1.15倍速后拿给队友听了听，一耳朵认出来是Billie
-Eilish的<code>Birds of a Feather</code>。</p>
-<h1 id="crypto">Crypto</h1>
-<p>开胃小菜都算不上，一个ECB逐分组字节爆破，一个misc(俩图按像素Add就有flag)，一个MT19937(还是直接照抄的<a
-target="_blank" rel="noopener" href="https://stackered.com/blog/python-random-prediction/">这个</a>)，一个MD5长度扩展攻击，还有一个更是直接按D-S-D-S走迷宫就拿下了(虽然后来好像把这个bug给修了)</p>
-<blockquote>
-<p>一坨</p>
-</blockquote>
-
-                
-              </div>
-            
-            <hr/>
-            <div>
-              <div class="post-metas my-3">
-  
-    <div class="post-meta mr-3 d-flex align-items-center">
-      <i class="iconfont icon-category"></i>
-      
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Writeups/" class="category-chain-item">Writeups</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-    </div>
-  
-  
-    <div class="post-meta">
-      <i class="iconfont icon-tags"></i>
-      
-        <a href="/tags/CTF/">#CTF</a>
-      
-        <a href="/tags/Crypto/">#Crypto</a>
-      
-        <a href="/tags/Misc/">#Misc</a>
-      
-        <a href="/tags/Reverse/">#Reverse</a>
-      
-    </div>
-  
-</div>
-
-
-              
-  
-
-  <div class="license-box my-3">
-    <div class="license-title">
-      <div>2025 ApoorvCTF Writeup</div>
-      <div>https://eupho.me/9ad61849.html</div>
-    </div>
-    <div class="license-meta">
-      
-        <div class="license-meta-item">
-          <div>作者</div>
-          <div>Lambert Swizzer</div>
-        </div>
-      
-      
-        <div class="license-meta-item license-meta-date">
-          <div>发布于</div>
-          <div>2025年3月4日</div>
-        </div>
-      
-      
-      
-        <div class="license-meta-item">
-          <div>许可协议</div>
-          <div>
-            
-              
-              
-                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
-                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
-                    <i class="iconfont icon-by"></i>
-                  </span>
-                </a>
-              
-                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
-                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
-                    <i class="iconfont icon-nc"></i>
-                  </span>
-                </a>
-              
-                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
-                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
-                    <i class="iconfont icon-sa"></i>
-                  </span>
-                </a>
-              
-            
-          </div>
-        </div>
-      
-    </div>
-    <div class="license-icon iconfont"></div>
-  </div>
-
-
-
-              
-                <div class="post-prevnext my-3">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/828e6345.html" title="2025 TPCTF Writeup">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">2025 TPCTF Writeup</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                      <a href="/e1345c95.html" title="Isogeny概览">
-                        <span class="hidden-mobile">Isogeny概览</span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
-                    
-                  </article>
-                </div>
-              
-            </div>
-
-            
-  
-  
-    <article id="comments" lazyload>
-      
-  <script type="text/javascript">
-    Fluid.utils.loadComments('#comments', function() {
-      var light = 'github-light';
-      var dark = 'github-dark';
-      var schema = document.documentElement.getAttribute('data-user-color-scheme');
-      if (schema === 'dark') {
-        schema = dark;
-      } else {
-        schema = light;
-      }
-      window.UtterancesThemeLight = light;
-      window.UtterancesThemeDark = dark;
-      var s = document.createElement('script');
-      s.setAttribute('src', 'https://utteranc.es/client.js');
-      s.setAttribute('repo', 'Swizzzer/blogComments');
-      s.setAttribute('issue-term', 'pathname');
-      
-      s.setAttribute('label', 'utterances');
-      
-      s.setAttribute('theme', schema);
-      s.setAttribute('crossorigin', 'anonymous');
-      document.getElementById('comments').appendChild(s);
-    })
-  </script>
-  <noscript>Please enable JavaScript to view the comments</noscript>
-
-
-    </article>
-  
-
-
-          </article>
-        </div>
-      </div>
-    </div>
-
-    <div class="side-col d-none d-lg-block col-lg-2">
-      
-  <aside class="sidebar" style="margin-left: -1rem">
-    <div id="toc">
-  <p class="toc-header">
-    <i class="iconfont icon-list"></i>
-    <span>目录</span>
-  </p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
-
-
-
-  </aside>
-
-
-    </div>
-  </div>
-</div>
-
-
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-
-
-
-
-    
-
-    
-      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
-        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-      </a>
-    
-
-    
-      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
-        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
-        </div>
-        <div class="list-group" id="local-search-result"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-    
-
-    
-  </main>
-
-  <footer>
-    <div class="footer-inner">
-  
-    <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
-    </div>
-  
-  
-  
-  
-</div>
-
-  </footer>
-
-  <!-- Scripts -->
-  
-  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
-
-
-<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
-<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
-
-
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var subtitle = document.getElementById('subtitle');
-      if (!subtitle || !typing) {
-        return;
-      }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
-    })(window, document);
-  </script>
-
-
-
-
-  
-    <script  src="/js/img-lazyload.js" ></script>
-  
-
-
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
-    var toc = jQuery('#toc');
-    if (toc.length === 0 || !window.tocbot) { return; }
-    var boardCtn = jQuery('#board-ctn');
-    var boardTop = boardCtn.offset().top;
-
-    window.tocbot.init(Object.assign({
-      tocSelector     : '#toc-body',
-      contentSelector : '.markdown-body',
-      linkClass       : 'tocbot-link',
-      activeLinkClass : 'tocbot-active-link',
-      listClass       : 'tocbot-list',
-      isCollapsedClass: 'tocbot-is-collapsed',
-      collapsibleClass: 'tocbot-is-collapsible',
-      scrollSmooth    : true,
-      includeTitleTags: true,
-      headingsOffset  : -boardTop,
-    }, CONFIG.toc));
-    if (toc.find('.toc-list-item').length > 0) {
-      toc.css('visibility', 'visible');
-    }
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('tocbot' in window) {
-        tocbot.refresh();
-        var toc = jQuery('#toc');
-        if (toc.length === 0 || !tocbot) {
-          return;
-        }
-        if (toc.find('.toc-list-item').length > 0) {
-          toc.css('visibility', 'visible');
-        }
-      }
-    });
-  });
-</script>
-
-
-  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
-
-  <script>Fluid.plugins.codeWidget();</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
-    window.anchors.options = {
-      placement: CONFIG.anchorjs.placement,
-      visible  : CONFIG.anchorjs.visible
-    };
-    if (CONFIG.anchorjs.icon) {
-      window.anchors.options.icon = CONFIG.anchorjs.icon;
-    }
-    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-    var res = [];
-    for (var item of el) {
-      res.push('.markdown-body > ' + item.trim());
-    }
-    if (CONFIG.anchorjs.placement === 'left') {
-      window.anchors.options.class = 'anchorjs-link-left';
-    }
-    window.anchors.add(res.join(', '));
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('anchors' in window) {
-        anchors.removeAll();
-        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-        var res = [];
-        for (var item of el) {
-          res.push('.markdown-body > ' + item.trim());
-        }
-        if (CONFIG.anchorjs.placement === 'left') {
-          anchors.options.class = 'anchorjs-link-left';
-        }
-        anchors.add(res.join(', '));
-      }
-    });
-  });
-</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
-    Fluid.plugins.fancyBox();
-  });
-</script>
-
-
-  <script>Fluid.plugins.imageCaption();</script>
-
-  <script  src="/js/local-search.js" ></script>
-
-
-
-
-
-<!-- 主题的启动项，将它保持在最底部 -->
-<!-- the boot of the theme, keep it at the bottom -->
-<script  src="/js/boot.js" ></script>
-
-
-  
-
-  <noscript>
-    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
-  </noscript>
-</body>
-</html>
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="keywords" content="Hexo Theme Keep"><meta name="description" content="Hexo Theme Keep"><meta name="author" content="Swizzer"><title>2025 ApoorvCTF Writeup | Swizzer&#39;s euphonium</title><link rel="stylesheet" href="/css/style.css"><link rel="shortcut icon" href="/images/favicon.png"><link rel="stylesheet" href="/font/css/fontawesome.min.css"><link rel="stylesheet" href="/font/css/regular.min.css"><link rel="stylesheet" href="/font/css/solid.min.css"><link rel="stylesheet" href="/font/css/brands.min.css"><link rel="stylesheet" href="/css/slogan.css"><script class="keep-theme-configurations">const KEEP=window.KEEP||{};KEEP.hexo_config={hostname:"eupho.me",root:"/",language:"zh-CN",path:"search.json"},KEEP.theme_config={base_info:{primary_color:"#5dffe4",title:"Swizzer's euphonium",author:"Swizzer",avatar:"/img/avatar.png",logo:"/img/logo.png",favicon:"/images/favicon.png"},menu:{home:"/",archives:"/archives",tags:"/tags",categories:"/categories",about:"/about"},first_screen:{enable:!0,background_img:"/img/banner.jpg",background_img_dark:"/img/banner.jpg",description:"No, thank you!",hitokoto:!1},social_contact:{enable:!0,links:{github:"https://github.com/Swizzzer",bilibili:"https://space.bilibili.com/446708215",email:"kyoshaft@outlook.com"}},scroll:{progress_bar:!0,percent:!1,hide_header:!0},home:{announcement:null,category:!0,tag:!0,post_datetime:"updated"},post:{author_badge:{enable:!1,level_badge:!1,custom_badge:"Mio"},word_count:{wordcount:!0,min2read:!0},datetime_format:"YYYY-MM-DD HH:mm:ss",copyright_info:!0,share:!0,reward:{enable:!1,img_link:null,text:null}},code_block:{tools:{enable:!0,style:"default"},highlight_theme:"default"},toc:{enable:!0,number:!1,expand_all:!0,init_open:!0,layout:"right"},website_count:{busuanzi_count:{enable:!0,site_uv:!0,site_pv:!0,page_pv:!0}},local_search:{enable:!0,preload:!0},comment:{enable:!1,use:"gisqus",valine:{appid:null,appkey:null,server_urls:null,placeholder:null},gitalk:{github_id:null,github_admins:null,repository:null,client_id:null,client_secret:null,proxy:null},twikoo:{env_id:null,region:null,version:"1.6.36"},waline:{server_url:null,reaction:!1,version:"3.2.1"},giscus:{repo:"Swizzzer/blogComments",repo_id:"R_kgDOJWumvw",category:"Q&A",category_id:"DIC_kwDOJWumv84CopXz",reactions_enabled:!0},artalk:{server:null},disqus:{shortname:null}},rss:{enable:!1},lazyload:{enable:!0},cdn:{enable:!1,provider:"cdnjs"},pjax:{enable:!0},footer:{since:2022,word_count:!1,site_deploy:{enable:!1,provider:"github",url:null},record:{enable:!1,list:[{code:null,link:null}]}},inject:{enable:!0,css:[["/css/slogan.css"]],js:[null]},root:"",source_data:{},version:"4.2.5"},KEEP.language_ago={second:"%s 秒前",minute:"%s 分钟前",hour:"%s 小时前",day:"%s 天前",week:"%s 周前",month:"%s 个月前",year:"%s 年前"},KEEP.language_code_block={copy:"复制代码",copied:"已复制",fold:"折叠代码块",folded:"已折叠"},KEEP.language_copy_copyright={copy:"复制版权信息",copied:"已复制",title:"原文标题",author:"原文作者",link:"原文链接"}</script><meta name="generator" content="Hexo 6.3.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head><body><div class="progress-bar-container"><span class="scroll-progress-bar"></span> <span class="pjax-progress-bar"></span> <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i></div><main class="page-container border-box"><div class="page-main-content border-box"><div class="page-main-content-top"><header class="header-wrapper"><div class="border-box header-content"><div class="left flex-start border-box"><a class="logo-image border-box" href="/"><img src="/img/logo.png"> </a><a class="site-name border-box" href="/">Swizzer&#39;s euphonium</a></div><div class="right border-box"><div class="pc border-box"><ul class="menu-list border-box"><li class="menu-item flex-start border-box"><a class="menu-text-color border-box" href="/">首页</a></li><li class="menu-item flex-start border-box"><a class="menu-text-color border-box" href="/archives">归档</a></li><li class="menu-item flex-start border-box"><a class="menu-text-color border-box" href="/tags">标签</a></li><li class="menu-item flex-start border-box"><a class="menu-text-color border-box" href="/categories">分类</a></li><li class="menu-item flex-start border-box"><a class="menu-text-color border-box" href="/about">关于</a></li><li class="menu-item search search-popup-trigger"><i class="menu-text-color fas search fa-search"></i></li></ul></div><div class="mobile border-box flex-start"><div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div><div class="icon-item menu-bar"><div class="menu-bar-middle"></div></div></div></div></div><div class="header-drawer"><ul class="drawer-menu-list border-box"><li class="drawer-menu-item border-box not-sub-menu"><label class="drawer-menu-label border-box"><a class="drawer-menu-text-color left-side flex-start border-box" href="/">首页</a></label></li><li class="drawer-menu-item border-box not-sub-menu"><label class="drawer-menu-label border-box"><a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">归档</a></label></li><li class="drawer-menu-item border-box not-sub-menu"><label class="drawer-menu-label border-box"><a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">标签</a></label></li><li class="drawer-menu-item border-box not-sub-menu"><label class="drawer-menu-label border-box"><a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">分类</a></label></li><li class="drawer-menu-item border-box not-sub-menu"><label class="drawer-menu-label border-box"><a class="drawer-menu-text-color left-side flex-start border-box" href="/about">关于</a></label></li></ul></div><div class="window-mask"></div></header></div><div class="page-main-content-middle border-box"><div class="main-content border-box"><div class="fade-in-down-animation"><div class="post-page-container border-box"><div class="post-content-container border-box"><div class="post-content-bottom border-box"><div class="post-title">2025 ApoorvCTF Writeup</div><div class="post-header border-box"><div class="avatar-box border-box"><img src="/img/avatar.png"></div><div class="info-box"><div class="author border-box"><span class="name">Swizzer</span></div><div class="meta-info border-box"><div class="post-meta-info-container border-box post"><div class="post-meta-info border-box"><span class="meta-info-item post-create-date"><i class="icon fa-solid fa-calendar-plus"></i>&nbsp; <span class="datetime">2025-03-04 21:29:11</span> </span><span class="meta-info-item post-update-date"><i class="icon fa-solid fa-file-pen"></i>&nbsp; <span class="datetime" data-updated="Tue Apr 01 2025 00:38:45 GMT+0800">2025-04-01 00:38:45</span> </span><span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;<ul class="post-category-ul"><li class="category-item"><a href="/categories/Writeups/">Writeups</a></li></ul></span><span class="post-tag meta-info-item border-box"><ul class="post-tag-ul"><li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/CTF/">CTF</a></li><li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Crypto/">Crypto</a></li><li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Misc/">Misc</a></li><li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Reverse/">Reverse</a></li></ul></span><span class="meta-info-item post-wordcount"><i class="icon fas fa-file-word"></i>&nbsp;<span>786 字</span> </span><span class="meta-info-item post-min2read"><i class="icon fas fa-clock"></i>&nbsp;<span>2 分钟</span> </span><span class="meta-info-item post-pv"><i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span></span></div></div></div></div></div><div class="post-content keep-markdown-body"><figure><img lazyload="" alt="Rank 18th" data-src="../assets/image-17.png"><figcaption aria-hidden="true">Rank 18th</figcaption></figure><p>又又又是印度佬的比赛，题目味道一如既往的咖喱。</p><blockquote><p>你问我为什么要打？当然是因为前75有域名奖励啦！</p></blockquote><p>因为exp什么的都在另一台设备上，这里就不一个个贴了，简单记录下思路吧。</p><span id="more"></span><h1 id="misc-forensics-hardware">Misc &amp; Forensics &amp; Hardware</h1><h2 id="ramen-lockdown">Ramen lockdown</h2><p>Zip Store压缩的加密压缩包，里面有个png文件。png文件头能抠出来16个连续的已知字节，足够直接bkcrack明文攻击了。</p><p><code>bkcrack -C recipe.zip -c secret_recipe.png -x 0 89504E470D0A1A0A0000000D49484452 -U chall_dec.zip ""</code></p><p>等1min左右就出了。</p><h2 id="the-cursed-console---呪われたカセット">*The Cursed Console - 呪われたカセット</h2><p>这题是队友<a target="_blank" rel="noopener" href="https://oldkingok.cc"><span class="citation" data-cites="oldkingOK">@oldkingOK</span></a>出的，一血，也是全场唯一一解。我用VirusTotal检查了一下nes文件，从first submission日期可以确定问题不在于此，所以只需要看分发的emulator。</p><p>IDA看一眼字符串找到对应的<a class="link" target="_blank" rel="noopener" href="https://github.com/amhndu/SimpleNES">项目<i class="fas fa-external-link-alt"></i></a>，跟队友讨论了一下觉得可以拖一个Action里的二进制出来bindiff，这样会方便逆向一点。</p><p>按队友的说法最后是在<code>sn::PictureBus::read</code>里找到的神秘字符串，异或解密后包上flag格式就对了：</p><figure><img lazyload="" alt="magic!" data-src="../assets/image-18.png"><figcaption aria-hidden="true">magic!</figcaption></figure><p>主办方最初分发的附件是动态链接的并且链接的libsfml版本很低，为了跑起来这玩意儿，<a target="_blank" rel="noopener" href="https://oldkingok.cc"><span class="citation" data-cites="oldkingOK">@oldkingOK</span></a>整了点灵车手段才搞定<del>估计大部分人都没有相应的环境直接运行吧</del>，我猜在这儿卡住了不少人。</p><p>本来以为是跟GeekGame 2025里mario那题类似的东西，结果判若云泥...</p><h2 id="ghosted-on-the-14th">Ghosted on the 14th</h2><p>流量包里俩人的聊天透露了个IP地址，还说这上面的blog被删除了。结合题面暗示的日期，拿去Wayback Machine查查看就能找到被删除的页面，检查源代码看到一串base64,解码即得。</p><p>一个坑点是Wayback Machine不能直接用IP搜索，得加个<code>http://</code>前缀，不然完全找不到正确答案。</p><h2 id="petah-hunt">Petah Hunt</h2><p>图片提示用户名为<code>buffedpetah</code>，DuckDuckGo直接搜到对应的GitHub用户。稍微看看这人(人?)的repo就能发现<a class="link" target="_blank" rel="noopener" href="https://github.com/buffedpetah/freakQuest">问题<i class="fas fa-external-link-alt"></i></a></p><p>结合代码和数值可以猜到<code>project.obj</code>里的数据前两列是双音多频，可以对应到按键。最后一列虽然不知道是在干嘛，但是可以注意到有<code>{行数}-&gt;{行数*100}</code>这两个集合之间的双射，所以按第三列数字的升序排列一下数据，然后提取按键，可以看出来是个英文9键输入法，再转换一下就是flag。</p><h2 id="broken-tooth">Broken Tooth</h2><p>RTP传输的音频，Wireshark直接就能从里面播放出音频，不过经过了很明显的慢放和降调。+6个半音&amp;1.15倍速后拿给队友听了听，一耳朵认出来是Billie Eilish的<code>Birds of a Feather</code>。</p><h1 id="crypto">Crypto</h1><p>开胃小菜都算不上，一个ECB逐分组字节爆破，一个misc(俩图按像素Add就有flag)，一个MT19937(还是直接照抄的<a class="link" target="_blank" rel="noopener" href="https://stackered.com/blog/python-random-prediction/">这个<i class="fas fa-external-link-alt"></i></a>)，一个MD5长度扩展攻击，还有一个更是直接按D-S-D-S走迷宫就拿下了(虽然后来好像把这个bug给修了)</p><blockquote><p>一坨</p></blockquote></div><div class="post-copyright-info-container border-box"><div class="copyright-info-content border-box"><div class="copyright-info-top border-box"><div class="copyright-post-title border-box text-ellipsis">2025 ApoorvCTF Writeup</div><div class="copyright-post-link border-box text-ellipsis">9ad61849.html</div></div><div class="copyright-info-bottom border-box"><div class="copyright-post-author bottom-item"><div class="type">作者</div><div class="content">Swizzer</div></div><div class="post-time bottom-item"><div class="type">发布于</div><div class="content">2025-03-04 21:29</div></div><div class="post-license bottom-item"><div class="type">许可</div><div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank"><i class="fa-brands fa-creative-commons"></i> <i class="fa-brands fa-creative-commons-by"></i> <i class="fa-brands fa-creative-commons-nc"></i> <i class="fa-brands fa-creative-commons-sa"></i></a></div></div></div><i class="copyright-bg fa-solid fa-copyright"></i></div><div class="copy-copyright-info flex-center tooltip" data-tooltip-content="复制版权信息" data-tooltip-offset-y="-2px"><i class="fa-solid fa-copy"></i></div></div><div class="post-bottom-tags-and-share border-box"><div><ul class="post-tags-box border-box"><li class="tag-item border-box"><i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/CTF/">CTF</a></li><li class="tag-item border-box"><i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Crypto/">Crypto</a></li><li class="tag-item border-box"><i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Misc/">Misc</a></li><li class="tag-item border-box"><i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Reverse/">Reverse</a></li></ul></div><div><div class="post-share-container border-box"><ul class="share-list-wrap border-box"><li class="qq share-item border-box flex-center tooltip" data-tooltip-content="分享到 QQ"><i class="fa-brands fa-qq"></i></li><li class="wechat share-item border-box flex-center tooltip tooltip-img" data-tooltip-content="分享到微信" data-tooltip-img-tip="微信扫一扫" data-tooltip-img-style="background-color: #fff; top: -10px; padding: 0.6rem 0.6rem 0.1rem 0.6rem;"><i class="fa-brands fa-weixin"></i></li><li class="weibo share-item border-box flex-center tooltip" data-tooltip-content="分享到微博"><i class="fa-brands fa-weibo"></i></li></ul></div></div></div><div class="post-nav border-box"><div class="prev-post"><a class="prev" rel="prev" href="/828e6345.html" title="2025 TPCTF Writeup"><span class="left arrow-icon flex-center"><i class="fas fa-chevron-left"></i> </span><span class="title flex-center"><span class="post-nav-title-item text-ellipsis">2025 TPCTF Writeup</span> <span class="post-nav-item">上一篇</span></span></a></div><div class="next-post"><a class="next" rel="next" href="/e1345c95.html" title="Isogeny概览"><span class="title flex-center"><span class="post-nav-title-item text-ellipsis">Isogeny概览</span> <span class="post-nav-item">下一篇</span> </span><span class="right arrow-icon flex-center"><i class="fas fa-chevron-right"></i></span></a></div></div></div></div><div class="pc-post-toc right-toc"><div class="post-toc-wrap border-box"><div class="post-toc border-box"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#misc-forensics-hardware"><span class="nav-text">Misc &amp; Forensics &amp; Hardware</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ramen-lockdown"><span class="nav-text">Ramen lockdown</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#the-cursed-console---%E5%91%AA%E3%82%8F%E3%82%8C%E3%81%9F%E3%82%AB%E3%82%BB%E3%83%83%E3%83%88"><span class="nav-text">*The Cursed Console - 呪われたカセット</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ghosted-on-the-14th"><span class="nav-text">Ghosted on the 14th</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#petah-hunt"><span class="nav-text">Petah Hunt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#broken-tooth"><span class="nav-text">Broken Tooth</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#crypto"><span class="nav-text">Crypto</span></a></li></ol></div></div></div></div></div></div></div><div class="page-main-content-bottom border-box"><footer class="footer border-box"><div class="copyright-info info-item">&copy;&nbsp;<span>2022</span>&nbsp;-&nbsp;2025 &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Swizzer</a></div><div class="theme-info info-item">由&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;驱动&nbsp;&&nbsp;主题&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a></div><div class="count-info info-item"><span class="count-item border-box uv"><span class="item-type border-box">访客数</span> <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span> </span><span class="count-item border-box pv"><span class="item-type border-box">访问量</span> <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span></span></div></footer></div></div><div class="post-tools right-toc"><div class="post-tools-container border-box"><ul class="post-tools-list border-box"><li class="tools-item flex-center toggle-show-toc"><i class="fas fa-list"></i></li><li class="tools-item flex-center full-screen"><i class="fa-solid fa-expand"></i></li></ul></div></div><div class="side-tools"><div class="side-tools-container border-box"><ul class="side-tools-list side-tools-show-handle border-box"><li class="tools-item tool-font-adjust-plus flex-center"><i class="fas fa-search-plus"></i></li><li class="tools-item tool-font-adjust-minus flex-center"><i class="fas fa-search-minus"></i></li><li class="tools-item tool-toggle-theme-mode flex-center"><i class="fas fa-moon"></i></li><li class="tools-item tool-scroll-to-bottom flex-center"><i class="fas fa-arrow-down"></i></li></ul><ul class="exposed-tools-list border-box"><li class="tools-item toggle-show-toc-tablet flex-center"><i class="fas fa-list"></i></li><li class="tools-item tool-toggle-show flex-center"><i class="fas fa-cog fa-spin"></i></li><li class="tools-item tool-scroll-to-top flex-center show-arrow"><i class="arrow fas fa-arrow-up"></i> <span class="percent"></span></li></ul></div></div><div class="zoom-in-image-mask"><img class="zoom-in-image"></div><div class="search-pop-overlay"><div class="popup search-popup"><div class="search-header"><span class="search-input-field-pre"><i class="fas fa-keyboard"></i></span><div class="search-input-container"><input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="搜索..." spellcheck="false" type="search" class="search-input"></div><span class="close-popup-btn"><i class="fas fa-times"></i></span></div><div id="search-result"><div id="no-result"><i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i></div></div></div></div><div class="tablet-post-toc-mask"><div class="tablet-post-toc"><div class="post-toc-wrap border-box"><div class="post-toc border-box"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#misc-forensics-hardware"><span class="nav-text">Misc &amp; Forensics &amp; Hardware</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ramen-lockdown"><span class="nav-text">Ramen lockdown</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#the-cursed-console---%E5%91%AA%E3%82%8F%E3%82%8C%E3%81%9F%E3%82%AB%E3%82%BB%E3%83%83%E3%83%88"><span class="nav-text">*The Cursed Console - 呪われたカセット</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ghosted-on-the-14th"><span class="nav-text">Ghosted on the 14th</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#petah-hunt"><span class="nav-text">Petah Hunt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#broken-tooth"><span class="nav-text">Broken Tooth</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#crypto"><span class="nav-text">Crypto</span></a></li></ol></div></div></div></div></main><script src="/js/utils.js"></script><script src="/js/header-shrink.js"></script><script src="/js/back2top.js"></script><script src="/js/toggle-theme.js"></script><script src="/js/code-block.js"></script><script src="/js/main.js"></script><script src="/js/libs/anime.min.js"></script><script src="/js/local-search.js"></script><script src="/js/lazyload.js"></script><div class="pjax"><script src="/js/post/post-helper.js"></script><script src="/js/post/toc.js"></script><script src="/js/post/copyright-info.js"></script><script src="/js/post/share.js"></script></div><script src="/js/libs/pjax.min.js"></script><script>window.addEventListener("DOMContentLoaded",()=>{window.pjax=new Pjax({selectors:["head title",".page-container",".pjax"],history:!0,debug:!1,cacheBust:!1,timeout:0,analytics:!1,currentUrlFullReload:!1,scrollRestoration:!1}),document.addEventListener("pjax:send",()=>{KEEP.utils.pjaxProgressBarStart()}),document.addEventListener("pjax:complete",()=>{KEEP.utils.pjaxProgressBarEnd(),window.pjax.executeScripts(document.querySelectorAll("script[data-pjax], .pjax script")),KEEP.initExecute()})})</script></body></html>

@@ -1,736 +1,113 @@
-
-
-<!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=dark>
-
-
-
-<head>
-  <meta name="google-site-verification" content="vfJ2GJW1_Q4AOrJXuD5IJvdntHtM2T5hXhBiq3pLXiw" />
-  <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
-  <link rel="icon" href="/img/fluid.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-  
-  <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="Lambert Swizzer">
-  <meta name="keywords" content="">
-  
-    <meta name="description" content="Misc Spooky Sound wav，先拖下来Audacity看一眼频谱，果然就有flag。   flag  Last Minute c12345678910111213141516171819#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#include &lt;string.h&gt;#include &lt;time.h&gt;int">
-<meta property="og:type" content="article">
-<meta property="og:title" content="imaginaryCTF round46">
-<meta property="og:url" content="https://eupho.me/1eb1cc3e.html">
-<meta property="og:site_name" content="Euphome">
-<meta property="og:description" content="Misc Spooky Sound wav，先拖下来Audacity看一眼频谱，果然就有flag。   flag  Last Minute c12345678910111213141516171819#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#include &lt;string.h&gt;#include &lt;time.h&gt;int">
-<meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://eupho.me/assets/image.png">
-<meta property="article:published_time" content="2024-05-31T16:00:07.000Z">
-<meta property="article:modified_time" content="2024-05-31T16:00:07.000Z">
-<meta property="article:author" content="Lambert Swizzer">
-<meta property="article:tag" content="CTF">
-<meta property="article:tag" content="Crypto">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://eupho.me/assets/image.png">
-  
-  
-  
-  <title>imaginaryCTF round46 - Euphome</title>
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
-
-
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
-
-
-<!-- 主题依赖的图标库，不要自行修改 -->
-<!-- Do not modify the link that theme dependent icons -->
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
-
-
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
-
-
-<link  rel="stylesheet" href="/css/main.css" />
-
-
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
-  
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
-  
-
-
-
-  
-<link rel="stylesheet" href="/css/mac.css">
-
-
-
-  <script id="fluid-configs">
-    var Fluid = window.Fluid || {};
-    Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"eupho.me","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":false,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
-
-    if (CONFIG.web_analytics.follow_dnt) {
-      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
-      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
-    }
-  </script>
-  <script  src="/js/utils.js" ></script>
-  <script  src="/js/color-schema.js" ></script>
-  
-
-
-  
-<meta name="generator" content="Hexo 6.3.0"></head>
-
-
-<body>
-  
-
-  <header>
-    
-
-<div class="header-inner" style="height: 70vh;">
-  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="/">
-      <strong>Euphome</strong>
-    </a>
-
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <div class="animated-icon"><span></span><span></span><span></span></div>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto text-center">
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/">
-                <i class="iconfont icon-home-fill"></i>
-                <span>首页</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/archives/">
-                <i class="iconfont icon-archive-fill"></i>
-                <span>归档</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/categories/">
-                <i class="iconfont icon-category-fill"></i>
-                <span>分类</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/tags/">
-                <i class="iconfont icon-tags-fill"></i>
-                <span>标签</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                <span>关于</span>
-              </a>
-            </li>
-          
-        
-        
-          <li class="nav-item" id="search-btn">
-            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              <i class="iconfont icon-search"></i>
-            </a>
-          </li>
-          
-        
-        
-          <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
-              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
-            </a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-</nav>
-
-  
-
-<div id="banner" class="banner" parallax=true
-     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
-  <div class="full-bg-img">
-    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-      <div class="banner-text text-center fade-in-up">
-        <div class="h2">
-          
-            <span id="subtitle" data-typed-text="imaginaryCTF round46"></span>
-          
-        </div>
-
-        
-          
-  <div class="mt-3">
-    
-    
-      <span class="post-meta">
-        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-06-01 00:00" pubdate>
-          2024年6月1日 凌晨
-        </time>
-      </span>
-    
-  </div>
-
-  <div class="mt-1">
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-chart"></i>
-        
-          3.2k 字
-        
-      </span>
-    
-
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-clock-fill"></i>
-        
-        
-        
-          6 分钟
-        
-      </span>
-    
-
-    
-    
-  </div>
-
-
-        
-      </div>
-
-      
-    </div>
-  </div>
-</div>
-
-</div>
-
-  </header>
-
-  <main>
-    
-      
-
-<div class="container-fluid nopadding-x">
-  <div class="row nomargin-x">
-    <div class="side-col d-none d-lg-block col-lg-2">
-      
-
-    </div>
-
-    <div class="col-lg-8 nopadding-x-md">
-      <div class="container nopadding-x-md" id="board-ctn">
-        <div id="board">
-          <article class="post-content mx-auto">
-            <!-- SEO header -->
-            <h1 style="display: none">imaginaryCTF round46</h1>
-            
-            
-              <div class="markdown-body">
-                
-                <h1 id="misc">Misc</h1>
-<h2 id="spooky-sound">Spooky Sound</h2>
-<p>wav，先拖下来Audacity看一眼频谱，果然就有flag。</p>
-<figure>
-<img src="../assets/image.png" srcset="/img/loading.gif" lazyload alt="flag" />
-<figcaption aria-hidden="true">flag</figcaption>
-</figure>
-<h2 id="last-minute">Last Minute</h2>
-<figure class="highlight c"><i class="iconfont icon-github-fill" type="button" data-toggle="collapse" data-target="#collapse-wfjkpgm8xc7gr6"></i><span>c</span><div class="collapse show" id="collapse-wfjkpgm8xc7gr6"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;time.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> &#123;<br>    srand(time(<span class="hljs-literal">NULL</span>));<br><br>    <span class="hljs-type">const</span> <span class="hljs-type">char</span>* flag = <span class="hljs-string">&quot;[redacted]&quot;</span>;<br><br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-built_in">strlen</span>(flag); i++) &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%02x&quot;</span>, flag[i] ^ (rand() % <span class="hljs-number">256</span>));<br>    &#125;<br><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;\n&quot;</span>);<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br></code></pre></td></tr></table></div></figure>
-<p>直截了当的爆破。</p>
-<figure class="highlight c"><i class="iconfont icon-github-fill" type="button" data-toggle="collapse" data-target="#collapse-rj214om8xc7gr6"></i><span>c</span><div class="collapse show" id="collapse-rj214om8xc7gr6"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;time.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> &#123;<br>    <span class="hljs-type">long</span> <span class="hljs-type">int</span> flag[]=&#123;<span class="hljs-number">0x94</span>,<span class="hljs-number">0x1e</span>,<span class="hljs-number">0x94</span>,<span class="hljs-number">0xd2</span>,<span class="hljs-number">0x87</span>,<span class="hljs-number">0xfa</span>,<span class="hljs-number">0xb0</span>,<span class="hljs-number">0x58</span>,<span class="hljs-number">0xfd</span>,<span class="hljs-number">0xe5</span>,<span class="hljs-number">0xb6</span>,<span class="hljs-number">0x0a</span>,<span class="hljs-number">0x1b</span>,<span class="hljs-number">0xd5</span>,<span class="hljs-number">0x39</span>,<span class="hljs-number">0xee</span>,<span class="hljs-number">0x4d</span>,<span class="hljs-number">0x55</span>,<span class="hljs-number">0xb7</span>,<span class="hljs-number">0x08</span>,<span class="hljs-number">0x70</span>,<span class="hljs-number">0xf1</span>,<span class="hljs-number">0x29</span>,<span class="hljs-number">0xba</span>,<span class="hljs-number">0x6b</span>,<span class="hljs-number">0x2a</span>,<span class="hljs-number">0x76</span>,<span class="hljs-number">0x71</span>,<span class="hljs-number">0x76</span>,<span class="hljs-number">0x58</span>,<span class="hljs-number">0xe4</span>,<span class="hljs-number">0xce</span>,<span class="hljs-number">0xea</span>,<span class="hljs-number">0x1c</span>,<span class="hljs-number">0xc0</span>,<span class="hljs-number">0xb2</span>,<span class="hljs-number">0x5d</span>,<span class="hljs-number">0x01</span>,<span class="hljs-number">0x84</span>,<span class="hljs-number">0xff</span>,<span class="hljs-number">0x7c</span>,<span class="hljs-number">0x2c</span>,<span class="hljs-number">0x4c</span>,<span class="hljs-number">0xb4</span>,<span class="hljs-number">0x8b</span>,<span class="hljs-number">0xe6</span>,<span class="hljs-number">0x6e</span>,<span class="hljs-number">0x28</span>,<span class="hljs-number">0xa4</span>,<span class="hljs-number">0xd5</span>,<span class="hljs-number">0xed</span>,<span class="hljs-number">0x96</span>,<span class="hljs-number">0x09</span>,<span class="hljs-number">0xfc</span>,<span class="hljs-number">0xc4</span>,<span class="hljs-number">0xc8</span>,<span class="hljs-number">0x6f</span>&#125;;<br><br>    <span class="hljs-type">int</span> len = <span class="hljs-keyword">sizeof</span>(flag) / <span class="hljs-keyword">sizeof</span>(flag[<span class="hljs-number">0</span>]);<br>    <span class="hljs-type">char</span> decrypted[len + <span class="hljs-number">1</span>]; <br><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">long</span> <span class="hljs-type">int</span> seed = <span class="hljs-number">1715867640</span>; seed &lt; <span class="hljs-number">1715878940</span>; seed++) &#123;<br>        srand(seed);<br><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">0</span>; j &lt; len; j++) &#123;<br>            decrypted[j] = flag[j] ^ (rand() % <span class="hljs-number">256</span>);<br>        &#125;<br>        decrypted[len] = <span class="hljs-string">&#x27;\0&#x27;</span>; <br><br>        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">strstr</span>(decrypted, <span class="hljs-string">&quot;ictf&quot;</span>) != <span class="hljs-literal">NULL</span>) &#123;<br>            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Seed: %ld\n&quot;</span>, seed);<br>            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Decrypted string: %s\n&quot;</span>, decrypted);<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br></code></pre></td></tr></table></div></figure>
-<h1 id="crypto">Crypto</h1>
-<h2 id="xorsar">xorsar</h2>
-<p><code>hbugzchu^gmhqqhof^guv&gt;^0e8c3028|</code></p>
-<p>实验可知<span class="math inline">\(cipher[i] = flag[i] \oplus
-1\)</span>，xor回去即可。</p>
-<h2 id="random-base">Random Base</h2>
-<p><code>OED8WECRFCS6/TC9$DUICGPEFQEGS6BM6*.CN-DZ2</code></p>
-<p>字母特征猜出是base45。</p>
-<h2 id="strange-base">Strange Base</h2>
-<p><code>aQ==Yw==dA==Zg==ew==dg==Mw==cg==eQ==Xw==NQ==Nw==cg==NA==bg==Zw==Mw==Xw==Yg==NA==cw==Mw==Xw==Ng==NA==IQ==fQ==</code></p>
-<p>很容易看出来是逐字符的base64，4字一组decode即可。</p>
-<h2 id="so-much-xor">So much XOR</h2>
-<figure class="highlight python"><i class="iconfont icon-github-fill" type="button" data-toggle="collapse" data-target="#collapse-m73dswm8xc7gr6"></i><span>Python</span><div class="collapse show" id="collapse-m73dswm8xc7gr6"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs Python"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> xor <span class="hljs-comment"># pwntools xor function</span><br><span class="hljs-keyword">import</span> random<br>flag = <span class="hljs-built_in">open</span>(<span class="hljs-string">&#x27;flag.txt&#x27;</span>,<span class="hljs-string">&#x27;rb&#x27;</span>).read()<br>key1 = <span class="hljs-string">b&#x27;supersecurekey&#x27;</span><br>key2=<span class="hljs-string">b&#x27;verysecretkey&#x27;</span><br>iters1 = random.randint(<span class="hljs-number">1</span>,<span class="hljs-number">100</span>)<br>iters2 = random.randint(<span class="hljs-number">1</span>,<span class="hljs-number">100</span>)<br>enc = flag<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(iters1):<br>    enc = xor(enc,key1)<br>    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(iters2):<br>        enc = xor(enc,key2)<br><br><span class="hljs-comment"># b&#x27;\x1a\x16\x04\x03\t\x00\n&lt;\x18\x07\x06\x03:\x00\x16\x01/\x16\x1d,\t\n\x01\x06\t\x0e\x18&#x27;</span><br></code></pre></td></tr></table></div></figure>
-<p>异或满足交换律和结合律，并且和同一个数异或两次会还原自身，所以做的这么多异或无非就是异或了0次或者1次。</p>
-<figure class="highlight python"><i class="iconfont icon-github-fill" type="button" data-toggle="collapse" data-target="#collapse-c8fcshm8xc7gr6"></i><span>Python</span><div class="collapse show" id="collapse-c8fcshm8xc7gr6"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs Python"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> xor <span class="hljs-comment"># pwntools xor function</span><br><br>cipher = <span class="hljs-string">b&#x27;\x1a\x16\x04\x03\t\x00\n&lt;\x18\x07\x06\x03:\x00\x16\x01/\x16\x1d,\t\n\x01\x06\t\x0e\x18&#x27;</span><br>key1 = <span class="hljs-string">b&#x27;supersecurekey&#x27;</span><br>key2=<span class="hljs-string">b&#x27;verysecretkey&#x27;</span><br><span class="hljs-built_in">print</span>(xor(cipher, key1))<br><span class="hljs-built_in">print</span>(xor(cipher, key2))<br><span class="hljs-built_in">print</span>(xor(xor(cipher, key1),key2))<br></code></pre></td></tr></table></div></figure>
-<h1 id="reverse">Reverse</h1>
-<h2 id="tape-reader">Tape Reader</h2>
-<p>程序会简单地读取纸带做对应操作。纸带和操作都明确给出了，逆操作即可。需要注意的是，Binary
-Ninja似乎解析纸带数组时会出现错误，这部分最好用IDA去做。</p>
-<figure class="highlight c"><i class="iconfont icon-github-fill" type="button" data-toggle="collapse" data-target="#collapse-zlxm2xm8xc7gr6"></i><span>c</span><div class="collapse show" id="collapse-zlxm2xm8xc7gr6"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SIZE 21</span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">char</span> command[] = <span class="hljs-string">&quot;aaiasiasassaiaasaiaiaaasssiasisaasiasissaiaasaiasisaisaisaiiaasaiassissaiasii&quot;</span>;<br>    <span class="hljs-type">int</span> arr[SIZE] = &#123;<span class="hljs-number">0x81</span>, <span class="hljs-number">0x6a</span>, <span class="hljs-number">0x7f</span>, <span class="hljs-number">0x6b</span>, <span class="hljs-number">0x78</span>, <span class="hljs-number">0x75</span>, <span class="hljs-number">0x6e</span>, <span class="hljs-number">0x7a</span>, <span class="hljs-number">0x67</span>, <span class="hljs-number">0x5e</span>, <span class="hljs-number">0x83</span>, <span class="hljs-number">0x6a</span>, <span class="hljs-number">0x67</span>, <span class="hljs-number">0x70</span>, <span class="hljs-number">0x61</span>, <span class="hljs-number">0x6f</span>, <span class="hljs-number">0x81</span>, <span class="hljs-number">0x73</span>, <span class="hljs-number">0x6f</span>, <span class="hljs-number">0x77</span>, <span class="hljs-number">0x74</span>&#125;;<br>    <span class="hljs-type">int</span> v4 = <span class="hljs-number">21</span>;<br>    <span class="hljs-type">int</span> i, len = <span class="hljs-built_in">strlen</span>(command);<br><br>    <span class="hljs-keyword">for</span> (i = len - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; --i) &#123;<br>        <span class="hljs-keyword">switch</span> (command[i]) &#123;<br>            <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;a&#x27;</span>:<br>                arr[v4] -= <span class="hljs-number">5</span>;<br>                <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;i&#x27;</span>:<br>                --v4;<br>                <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;s&#x27;</span>:<br>                arr[v4] += <span class="hljs-number">3</span>;<br>                <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;x&#x27;</span>:<br>                arr[v4] ^= arr[v4 + <span class="hljs-number">1</span>];<br>                <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">default</span>:<br>                <span class="hljs-keyword">continue</span>;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; SIZE; ++i) &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;0x%x&quot;</span>, arr[i]);<br>    &#125;<br>    <br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br></code></pre></td></tr></table></div></figure>
-
-                
-              </div>
-            
-            <hr/>
-            <div>
-              <div class="post-metas my-3">
-  
-    <div class="post-meta mr-3 d-flex align-items-center">
-      <i class="iconfont icon-category"></i>
-      
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Writeups/" class="category-chain-item">Writeups</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-    </div>
-  
-  
-    <div class="post-meta">
-      <i class="iconfont icon-tags"></i>
-      
-        <a href="/tags/CTF/">#CTF</a>
-      
-        <a href="/tags/Crypto/">#Crypto</a>
-      
-    </div>
-  
-</div>
-
-
-              
-  
-
-  <div class="license-box my-3">
-    <div class="license-title">
-      <div>imaginaryCTF round46</div>
-      <div>https://eupho.me/1eb1cc3e.html</div>
-    </div>
-    <div class="license-meta">
-      
-        <div class="license-meta-item">
-          <div>作者</div>
-          <div>Lambert Swizzer</div>
-        </div>
-      
-      
-        <div class="license-meta-item license-meta-date">
-          <div>发布于</div>
-          <div>2024年6月1日</div>
-        </div>
-      
-      
-      
-        <div class="license-meta-item">
-          <div>许可协议</div>
-          <div>
-            
-              
-              
-                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
-                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
-                    <i class="iconfont icon-by"></i>
-                  </span>
-                </a>
-              
-                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
-                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
-                    <i class="iconfont icon-nc"></i>
-                  </span>
-                </a>
-              
-                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
-                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
-                    <i class="iconfont icon-sa"></i>
-                  </span>
-                </a>
-              
-            
-          </div>
-        </div>
-      
-    </div>
-    <div class="license-icon iconfont"></div>
-  </div>
-
-
-
-              
-                <div class="post-prevnext my-3">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/c34ae11.html" title="CryptoCTF 2024 Writeup">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">CryptoCTF 2024 Writeup</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                      <a href="/19d8fa37.html" title="DragonKnight CTF 2024 Writeup">
-                        <span class="hidden-mobile">DragonKnight CTF 2024 Writeup</span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
-                    
-                  </article>
-                </div>
-              
-            </div>
-
-            
-  
-  
-    <article id="comments" lazyload>
-      
-  <script type="text/javascript">
-    Fluid.utils.loadComments('#comments', function() {
-      var light = 'github-light';
-      var dark = 'github-dark';
-      var schema = document.documentElement.getAttribute('data-user-color-scheme');
-      if (schema === 'dark') {
-        schema = dark;
-      } else {
-        schema = light;
-      }
-      window.UtterancesThemeLight = light;
-      window.UtterancesThemeDark = dark;
-      var s = document.createElement('script');
-      s.setAttribute('src', 'https://utteranc.es/client.js');
-      s.setAttribute('repo', 'Swizzzer/blogComments');
-      s.setAttribute('issue-term', 'pathname');
-      
-      s.setAttribute('label', 'utterances');
-      
-      s.setAttribute('theme', schema);
-      s.setAttribute('crossorigin', 'anonymous');
-      document.getElementById('comments').appendChild(s);
-    })
-  </script>
-  <noscript>Please enable JavaScript to view the comments</noscript>
-
-
-    </article>
-  
-
-
-          </article>
-        </div>
-      </div>
-    </div>
-
-    <div class="side-col d-none d-lg-block col-lg-2">
-      
-  <aside class="sidebar" style="margin-left: -1rem">
-    <div id="toc">
-  <p class="toc-header">
-    <i class="iconfont icon-list"></i>
-    <span>目录</span>
-  </p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
-
-
-
-  </aside>
-
-
-    </div>
-  </div>
-</div>
-
-
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-
-
-
-
-    
-
-    
-      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
-        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-      </a>
-    
-
-    
-      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
-        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
-        </div>
-        <div class="list-group" id="local-search-result"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-    
-
-    
-  </main>
-
-  <footer>
-    <div class="footer-inner">
-  
-    <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
-    </div>
-  
-  
-  
-  
-</div>
-
-  </footer>
-
-  <!-- Scripts -->
-  
-  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
-
-
-<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
-<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
-
-
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var subtitle = document.getElementById('subtitle');
-      if (!subtitle || !typing) {
-        return;
-      }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
-    })(window, document);
-  </script>
-
-
-
-
-  
-    <script  src="/js/img-lazyload.js" ></script>
-  
-
-
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
-    var toc = jQuery('#toc');
-    if (toc.length === 0 || !window.tocbot) { return; }
-    var boardCtn = jQuery('#board-ctn');
-    var boardTop = boardCtn.offset().top;
-
-    window.tocbot.init(Object.assign({
-      tocSelector     : '#toc-body',
-      contentSelector : '.markdown-body',
-      linkClass       : 'tocbot-link',
-      activeLinkClass : 'tocbot-active-link',
-      listClass       : 'tocbot-list',
-      isCollapsedClass: 'tocbot-is-collapsed',
-      collapsibleClass: 'tocbot-is-collapsible',
-      scrollSmooth    : true,
-      includeTitleTags: true,
-      headingsOffset  : -boardTop,
-    }, CONFIG.toc));
-    if (toc.find('.toc-list-item').length > 0) {
-      toc.css('visibility', 'visible');
-    }
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('tocbot' in window) {
-        tocbot.refresh();
-        var toc = jQuery('#toc');
-        if (toc.length === 0 || !tocbot) {
-          return;
-        }
-        if (toc.find('.toc-list-item').length > 0) {
-          toc.css('visibility', 'visible');
-        }
-      }
-    });
-  });
-</script>
-
-
-  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
-
-  <script>Fluid.plugins.codeWidget();</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
-    window.anchors.options = {
-      placement: CONFIG.anchorjs.placement,
-      visible  : CONFIG.anchorjs.visible
-    };
-    if (CONFIG.anchorjs.icon) {
-      window.anchors.options.icon = CONFIG.anchorjs.icon;
-    }
-    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-    var res = [];
-    for (var item of el) {
-      res.push('.markdown-body > ' + item.trim());
-    }
-    if (CONFIG.anchorjs.placement === 'left') {
-      window.anchors.options.class = 'anchorjs-link-left';
-    }
-    window.anchors.add(res.join(', '));
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('anchors' in window) {
-        anchors.removeAll();
-        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-        var res = [];
-        for (var item of el) {
-          res.push('.markdown-body > ' + item.trim());
-        }
-        if (CONFIG.anchorjs.placement === 'left') {
-          anchors.options.class = 'anchorjs-link-left';
-        }
-        anchors.add(res.join(', '));
-      }
-    });
-  });
-</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
-    Fluid.plugins.fancyBox();
-  });
-</script>
-
-
-  <script>Fluid.plugins.imageCaption();</script>
-
-  <script  src="/js/local-search.js" ></script>
-
-
-
-
-
-<!-- 主题的启动项，将它保持在最底部 -->
-<!-- the boot of the theme, keep it at the bottom -->
-<script  src="/js/boot.js" ></script>
-
-
-  
-
-  <noscript>
-    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
-  </noscript>
-</body>
-</html>
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="keywords" content="Hexo Theme Keep"><meta name="description" content="Hexo Theme Keep"><meta name="author" content="Swizzer"><title>imaginaryCTF round46 | Swizzer&#39;s euphonium</title><link rel="stylesheet" href="/css/style.css"><link rel="shortcut icon" href="/images/favicon.png"><link rel="stylesheet" href="/font/css/fontawesome.min.css"><link rel="stylesheet" href="/font/css/regular.min.css"><link rel="stylesheet" href="/font/css/solid.min.css"><link rel="stylesheet" href="/font/css/brands.min.css"><link rel="stylesheet" href="/css/slogan.css"><script class="keep-theme-configurations">const KEEP=window.KEEP||{};KEEP.hexo_config={hostname:"eupho.me",root:"/",language:"zh-CN",path:"search.json"},KEEP.theme_config={base_info:{primary_color:"#5dffe4",title:"Swizzer's euphonium",author:"Swizzer",avatar:"/img/avatar.png",logo:"/img/logo.png",favicon:"/images/favicon.png"},menu:{home:"/",archives:"/archives",tags:"/tags",categories:"/categories",about:"/about"},first_screen:{enable:!0,background_img:"/img/banner.jpg",background_img_dark:"/img/banner.jpg",description:"No, thank you!",hitokoto:!1},social_contact:{enable:!0,links:{github:"https://github.com/Swizzzer",bilibili:"https://space.bilibili.com/446708215",email:"kyoshaft@outlook.com"}},scroll:{progress_bar:!0,percent:!1,hide_header:!0},home:{announcement:null,category:!0,tag:!0,post_datetime:"updated"},post:{author_badge:{enable:!1,level_badge:!1,custom_badge:"Mio"},word_count:{wordcount:!0,min2read:!0},datetime_format:"YYYY-MM-DD HH:mm:ss",copyright_info:!0,share:!0,reward:{enable:!1,img_link:null,text:null}},code_block:{tools:{enable:!0,style:"default"},highlight_theme:"default"},toc:{enable:!0,number:!1,expand_all:!0,init_open:!0,layout:"right"},website_count:{busuanzi_count:{enable:!0,site_uv:!0,site_pv:!0,page_pv:!0}},local_search:{enable:!0,preload:!0},comment:{enable:!1,use:"gisqus",valine:{appid:null,appkey:null,server_urls:null,placeholder:null},gitalk:{github_id:null,github_admins:null,repository:null,client_id:null,client_secret:null,proxy:null},twikoo:{env_id:null,region:null,version:"1.6.36"},waline:{server_url:null,reaction:!1,version:"3.2.1"},giscus:{repo:"Swizzzer/blogComments",repo_id:"R_kgDOJWumvw",category:"Q&A",category_id:"DIC_kwDOJWumv84CopXz",reactions_enabled:!0},artalk:{server:null},disqus:{shortname:null}},rss:{enable:!1},lazyload:{enable:!0},cdn:{enable:!1,provider:"cdnjs"},pjax:{enable:!0},footer:{since:2022,word_count:!1,site_deploy:{enable:!1,provider:"github",url:null},record:{enable:!1,list:[{code:null,link:null}]}},inject:{enable:!0,css:[["/css/slogan.css"]],js:[null]},root:"",source_data:{},version:"4.2.5"},KEEP.language_ago={second:"%s 秒前",minute:"%s 分钟前",hour:"%s 小时前",day:"%s 天前",week:"%s 周前",month:"%s 个月前",year:"%s 年前"},KEEP.language_code_block={copy:"复制代码",copied:"已复制",fold:"折叠代码块",folded:"已折叠"},KEEP.language_copy_copyright={copy:"复制版权信息",copied:"已复制",title:"原文标题",author:"原文作者",link:"原文链接"}</script><meta name="generator" content="Hexo 6.3.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head><body><div class="progress-bar-container"><span class="scroll-progress-bar"></span> <span class="pjax-progress-bar"></span> <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i></div><main class="page-container border-box"><div class="page-main-content border-box"><div class="page-main-content-top"><header class="header-wrapper"><div class="border-box header-content"><div class="left flex-start border-box"><a class="logo-image border-box" href="/"><img src="/img/logo.png"> </a><a class="site-name border-box" href="/">Swizzer&#39;s euphonium</a></div><div class="right border-box"><div class="pc border-box"><ul class="menu-list border-box"><li class="menu-item flex-start border-box"><a class="menu-text-color border-box" href="/">首页</a></li><li class="menu-item flex-start border-box"><a class="menu-text-color border-box" href="/archives">归档</a></li><li class="menu-item flex-start border-box"><a class="menu-text-color border-box" href="/tags">标签</a></li><li class="menu-item flex-start border-box"><a class="menu-text-color border-box" href="/categories">分类</a></li><li class="menu-item flex-start border-box"><a class="menu-text-color border-box" href="/about">关于</a></li><li class="menu-item search search-popup-trigger"><i class="menu-text-color fas search fa-search"></i></li></ul></div><div class="mobile border-box flex-start"><div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div><div class="icon-item menu-bar"><div class="menu-bar-middle"></div></div></div></div></div><div class="header-drawer"><ul class="drawer-menu-list border-box"><li class="drawer-menu-item border-box not-sub-menu"><label class="drawer-menu-label border-box"><a class="drawer-menu-text-color left-side flex-start border-box" href="/">首页</a></label></li><li class="drawer-menu-item border-box not-sub-menu"><label class="drawer-menu-label border-box"><a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">归档</a></label></li><li class="drawer-menu-item border-box not-sub-menu"><label class="drawer-menu-label border-box"><a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">标签</a></label></li><li class="drawer-menu-item border-box not-sub-menu"><label class="drawer-menu-label border-box"><a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">分类</a></label></li><li class="drawer-menu-item border-box not-sub-menu"><label class="drawer-menu-label border-box"><a class="drawer-menu-text-color left-side flex-start border-box" href="/about">关于</a></label></li></ul></div><div class="window-mask"></div></header></div><div class="page-main-content-middle border-box"><div class="main-content border-box"><div class="fade-in-down-animation"><div class="post-page-container border-box"><div class="post-content-container border-box"><div class="post-content-bottom border-box"><div class="post-title">imaginaryCTF round46</div><div class="post-header border-box"><div class="avatar-box border-box"><img src="/img/avatar.png"></div><div class="info-box"><div class="author border-box"><span class="name">Swizzer</span></div><div class="meta-info border-box"><div class="post-meta-info-container border-box post"><div class="post-meta-info border-box"><span class="meta-info-item post-create-date"><i class="icon fa-solid fa-calendar-plus"></i>&nbsp; <span class="datetime">2024-06-01 00:00:07</span> </span><span class="meta-info-item post-update-date"><i class="icon fa-solid fa-file-pen"></i>&nbsp; <span class="datetime" data-updated="Sat Jun 01 2024 00:00:07 GMT+0800">2024-06-01 00:00:07</span> </span><span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;<ul class="post-category-ul"><li class="category-item"><a href="/categories/Writeups/">Writeups</a></li></ul></span><span class="post-tag meta-info-item border-box"><ul class="post-tag-ul"><li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/CTF/">CTF</a></li><li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Crypto/">Crypto</a></li></ul></span><span class="meta-info-item post-wordcount"><i class="icon fas fa-file-word"></i>&nbsp;<span>640 字</span> </span><span class="meta-info-item post-min2read"><i class="icon fas fa-clock"></i>&nbsp;<span>3 分钟</span> </span><span class="meta-info-item post-pv"><i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span></span></div></div></div></div></div><div class="post-content keep-markdown-body"><h1 id="misc">Misc</h1><h2 id="spooky-sound">Spooky Sound</h2><p>wav，先拖下来Audacity看一眼频谱，果然就有flag。</p><figure><img lazyload="" alt="flag" data-src="../assets/image.png"><figcaption aria-hidden="true">flag</figcaption></figure><h2 id="last-minute">Last Minute</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;time.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span> {</span><br><span class="line">    srand(time(<span class="literal">NULL</span>));</span><br><span class="line"></span><br><span class="line">    <span class="type">const</span> <span class="type">char</span>* flag = <span class="string">"[redacted]"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="built_in">strlen</span>(flag); i++) {</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"%02x"</span>, flag[i] ^ (rand() % <span class="number">256</span>));</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"\n"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></table></figure><p>直截了当的爆破。</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;time.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span> {</span><br><span class="line">    <span class="type">long</span> <span class="type">int</span> flag[]={<span class="number">0x94</span>,<span class="number">0x1e</span>,<span class="number">0x94</span>,<span class="number">0xd2</span>,<span class="number">0x87</span>,<span class="number">0xfa</span>,<span class="number">0xb0</span>,<span class="number">0x58</span>,<span class="number">0xfd</span>,<span class="number">0xe5</span>,<span class="number">0xb6</span>,<span class="number">0x0a</span>,<span class="number">0x1b</span>,<span class="number">0xd5</span>,<span class="number">0x39</span>,<span class="number">0xee</span>,<span class="number">0x4d</span>,<span class="number">0x55</span>,<span class="number">0xb7</span>,<span class="number">0x08</span>,<span class="number">0x70</span>,<span class="number">0xf1</span>,<span class="number">0x29</span>,<span class="number">0xba</span>,<span class="number">0x6b</span>,<span class="number">0x2a</span>,<span class="number">0x76</span>,<span class="number">0x71</span>,<span class="number">0x76</span>,<span class="number">0x58</span>,<span class="number">0xe4</span>,<span class="number">0xce</span>,<span class="number">0xea</span>,<span class="number">0x1c</span>,<span class="number">0xc0</span>,<span class="number">0xb2</span>,<span class="number">0x5d</span>,<span class="number">0x01</span>,<span class="number">0x84</span>,<span class="number">0xff</span>,<span class="number">0x7c</span>,<span class="number">0x2c</span>,<span class="number">0x4c</span>,<span class="number">0xb4</span>,<span class="number">0x8b</span>,<span class="number">0xe6</span>,<span class="number">0x6e</span>,<span class="number">0x28</span>,<span class="number">0xa4</span>,<span class="number">0xd5</span>,<span class="number">0xed</span>,<span class="number">0x96</span>,<span class="number">0x09</span>,<span class="number">0xfc</span>,<span class="number">0xc4</span>,<span class="number">0xc8</span>,<span class="number">0x6f</span>};</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> len = <span class="keyword">sizeof</span>(flag) / <span class="keyword">sizeof</span>(flag[<span class="number">0</span>]);</span><br><span class="line">    <span class="type">char</span> decrypted[len + <span class="number">1</span>]; </span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">long</span> <span class="type">int</span> seed = <span class="number">1715867640</span>; seed &lt; <span class="number">1715878940</span>; seed++) {</span><br><span class="line">        srand(seed);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; len; j++) {</span><br><span class="line">            decrypted[j] = flag[j] ^ (rand() % <span class="number">256</span>);</span><br><span class="line">        }</span><br><span class="line">        decrypted[len] = <span class="string">'\0'</span>; </span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">strstr</span>(decrypted, <span class="string">"ictf"</span>) != <span class="literal">NULL</span>) {</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">"Seed: %ld\n"</span>, seed);</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">"Decrypted string: %s\n"</span>, decrypted);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></table></figure><h1 id="crypto">Crypto</h1><h2 id="xorsar">xorsar</h2><p><code>hbugzchu^gmhqqhof^guv&gt;^0e8c3028|</code></p><p>实验可知<span class="math inline"><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align:-.566ex" xmlns="http://www.w3.org/2000/svg" width="21.462ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 9486 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D450" d="M34 159Q34 268 120 355T306 442Q362 442 394 418T427 355Q427 326 408 306T360 285Q341 285 330 295T319 325T330 359T352 380T366 386H367Q367 388 361 392T340 400T306 404Q276 404 249 390Q228 381 206 359Q162 315 142 235T121 119Q121 73 147 50Q169 26 205 26H209Q321 26 394 111Q403 121 406 121Q410 121 419 112T429 98T420 83T391 55T346 25T282 0T202 -11Q127 -11 81 37T34 159Z"></path></g><g data-mml-node="mi" transform="translate(433,0)"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g><g data-mml-node="mi" transform="translate(778,0)"><path data-c="1D45D" d="M23 287Q24 290 25 295T30 317T40 348T55 381T75 411T101 433T134 442Q209 442 230 378L240 387Q302 442 358 442Q423 442 460 395T497 281Q497 173 421 82T249 -10Q227 -10 210 -4Q199 1 187 11T168 28L161 36Q160 35 139 -51T118 -138Q118 -144 126 -145T163 -148H188Q194 -155 194 -157T191 -175Q188 -187 185 -190T172 -194Q170 -194 161 -194T127 -193T65 -192Q-5 -192 -24 -194H-32Q-39 -187 -39 -183Q-37 -156 -26 -148H-6Q28 -147 33 -136Q36 -130 94 103T155 350Q156 355 156 364Q156 405 131 405Q109 405 94 377T71 316T59 280Q57 278 43 278H29Q23 284 23 287ZM178 102Q200 26 252 26Q282 26 310 49T356 107Q374 141 392 215T411 325V331Q411 405 350 405Q339 405 328 402T306 393T286 380T269 365T254 350T243 336T235 326L232 322Q232 321 229 308T218 264T204 212Q178 106 178 102Z"></path></g><g data-mml-node="mi" transform="translate(1281,0)"><path data-c="210E" d="M137 683Q138 683 209 688T282 694Q294 694 294 685Q294 674 258 534Q220 386 220 383Q220 381 227 388Q288 442 357 442Q411 442 444 415T478 336Q478 285 440 178T402 50Q403 36 407 31T422 26Q450 26 474 56T513 138Q516 149 519 151T535 153Q555 153 555 145Q555 144 551 130Q535 71 500 33Q466 -10 419 -10H414Q367 -10 346 17T325 74Q325 90 361 192T398 345Q398 404 354 404H349Q266 404 205 306L198 293L164 158Q132 28 127 16Q114 -11 83 -11Q69 -11 59 -2T48 16Q48 30 121 320L195 616Q195 629 188 632T149 637H128Q122 643 122 645T124 664Q129 683 137 683Z"></path></g><g data-mml-node="mi" transform="translate(1857,0)"><path data-c="1D452" d="M39 168Q39 225 58 272T107 350T174 402T244 433T307 442H310Q355 442 388 420T421 355Q421 265 310 237Q261 224 176 223Q139 223 138 221Q138 219 132 186T125 128Q125 81 146 54T209 26T302 45T394 111Q403 121 406 121Q410 121 419 112T429 98T420 82T390 55T344 24T281 -1T205 -11Q126 -11 83 42T39 168ZM373 353Q367 405 305 405Q272 405 244 391T199 357T170 316T154 280T149 261Q149 260 169 260Q282 260 327 284T373 353Z"></path></g><g data-mml-node="mi" transform="translate(2323,0)"><path data-c="1D45F" d="M21 287Q22 290 23 295T28 317T38 348T53 381T73 411T99 433T132 442Q161 442 183 430T214 408T225 388Q227 382 228 382T236 389Q284 441 347 441H350Q398 441 422 400Q430 381 430 363Q430 333 417 315T391 292T366 288Q346 288 334 299T322 328Q322 376 378 392Q356 405 342 405Q286 405 239 331Q229 315 224 298T190 165Q156 25 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 114 189T154 366Q154 405 128 405Q107 405 92 377T68 316T57 280Q55 278 41 278H27Q21 284 21 287Z"></path></g><g data-mml-node="mo" transform="translate(2774,0)"><path data-c="5B" d="M118 -250V750H255V710H158V-210H255V-250H118Z"></path></g><g data-mml-node="mi" transform="translate(3052,0)"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g><g data-mml-node="mo" transform="translate(3397,0)"><path data-c="5D" d="M22 710V750H159V-250H22V-210H119V710H22Z"></path></g><g data-mml-node="mo" transform="translate(3952.8,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="mi" transform="translate(5008.6,0)"><path data-c="1D453" d="M118 -162Q120 -162 124 -164T135 -167T147 -168Q160 -168 171 -155T187 -126Q197 -99 221 27T267 267T289 382V385H242Q195 385 192 387Q188 390 188 397L195 425Q197 430 203 430T250 431Q298 431 298 432Q298 434 307 482T319 540Q356 705 465 705Q502 703 526 683T550 630Q550 594 529 578T487 561Q443 561 443 603Q443 622 454 636T478 657L487 662Q471 668 457 668Q445 668 434 658T419 630Q412 601 403 552T387 469T380 433Q380 431 435 431Q480 431 487 430T498 424Q499 420 496 407T491 391Q489 386 482 386T428 385H372L349 263Q301 15 282 -47Q255 -132 212 -173Q175 -205 139 -205Q107 -205 81 -186T55 -132Q55 -95 76 -78T118 -61Q162 -61 162 -103Q162 -122 151 -136T127 -157L118 -162Z"></path></g><g data-mml-node="mi" transform="translate(5558.6,0)"><path data-c="1D459" d="M117 59Q117 26 142 26Q179 26 205 131Q211 151 215 152Q217 153 225 153H229Q238 153 241 153T246 151T248 144Q247 138 245 128T234 90T214 43T183 6T137 -11Q101 -11 70 11T38 85Q38 97 39 102L104 360Q167 615 167 623Q167 626 166 628T162 632T157 634T149 635T141 636T132 637T122 637Q112 637 109 637T101 638T95 641T94 647Q94 649 96 661Q101 680 107 682T179 688Q194 689 213 690T243 693T254 694Q266 694 266 686Q266 675 193 386T118 83Q118 81 118 75T117 65V59Z"></path></g><g data-mml-node="mi" transform="translate(5856.6,0)"><path data-c="1D44E" d="M33 157Q33 258 109 349T280 441Q331 441 370 392Q386 422 416 422Q429 422 439 414T449 394Q449 381 412 234T374 68Q374 43 381 35T402 26Q411 27 422 35Q443 55 463 131Q469 151 473 152Q475 153 483 153H487Q506 153 506 144Q506 138 501 117T481 63T449 13Q436 0 417 -8Q409 -10 393 -10Q359 -10 336 5T306 36L300 51Q299 52 296 50Q294 48 292 46Q233 -10 172 -10Q117 -10 75 30T33 157ZM351 328Q351 334 346 350T323 385T277 405Q242 405 210 374T160 293Q131 214 119 129Q119 126 119 118T118 106Q118 61 136 44T179 26Q217 26 254 59T298 110Q300 114 325 217T351 328Z"></path></g><g data-mml-node="mi" transform="translate(6385.6,0)"><path data-c="1D454" d="M311 43Q296 30 267 15T206 0Q143 0 105 45T66 160Q66 265 143 353T314 442Q361 442 401 394L404 398Q406 401 409 404T418 412T431 419T447 422Q461 422 470 413T480 394Q480 379 423 152T363 -80Q345 -134 286 -169T151 -205Q10 -205 10 -137Q10 -111 28 -91T74 -71Q89 -71 102 -80T116 -111Q116 -121 114 -130T107 -144T99 -154T92 -162L90 -164H91Q101 -167 151 -167Q189 -167 211 -155Q234 -144 254 -122T282 -75Q288 -56 298 -13Q311 35 311 43ZM384 328L380 339Q377 350 375 354T369 368T359 382T346 393T328 402T306 405Q262 405 221 352Q191 313 171 233T151 117Q151 38 213 38Q269 38 323 108L331 118L384 328Z"></path></g><g data-mml-node="mo" transform="translate(6862.6,0)"><path data-c="5B" d="M118 -250V750H255V710H158V-210H255V-250H118Z"></path></g><g data-mml-node="mi" transform="translate(7140.6,0)"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g><g data-mml-node="mo" transform="translate(7485.6,0)"><path data-c="5D" d="M22 710V750H159V-250H22V-210H119V710H22Z"></path></g><g data-mml-node="mo" transform="translate(7985.8,0)"><path data-c="2295" d="M56 250Q56 394 156 488T384 583Q530 583 626 485T722 250Q722 110 625 14T390 -83Q249 -83 153 14T56 250ZM364 542Q308 539 251 509T148 418T96 278V270H369V542H364ZM681 278Q675 338 650 386T592 462T522 509T458 535T412 542H409V270H681V278ZM96 222Q104 150 139 95T219 12T302 -29T366 -42H369V230H96V222ZM681 222V230H409V-42H412Q429 -42 456 -36T521 -10T590 37T649 113T681 222Z"></path></g><g data-mml-node="mn" transform="translate(8986,0)"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></g></g></g></svg></mjx-container></span>，xor回去即可。</p><h2 id="random-base">Random Base</h2><p><code>OED8WECRFCS6/TC9$DUICGPEFQEGS6BM6*.CN-DZ2</code></p><p>字母特征猜出是base45。</p><h2 id="strange-base">Strange Base</h2><p><code>aQ==Yw==dA==Zg==ew==dg==Mw==cg==eQ==Xw==NQ==Nw==cg==NA==bg==Zw==Mw==Xw==Yg==NA==cw==Mw==Xw==Ng==NA==IQ==fQ==</code></p><p>很容易看出来是逐字符的base64，4字一组decode即可。</p><h2 id="so-much-xor">So much XOR</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> xor <span class="comment"># pwntools xor function</span></span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line">flag = <span class="built_in">open</span>(<span class="string">'flag.txt'</span>,<span class="string">'rb'</span>).read()</span><br><span class="line">key1 = <span class="string">b'supersecurekey'</span></span><br><span class="line">key2=<span class="string">b'verysecretkey'</span></span><br><span class="line">iters1 = random.randint(<span class="number">1</span>,<span class="number">100</span>)</span><br><span class="line">iters2 = random.randint(<span class="number">1</span>,<span class="number">100</span>)</span><br><span class="line">enc = flag</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(iters1):</span><br><span class="line">    enc = xor(enc,key1)</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(iters2):</span><br><span class="line">        enc = xor(enc,key2)</span><br><span class="line"></span><br><span class="line"><span class="comment"># b'\x1a\x16\x04\x03\t\x00\n&lt;\x18\x07\x06\x03:\x00\x16\x01/\x16\x1d,\t\n\x01\x06\t\x0e\x18'</span></span><br></pre></td></tr></table></figure><p>异或满足交换律和结合律，并且和同一个数异或两次会还原自身，所以做的这么多异或无非就是异或了0次或者1次。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> xor <span class="comment"># pwntools xor function</span></span><br><span class="line"></span><br><span class="line">cipher = <span class="string">b'\x1a\x16\x04\x03\t\x00\n&lt;\x18\x07\x06\x03:\x00\x16\x01/\x16\x1d,\t\n\x01\x06\t\x0e\x18'</span></span><br><span class="line">key1 = <span class="string">b'supersecurekey'</span></span><br><span class="line">key2=<span class="string">b'verysecretkey'</span></span><br><span class="line"><span class="built_in">print</span>(xor(cipher, key1))</span><br><span class="line"><span class="built_in">print</span>(xor(cipher, key2))</span><br><span class="line"><span class="built_in">print</span>(xor(xor(cipher, key1),key2))</span><br></pre></td></tr></table></figure><h1 id="reverse">Reverse</h1><h2 id="tape-reader">Tape Reader</h2><p>程序会简单地读取纸带做对应操作。纸带和操作都明确给出了，逆操作即可。需要注意的是，Binary Ninja似乎解析纸带数组时会出现错误，这部分最好用IDA去做。</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SIZE 21</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> {</span><br><span class="line">    <span class="type">char</span> command[] = <span class="string">"aaiasiasassaiaasaiaiaaasssiasisaasiasissaiaasaiasisaisaisaiiaasaiassissaiasii"</span>;</span><br><span class="line">    <span class="type">int</span> arr[SIZE] = {<span class="number">0x81</span>, <span class="number">0x6a</span>, <span class="number">0x7f</span>, <span class="number">0x6b</span>, <span class="number">0x78</span>, <span class="number">0x75</span>, <span class="number">0x6e</span>, <span class="number">0x7a</span>, <span class="number">0x67</span>, <span class="number">0x5e</span>, <span class="number">0x83</span>, <span class="number">0x6a</span>, <span class="number">0x67</span>, <span class="number">0x70</span>, <span class="number">0x61</span>, <span class="number">0x6f</span>, <span class="number">0x81</span>, <span class="number">0x73</span>, <span class="number">0x6f</span>, <span class="number">0x77</span>, <span class="number">0x74</span>};</span><br><span class="line">    <span class="type">int</span> v4 = <span class="number">21</span>;</span><br><span class="line">    <span class="type">int</span> i, len = <span class="built_in">strlen</span>(command);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = len - <span class="number">1</span>; i &gt;= <span class="number">0</span>; --i) {</span><br><span class="line">        <span class="keyword">switch</span> (command[i]) {</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'a'</span>:</span><br><span class="line">                arr[v4] -= <span class="number">5</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'i'</span>:</span><br><span class="line">                --v4;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'s'</span>:</span><br><span class="line">                arr[v4] += <span class="number">3</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'x'</span>:</span><br><span class="line">                arr[v4] ^= arr[v4 + <span class="number">1</span>];</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; SIZE; ++i) {</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"0x%x"</span>, arr[i]);</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></table></figure></div><div class="post-copyright-info-container border-box"><div class="copyright-info-content border-box"><div class="copyright-info-top border-box"><div class="copyright-post-title border-box text-ellipsis">imaginaryCTF round46</div><div class="copyright-post-link border-box text-ellipsis">1eb1cc3e.html</div></div><div class="copyright-info-bottom border-box"><div class="copyright-post-author bottom-item"><div class="type">作者</div><div class="content">Swizzer</div></div><div class="post-time bottom-item"><div class="type">发布于</div><div class="content">2024-06-01 00:00</div></div><div class="post-license bottom-item"><div class="type">许可</div><div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank"><i class="fa-brands fa-creative-commons"></i> <i class="fa-brands fa-creative-commons-by"></i> <i class="fa-brands fa-creative-commons-nc"></i> <i class="fa-brands fa-creative-commons-sa"></i></a></div></div></div><i class="copyright-bg fa-solid fa-copyright"></i></div><div class="copy-copyright-info flex-center tooltip" data-tooltip-content="复制版权信息" data-tooltip-offset-y="-2px"><i class="fa-solid fa-copy"></i></div></div><div class="post-bottom-tags-and-share border-box"><div><ul class="post-tags-box border-box"><li class="tag-item border-box"><i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/CTF/">CTF</a></li><li class="tag-item border-box"><i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Crypto/">Crypto</a></li></ul></div><div><div class="post-share-container border-box"><ul class="share-list-wrap border-box"><li class="qq share-item border-box flex-center tooltip" data-tooltip-content="分享到 QQ"><i class="fa-brands fa-qq"></i></li><li class="wechat share-item border-box flex-center tooltip tooltip-img" data-tooltip-content="分享到微信" data-tooltip-img-tip="微信扫一扫" data-tooltip-img-style="background-color: #fff; top: -10px; padding: 0.6rem 0.6rem 0.1rem 0.6rem;"><i class="fa-brands fa-weixin"></i></li><li class="weibo share-item border-box flex-center tooltip" data-tooltip-content="分享到微博"><i class="fa-brands fa-weibo"></i></li></ul></div></div></div><div class="post-nav border-box"><div class="prev-post"><a class="prev" rel="prev" href="/c34ae11.html" title="CryptoCTF 2024 Writeup"><span class="left arrow-icon flex-center"><i class="fas fa-chevron-left"></i> </span><span class="title flex-center"><span class="post-nav-title-item text-ellipsis">CryptoCTF 2024 Writeup</span> <span class="post-nav-item">上一篇</span></span></a></div><div class="next-post"><a class="next" rel="next" href="/19d8fa37.html" title="DragonKnight CTF 2024 Writeup"><span class="title flex-center"><span class="post-nav-title-item text-ellipsis">DragonKnight CTF 2024 Writeup</span> <span class="post-nav-item">下一篇</span> </span><span class="right arrow-icon flex-center"><i class="fas fa-chevron-right"></i></span></a></div></div></div></div><div class="pc-post-toc right-toc"><div class="post-toc-wrap border-box"><div class="post-toc border-box"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#misc"><span class="nav-text">Misc</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#spooky-sound"><span class="nav-text">Spooky Sound</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#last-minute"><span class="nav-text">Last Minute</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#crypto"><span class="nav-text">Crypto</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#xorsar"><span class="nav-text">xorsar</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#random-base"><span class="nav-text">Random Base</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#strange-base"><span class="nav-text">Strange Base</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#so-much-xor"><span class="nav-text">So much XOR</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#reverse"><span class="nav-text">Reverse</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#tape-reader"><span class="nav-text">Tape Reader</span></a></li></ol></li></ol></div></div></div></div></div></div></div><div class="page-main-content-bottom border-box"><footer class="footer border-box"><div class="copyright-info info-item">&copy;&nbsp;<span>2022</span>&nbsp;-&nbsp;2025 &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Swizzer</a></div><div class="theme-info info-item">由&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;驱动&nbsp;&&nbsp;主题&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a></div><div class="count-info info-item"><span class="count-item border-box uv"><span class="item-type border-box">访客数</span> <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span> </span><span class="count-item border-box pv"><span class="item-type border-box">访问量</span> <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span></span></div></footer></div></div><div class="post-tools right-toc"><div class="post-tools-container border-box"><ul class="post-tools-list border-box"><li class="tools-item flex-center toggle-show-toc"><i class="fas fa-list"></i></li><li class="tools-item flex-center full-screen"><i class="fa-solid fa-expand"></i></li></ul></div></div><div class="side-tools"><div class="side-tools-container border-box"><ul class="side-tools-list side-tools-show-handle border-box"><li class="tools-item tool-font-adjust-plus flex-center"><i class="fas fa-search-plus"></i></li><li class="tools-item tool-font-adjust-minus flex-center"><i class="fas fa-search-minus"></i></li><li class="tools-item tool-toggle-theme-mode flex-center"><i class="fas fa-moon"></i></li><li class="tools-item tool-scroll-to-bottom flex-center"><i class="fas fa-arrow-down"></i></li></ul><ul class="exposed-tools-list border-box"><li class="tools-item toggle-show-toc-tablet flex-center"><i class="fas fa-list"></i></li><li class="tools-item tool-toggle-show flex-center"><i class="fas fa-cog fa-spin"></i></li><li class="tools-item tool-scroll-to-top flex-center show-arrow"><i class="arrow fas fa-arrow-up"></i> <span class="percent"></span></li></ul></div></div><div class="zoom-in-image-mask"><img class="zoom-in-image"></div><div class="search-pop-overlay"><div class="popup search-popup"><div class="search-header"><span class="search-input-field-pre"><i class="fas fa-keyboard"></i></span><div class="search-input-container"><input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="搜索..." spellcheck="false" type="search" class="search-input"></div><span class="close-popup-btn"><i class="fas fa-times"></i></span></div><div id="search-result"><div id="no-result"><i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i></div></div></div></div><div class="tablet-post-toc-mask"><div class="tablet-post-toc"><div class="post-toc-wrap border-box"><div class="post-toc border-box"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#misc"><span class="nav-text">Misc</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#spooky-sound"><span class="nav-text">Spooky Sound</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#last-minute"><span class="nav-text">Last Minute</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#crypto"><span class="nav-text">Crypto</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#xorsar"><span class="nav-text">xorsar</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#random-base"><span class="nav-text">Random Base</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#strange-base"><span class="nav-text">Strange Base</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#so-much-xor"><span class="nav-text">So much XOR</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#reverse"><span class="nav-text">Reverse</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#tape-reader"><span class="nav-text">Tape Reader</span></a></li></ol></li></ol></div></div></div></div></main><script src="/js/utils.js"></script><script src="/js/header-shrink.js"></script><script src="/js/back2top.js"></script><script src="/js/toggle-theme.js"></script><script src="/js/code-block.js"></script><script src="/js/main.js"></script><script src="/js/libs/anime.min.js"></script><script src="/js/local-search.js"></script><script src="/js/lazyload.js"></script><div class="pjax"><script src="/js/post/post-helper.js"></script><script src="/js/post/toc.js"></script><script src="/js/post/copyright-info.js"></script><script src="/js/post/share.js"></script></div><script src="/js/libs/pjax.min.js"></script><script>window.addEventListener("DOMContentLoaded",()=>{window.pjax=new Pjax({selectors:["head title",".page-container",".pjax"],history:!0,debug:!1,cacheBust:!1,timeout:0,analytics:!1,currentUrlFullReload:!1,scrollRestoration:!1}),document.addEventListener("pjax:send",()=>{KEEP.utils.pjaxProgressBarStart()}),document.addEventListener("pjax:complete",()=>{KEEP.utils.pjaxProgressBarEnd(),window.pjax.executeScripts(document.querySelectorAll("script[data-pjax], .pjax script")),KEEP.initExecute()})})</script></body></html>

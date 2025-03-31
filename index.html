@@ -1,1019 +1,113 @@
-
-
-<!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=dark>
-
-
-
-<head>
-  <meta name="google-site-verification" content="vfJ2GJW1_Q4AOrJXuD5IJvdntHtM2T5hXhBiq3pLXiw" />
-  <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
-  <link rel="icon" href="/img/fluid.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-  
-  <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="Lambert Swizzer">
-  <meta name="keywords" content="">
-  
-    <meta property="og:type" content="website">
-<meta property="og:title" content="Euphome">
-<meta property="og:url" content="https://eupho.me/index.html">
-<meta property="og:site_name" content="Euphome">
-<meta property="og:locale" content="zh_CN">
-<meta property="article:author" content="Lambert Swizzer">
-<meta name="twitter:card" content="summary_large_image">
-  
-  
-  
-  <title>Euphome</title>
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
-
-
-
-
-
-<!-- 主题依赖的图标库，不要自行修改 -->
-<!-- Do not modify the link that theme dependent icons -->
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
-
-
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
-
-
-<link  rel="stylesheet" href="/css/main.css" />
-
-
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
-  
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
-  
-
-
-
-  
-<link rel="stylesheet" href="/css/mac.css">
-
-
-
-  <script id="fluid-configs">
-    var Fluid = window.Fluid || {};
-    Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"eupho.me","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":false,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
-
-    if (CONFIG.web_analytics.follow_dnt) {
-      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
-      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
-    }
-  </script>
-  <script  src="/js/utils.js" ></script>
-  <script  src="/js/color-schema.js" ></script>
-  
-
-
-  
-<meta name="generator" content="Hexo 6.3.0"></head>
-
-
-<body>
-  
-
-  <header>
-    
-
-<div class="header-inner" style="height: 100vh;">
-  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="/">
-      <strong>Euphome</strong>
-    </a>
-
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <div class="animated-icon"><span></span><span></span><span></span></div>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto text-center">
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/">
-                <i class="iconfont icon-home-fill"></i>
-                <span>首页</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/archives/">
-                <i class="iconfont icon-archive-fill"></i>
-                <span>归档</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/categories/">
-                <i class="iconfont icon-category-fill"></i>
-                <span>分类</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/tags/">
-                <i class="iconfont icon-tags-fill"></i>
-                <span>标签</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                <span>关于</span>
-              </a>
-            </li>
-          
-        
-        
-          <li class="nav-item" id="search-btn">
-            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              <i class="iconfont icon-search"></i>
-            </a>
-          </li>
-          
-        
-        
-          <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
-              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
-            </a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-</nav>
-
-  
-
-<div id="banner" class="banner" parallax=true
-     style="background: url('/img/banner.jpg') no-repeat center center; background-size: cover;">
-  <div class="full-bg-img">
-    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-      <div class="banner-text text-center fade-in-up">
-        <div class="h2">
-          
-            <span id="subtitle" data-typed-text="404 Not Found"></span>
-          
-        </div>
-
-        
-      </div>
-
-      
-        <div class="scroll-down-bar">
-          <i class="iconfont icon-arrowdown"></i>
-        </div>
-      
-    </div>
-  </div>
-</div>
-
-</div>
-
-  </header>
-
-  <main>
-    
-      <div class="container nopadding-x-md">
-        <div id="board"
-          style="margin-top: 0">
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
-                
-
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/f77f5df.html" target="_self">
-          2025 数字中国创新大赛 数字安全赛道
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/f77f5df.html" target="_self">
-        <div>
-          题目不难，只是记录一些坑点。
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-03-31 01:37" pubdate>
-              2025-03-31
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Writeups/" class="category-chain-item">Writeups</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/CTF/">#CTF</a>
-            
-              <a href="/tags/Crypto/">#Crypto</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/59a1b91b.html" target="_self">
-          MT19937
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/59a1b91b.html" target="_self">
-        <div>
-          前几天开坑说要用gf2bv试验一下，就趁着这个机会稍微研究一下MT19937吧。
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-03-21 16:43" pubdate>
-              2025-03-21
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E9%9A%8F%E7%AC%94/" class="category-chain-item">随笔</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/%E9%9A%8F%E7%AC%94/%E6%8A%80%E6%9C%AF/" class="category-chain-item">技术</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Crypto/">#Crypto</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/828e6345.html" target="_self">
-          2025 TPCTF Writeup
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/828e6345.html" target="_self">
-        <div>
-          听说TP=Thu+Pku，但是题目质量有点名不副实...
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-03-11 17:37" pubdate>
-              2025-03-11
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Writeups/" class="category-chain-item">Writeups</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/CTF/">#CTF</a>
-            
-              <a href="/tags/Crypto/">#Crypto</a>
-            
-              <a href="/tags/Reverse/">#Reverse</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/9ad61849.html" target="_self">
-          2025 ApoorvCTF Writeup
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/9ad61849.html" target="_self">
-        <div>
-          Rank 18th  又又又是印度佬的比赛，题目味道一如既往的咖喱。  你问我为什么要打？当然是因为前75有域名奖励啦！  因为exp什么的都在另一台设备上，这里就不一个个贴了，简单记录下思路吧。
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-03-04 21:29" pubdate>
-              2025-03-04
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Writeups/" class="category-chain-item">Writeups</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/CTF/">#CTF</a>
-            
-              <a href="/tags/Crypto/">#Crypto</a>
-            
-              <a href="/tags/Misc/">#Misc</a>
-            
-              <a href="/tags/Reverse/">#Reverse</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/e1345c95.html" target="_self">
-          Isogeny概览
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/e1345c95.html" target="_self">
-        <div>
-          你说得对但是现在好像人人都会同源...感觉我不学已经落后了。 本文主要是借鉴鸡块的blog和Triode的blog做个简略的读后感，日后慢慢补充一些东西吧。
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-02-26 20:32" pubdate>
-              2025-02-26
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E9%9A%8F%E7%AC%94/" class="category-chain-item">随笔</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/%E9%9A%8F%E7%AC%94/%E6%8A%80%E6%9C%AF/" class="category-chain-item">技术</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/CTF/">#CTF</a>
-            
-              <a href="/tags/Crypto/">#Crypto</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/35228183.html" target="_self">
-          NoisyCRT
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/35228183.html" target="_self">
-        <div>
-          CRT一般是在已知
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-02-14 17:33" pubdate>
-              2025-02-14
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E9%9A%8F%E7%AC%94/" class="category-chain-item">随笔</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/%E9%9A%8F%E7%AC%94/%E6%8A%80%E6%9C%AF/" class="category-chain-item">技术</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Crypto/">#Crypto</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/1deedd32.html" target="_self">
-          2025 CISCNxCCB Qual Writeup
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/1deedd32.html" target="_self">
-        <div>
-          虽然往届CISCN多有烂活，但是像今年这样强制要求集中参赛还得统一双机位录制、连离开座位都要线上申请的烂活，似乎还是历史首次。至于解题更是限制颇多，甚至不允许使用大语言模型...
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-12-18 22:23" pubdate>
-              2024-12-18
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Writeups/" class="category-chain-item">Writeups</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/CTF/">#CTF</a>
-            
-              <a href="/tags/Crypto/">#Crypto</a>
-            
-              <a href="/tags/Misc/">#Misc</a>
-            
-              <a href="/tags/Reverse/">#Reverse</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/c9ca854d.html" target="_self">
-          Set proxy for Discord on Linux Desktop
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/c9ca854d.html" target="_self">
-        <div>
-          在linux上代理所有应用的最简便方式当然还是透明代理——不少client都提供的"TUN模式"之谓也。然而在我的机子上，开关这个功能总会导致短暂的网络中断，如果不使用这个功能又想代理Discord该怎么办呢？
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-12-09 19:44" pubdate>
-              2024-12-09
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E9%9A%8F%E7%AC%94/" class="category-chain-item">随笔</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/%E9%9A%8F%E7%AC%94/%E6%8A%80%E6%9C%AF/" class="category-chain-item">技术</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Linux/">#Linux</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/c4610b76.html" target="_self">
-          RSA LSB Oracle Attack
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/c4610b76.html" target="_self">
-        <div>
-          翻看crypto attacks时发现的一种攻击，稍微研究了下。
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-29 02:55" pubdate>
-              2024-11-29
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E9%9A%8F%E7%AC%94/" class="category-chain-item">随笔</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/%E9%9A%8F%E7%AC%94/%E6%8A%80%E6%9C%AF/" class="category-chain-item">技术</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Crypto/">#Crypto</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/b156821.html" target="_self">
-          切换到Linux工作环境
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/b156821.html" target="_self">
-        <div>
-          I use Arch btw :)
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-15 02:24" pubdate>
-              2024-11-15
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E9%9A%8F%E7%AC%94/" class="category-chain-item">随笔</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/%E9%9A%8F%E7%AC%94/%E6%8A%80%E6%9C%AF/" class="category-chain-item">技术</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-
-
-  <nav aria-label="navigation">
-    <span class="pagination" id="pagination">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/#board">2</a><a class="page-number" href="/page/3/#board">3</a><a class="extend next" rel="next" href="/page/2/#board"><i class="iconfont icon-arrowright"></i></a>
-    </span>
-  </nav>
-
-
-
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    
-
-    
-      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
-        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-      </a>
-    
-
-    
-      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
-        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
-        </div>
-        <div class="list-group" id="local-search-result"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-    
-
-    
-  </main>
-
-  <footer>
-    <div class="footer-inner">
-  
-    <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
-    </div>
-  
-  
-  
-  
-</div>
-
-  </footer>
-
-  <!-- Scripts -->
-  
-  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
-
-
-<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
-<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
-
-
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var subtitle = document.getElementById('subtitle');
-      if (!subtitle || !typing) {
-        return;
-      }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
-    })(window, document);
-  </script>
-
-
-
-
-  
-    <script  src="/js/img-lazyload.js" ></script>
-  
-
-
-
-
-  <script  src="/js/local-search.js" ></script>
-
-
-
-
-
-<!-- 主题的启动项，将它保持在最底部 -->
-<!-- the boot of the theme, keep it at the bottom -->
-<script  src="/js/boot.js" ></script>
-
-
-  
-
-  <noscript>
-    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
-  </noscript>
-</body>
-</html>
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="keywords" content="Hexo Theme Keep"><meta name="description" content="Hexo Theme Keep"><meta name="author" content="Swizzer"><title>Swizzer&#39;s euphonium</title><link rel="stylesheet" href="/css/style.css"><link rel="shortcut icon" href="/images/favicon.png"><link rel="stylesheet" href="/font/css/fontawesome.min.css"><link rel="stylesheet" href="/font/css/regular.min.css"><link rel="stylesheet" href="/font/css/solid.min.css"><link rel="stylesheet" href="/font/css/brands.min.css"><link rel="stylesheet" href="/css/slogan.css"><script class="keep-theme-configurations">const KEEP=window.KEEP||{};KEEP.hexo_config={hostname:"eupho.me",root:"/",language:"zh-CN",path:"search.json"},KEEP.theme_config={base_info:{primary_color:"#5dffe4",title:"Swizzer's euphonium",author:"Swizzer",avatar:"/img/avatar.png",logo:"/img/logo.png",favicon:"/images/favicon.png"},menu:{home:"/",archives:"/archives",tags:"/tags",categories:"/categories",about:"/about"},first_screen:{enable:!0,background_img:"/img/banner.jpg",background_img_dark:"/img/banner.jpg",description:"No, thank you!",hitokoto:!1},social_contact:{enable:!0,links:{github:"https://github.com/Swizzzer",bilibili:"https://space.bilibili.com/446708215",email:"kyoshaft@outlook.com"}},scroll:{progress_bar:!0,percent:!1,hide_header:!0},home:{announcement:null,category:!0,tag:!0,post_datetime:"updated"},post:{author_badge:{enable:!1,level_badge:!1,custom_badge:"Mio"},word_count:{wordcount:!0,min2read:!0},datetime_format:"YYYY-MM-DD HH:mm:ss",copyright_info:!0,share:!0,reward:{enable:!1,img_link:null,text:null}},code_block:{tools:{enable:!0,style:"default"},highlight_theme:"default"},toc:{enable:!0,number:!1,expand_all:!0,init_open:!0,layout:"right"},website_count:{busuanzi_count:{enable:!0,site_uv:!0,site_pv:!0,page_pv:!0}},local_search:{enable:!0,preload:!0},comment:{enable:!1,use:"gisqus",valine:{appid:null,appkey:null,server_urls:null,placeholder:null},gitalk:{github_id:null,github_admins:null,repository:null,client_id:null,client_secret:null,proxy:null},twikoo:{env_id:null,region:null,version:"1.6.36"},waline:{server_url:null,reaction:!1,version:"3.2.1"},giscus:{repo:"Swizzzer/blogComments",repo_id:"R_kgDOJWumvw",category:"Q&A",category_id:"DIC_kwDOJWumv84CopXz",reactions_enabled:!0},artalk:{server:null},disqus:{shortname:null}},rss:{enable:!1},lazyload:{enable:!0},cdn:{enable:!1,provider:"cdnjs"},pjax:{enable:!0},footer:{since:2022,word_count:!1,site_deploy:{enable:!1,provider:"github",url:null},record:{enable:!1,list:[{code:null,link:null}]}},inject:{enable:!0,css:[["/css/slogan.css"]],js:[null]},root:"",source_data:{},version:"4.2.5"},KEEP.language_ago={second:"%s 秒前",minute:"%s 分钟前",hour:"%s 小时前",day:"%s 天前",week:"%s 周前",month:"%s 个月前",year:"%s 年前"},KEEP.language_code_block={copy:"复制代码",copied:"已复制",fold:"折叠代码块",folded:"已折叠"},KEEP.language_copy_copyright={copy:"复制版权信息",copied:"已复制",title:"原文标题",author:"原文作者",link:"原文链接"}</script><meta name="generator" content="Hexo 6.3.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head><body><div class="progress-bar-container"><span class="scroll-progress-bar"></span> <span class="pjax-progress-bar"></span> <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i></div><main class="page-container border-box"><div class="first-screen-container border-box flex-center fade-in-down-animation"><div class="first-screen-content border-box"><div class="top-placeholder border-box"></div><div class="middle-placeholder border-box"><div class="description border-box"><div class="desc-item border-box"><span class="desc">No, thank you!</span><span class="cursor">｜</span></div></div></div><div class="bottom-placeholder border-box"><div class="sc-icon-list border-box"><div class="tooltip sc-icon-item" data-tooltip-content="GitHub"><a target="_blank" href="https://github.com/Swizzzer"><i class="fab fa-github"></i></a></div><div class="tooltip sc-icon-item" data-tooltip-content="bilibili"><a target="_blank" href="https://space.bilibili.com/446708215"><i class="fab fa-bilibili"></i></a></div><div class="tooltip sc-icon-item" data-tooltip-content="Email"><a href="mailto:kyoshaft@outlook.com"><i class="fas fa-envelope"></i></a></div></div></div></div></div><div class="page-main-content border-box is-home"><div class="page-main-content-top"><header class="header-wrapper transparent-1"><div class="border-box header-content has-first-screen"><div class="left flex-start border-box"><a class="logo-image border-box" href="/"><img src="/img/logo.png"> </a><a class="site-name border-box" href="/">Swizzer&#39;s euphonium</a></div><div class="right border-box"><div class="pc border-box"><ul class="menu-list border-box"><li class="menu-item flex-start border-box active"><a class="menu-text-color border-box" href="/">首页</a></li><li class="menu-item flex-start border-box"><a class="menu-text-color border-box" href="/archives">归档</a></li><li class="menu-item flex-start border-box"><a class="menu-text-color border-box" href="/tags">标签</a></li><li class="menu-item flex-start border-box"><a class="menu-text-color border-box" href="/categories">分类</a></li><li class="menu-item flex-start border-box"><a class="menu-text-color border-box" href="/about">关于</a></li><li class="menu-item search search-popup-trigger"><i class="menu-text-color fas search fa-search"></i></li></ul></div><div class="mobile border-box flex-start"><div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div><div class="icon-item menu-bar"><div class="menu-bar-middle"></div></div></div></div></div><div class="header-drawer"><ul class="drawer-menu-list border-box"><li class="drawer-menu-item border-box not-sub-menu active"><label class="drawer-menu-label border-box"><a class="drawer-menu-text-color left-side flex-start border-box" href="/">首页</a></label></li><li class="drawer-menu-item border-box not-sub-menu"><label class="drawer-menu-label border-box"><a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">归档</a></label></li><li class="drawer-menu-item border-box not-sub-menu"><label class="drawer-menu-label border-box"><a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">标签</a></label></li><li class="drawer-menu-item border-box not-sub-menu"><label class="drawer-menu-label border-box"><a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">分类</a></label></li><li class="drawer-menu-item border-box not-sub-menu"><label class="drawer-menu-label border-box"><a class="drawer-menu-text-color left-side flex-start border-box" href="/about">关于</a></label></li></ul></div><div class="window-mask"></div></header></div><div class="page-main-content-middle border-box"><div class="main-content border-box"><div class="home-content-container fade-in-down-animation"><ul class="home-post-list border-box"><li class="home-post-item"><div class="home-post-item-bottom border-box"><h3 class="home-post-title border-box"><a href="/f77f5df.html">2025 数字中国创新大赛 数字安全赛道</a></h3><div class="home-post-content keep-markdown-body"><p>题目不难，只是记录一些坑点。</p></div><div class="post-meta-info-container border-box home"><div class="post-meta-info border-box"><span class="meta-info-item border-box"><i class="icon fa-solid fa-history"></i>&nbsp;<span class="home-post-history" data-updated="Tue Apr 01 2025 00:38:45 GMT+0800">2025-04-01 00:38:45</span> </span><span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;<ul class="post-category-ul"><li class="category-item"><a href="/categories/Writeups/">Writeups</a></li></ul></span><span class="post-tag meta-info-item border-box"><ul class="post-tag-ul"><li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/CTF/">CTF</a></li><li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Crypto/">Crypto</a></li></ul></span></div><a class="home-read-more" href="/f77f5df.html">阅读全文&nbsp;<i class="icon fas fa-angle-right"></i></a></div></div></li><li class="home-post-item"><div class="home-post-item-bottom border-box"><h3 class="home-post-title border-box"><a href="/59a1b91b.html">MT19937</a></h3><div class="home-post-content keep-markdown-body"><p>前几天<a href="https://eupho.me/828e6345.html">开坑</a>说要用gf2bv试验一下，就趁着这个机会稍微研究一下MT19937吧。</p></div><div class="post-meta-info-container border-box home"><div class="post-meta-info border-box"><span class="meta-info-item border-box"><i class="icon fa-solid fa-history"></i>&nbsp;<span class="home-post-history" data-updated="Tue Apr 01 2025 00:38:54 GMT+0800">2025-04-01 00:38:54</span> </span><span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;<ul class="post-category-ul"><li class="category-item"><a href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></li><li class="category-item">&nbsp;<i class="icon fas fa-angle-right"></i>&nbsp;<a href="/categories/%E9%9A%8F%E7%AC%94/%E6%8A%80%E6%9C%AF/">技术</a></li></ul></span><span class="post-tag meta-info-item border-box"><ul class="post-tag-ul"><li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Crypto/">Crypto</a></li></ul></span></div><a class="home-read-more" href="/59a1b91b.html">阅读全文&nbsp;<i class="icon fas fa-angle-right"></i></a></div></div></li><li class="home-post-item"><div class="home-post-item-bottom border-box"><h3 class="home-post-title border-box"><a href="/828e6345.html">2025 TPCTF Writeup</a></h3><div class="home-post-content keep-markdown-body"><p>听说TP=Thu+Pku，但是题目质量有点名不副实...</p></div><div class="post-meta-info-container border-box home"><div class="post-meta-info border-box"><span class="meta-info-item border-box"><i class="icon fa-solid fa-history"></i>&nbsp;<span class="home-post-history" data-updated="Tue Apr 01 2025 00:38:45 GMT+0800">2025-04-01 00:38:45</span> </span><span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;<ul class="post-category-ul"><li class="category-item"><a href="/categories/Writeups/">Writeups</a></li></ul></span><span class="post-tag meta-info-item border-box"><ul class="post-tag-ul"><li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/CTF/">CTF</a></li><li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Crypto/">Crypto</a></li><li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Reverse/">Reverse</a></li></ul></span></div><a class="home-read-more" href="/828e6345.html">阅读全文&nbsp;<i class="icon fas fa-angle-right"></i></a></div></div></li><li class="home-post-item"><div class="home-post-item-bottom border-box"><h3 class="home-post-title border-box"><a href="/9ad61849.html">2025 ApoorvCTF Writeup</a></h3><div class="home-post-content keep-markdown-body"><figure><img lazyload="" alt="Rank 18th" data-src="../assets/image-17.png"><figcaption aria-hidden="true">Rank 18th</figcaption></figure><p>又又又是印度佬的比赛，题目味道一如既往的咖喱。</p><blockquote><p>你问我为什么要打？当然是因为前75有域名奖励啦！</p></blockquote><p>因为exp什么的都在另一台设备上，这里就不一个个贴了，简单记录下思路吧。</p></div><div class="post-meta-info-container border-box home"><div class="post-meta-info border-box"><span class="meta-info-item border-box"><i class="icon fa-solid fa-history"></i>&nbsp;<span class="home-post-history" data-updated="Tue Apr 01 2025 00:38:45 GMT+0800">2025-04-01 00:38:45</span> </span><span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;<ul class="post-category-ul"><li class="category-item"><a href="/categories/Writeups/">Writeups</a></li></ul></span><span class="post-tag meta-info-item border-box"><ul class="post-tag-ul"><li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/CTF/">CTF</a></li><li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Crypto/">Crypto</a></li><li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Misc/">Misc</a></li><li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Reverse/">Reverse</a></li></ul></span></div><a class="home-read-more" href="/9ad61849.html">阅读全文&nbsp;<i class="icon fas fa-angle-right"></i></a></div></div></li><li class="home-post-item"><div class="home-post-item-bottom border-box"><h3 class="home-post-title border-box"><a href="/e1345c95.html">Isogeny概览</a></h3><div class="home-post-content keep-markdown-body"><p>你说得对但是现在好像人人都会同源...感觉我不学已经落后了。 本文主要是借鉴<a class="link" target="_blank" rel="noopener" href="https://tangcuxiaojikuai.xyz/post/e06139e7.html">鸡块的blog<i class="fas fa-external-link-alt"></i></a>和<a class="link" target="_blank" rel="noopener" href="https://triodelzx.github.io/2025/02/26/%E5%90%8C%E6%BA%90%EF%BC%881%EF%BC%89%E2%80%94%E2%80%94SIDH/">Triode的blog<i class="fas fa-external-link-alt"></i></a>做个简略的读后感，日后慢慢补充一些东西吧。</p></div><div class="post-meta-info-container border-box home"><div class="post-meta-info border-box"><span class="meta-info-item border-box"><i class="icon fa-solid fa-history"></i>&nbsp;<span class="home-post-history" data-updated="Tue Apr 01 2025 00:38:54 GMT+0800">2025-04-01 00:38:54</span> </span><span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;<ul class="post-category-ul"><li class="category-item"><a href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></li><li class="category-item">&nbsp;<i class="icon fas fa-angle-right"></i>&nbsp;<a href="/categories/%E9%9A%8F%E7%AC%94/%E6%8A%80%E6%9C%AF/">技术</a></li></ul></span><span class="post-tag meta-info-item border-box"><ul class="post-tag-ul"><li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/CTF/">CTF</a></li><li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Crypto/">Crypto</a></li></ul></span></div><a class="home-read-more" href="/e1345c95.html">阅读全文&nbsp;<i class="icon fas fa-angle-right"></i></a></div></div></li><li class="home-post-item"><div class="home-post-item-bottom border-box"><h3 class="home-post-title border-box"><a href="/35228183.html">NoisyCRT</a></h3><div class="home-post-content keep-markdown-body"><p>CRT一般是在已知</p></div><div class="post-meta-info-container border-box home"><div class="post-meta-info border-box"><span class="meta-info-item border-box"><i class="icon fa-solid fa-history"></i>&nbsp;<span class="home-post-history" data-updated="Tue Apr 01 2025 00:38:54 GMT+0800">2025-04-01 00:38:54</span> </span><span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;<ul class="post-category-ul"><li class="category-item"><a href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></li><li class="category-item">&nbsp;<i class="icon fas fa-angle-right"></i>&nbsp;<a href="/categories/%E9%9A%8F%E7%AC%94/%E6%8A%80%E6%9C%AF/">技术</a></li></ul></span><span class="post-tag meta-info-item border-box"><ul class="post-tag-ul"><li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Crypto/">Crypto</a></li></ul></span></div><a class="home-read-more" href="/35228183.html">阅读全文&nbsp;<i class="icon fas fa-angle-right"></i></a></div></div></li><li class="home-post-item"><div class="home-post-item-bottom border-box"><h3 class="home-post-title border-box"><a href="/1deedd32.html">2025 CISCNxCCB Qual Writeup</a></h3><div class="home-post-content keep-markdown-body"><p>虽然往届CISCN多有烂活，但是像今年这样强制要求集中参赛还得统一双机位录制、连离开座位都要线上申请的烂活，似乎还是历史首次。至于解题更是限制颇多，甚至不允许使用大语言模型...</p></div><div class="post-meta-info-container border-box home"><div class="post-meta-info border-box"><span class="meta-info-item border-box"><i class="icon fa-solid fa-history"></i>&nbsp;<span class="home-post-history" data-updated="Tue Apr 01 2025 00:38:45 GMT+0800">2025-04-01 00:38:45</span> </span><span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;<ul class="post-category-ul"><li class="category-item"><a href="/categories/Writeups/">Writeups</a></li></ul></span><span class="post-tag meta-info-item border-box"><ul class="post-tag-ul"><li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/CTF/">CTF</a></li><li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Crypto/">Crypto</a></li><li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Misc/">Misc</a></li><li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Reverse/">Reverse</a></li></ul></span></div><a class="home-read-more" href="/1deedd32.html">阅读全文&nbsp;<i class="icon fas fa-angle-right"></i></a></div></div></li><li class="home-post-item"><div class="home-post-item-bottom border-box"><h3 class="home-post-title border-box"><a href="/c9ca854d.html">Set proxy for Discord on Linux Desktop</a></h3><div class="home-post-content keep-markdown-body"><p>在linux上代理所有应用的最简便方式当然还是透明代理——不少client都提供的"TUN模式"之谓也。然而在我的机子上，开关这个功能总会导致短暂的网络中断，如果不使用这个功能又想代理Discord该怎么办呢？</p></div><div class="post-meta-info-container border-box home"><div class="post-meta-info border-box"><span class="meta-info-item border-box"><i class="icon fa-solid fa-history"></i>&nbsp;<span class="home-post-history" data-updated="Tue Apr 01 2025 00:38:54 GMT+0800">2025-04-01 00:38:54</span> </span><span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;<ul class="post-category-ul"><li class="category-item"><a href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></li><li class="category-item">&nbsp;<i class="icon fas fa-angle-right"></i>&nbsp;<a href="/categories/%E9%9A%8F%E7%AC%94/%E6%8A%80%E6%9C%AF/">技术</a></li></ul></span><span class="post-tag meta-info-item border-box"><ul class="post-tag-ul"><li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Linux/">Linux</a></li></ul></span></div><a class="home-read-more" href="/c9ca854d.html">阅读全文&nbsp;<i class="icon fas fa-angle-right"></i></a></div></div></li><li class="home-post-item"><div class="home-post-item-bottom border-box"><h3 class="home-post-title border-box"><a href="/c4610b76.html">RSA LSB Oracle Attack</a></h3><div class="home-post-content keep-markdown-body"><p>翻看<a class="link" target="_blank" rel="noopener" href="https://github.com/jvdsn/crypto-attacks">crypto attacks<i class="fas fa-external-link-alt"></i></a>时发现的一种攻击，稍微研究了下。</p></div><div class="post-meta-info-container border-box home"><div class="post-meta-info border-box"><span class="meta-info-item border-box"><i class="icon fa-solid fa-history"></i>&nbsp;<span class="home-post-history" data-updated="Tue Apr 01 2025 00:38:54 GMT+0800">2025-04-01 00:38:54</span> </span><span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;<ul class="post-category-ul"><li class="category-item"><a href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></li><li class="category-item">&nbsp;<i class="icon fas fa-angle-right"></i>&nbsp;<a href="/categories/%E9%9A%8F%E7%AC%94/%E6%8A%80%E6%9C%AF/">技术</a></li></ul></span><span class="post-tag meta-info-item border-box"><ul class="post-tag-ul"><li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Crypto/">Crypto</a></li></ul></span></div><a class="home-read-more" href="/c4610b76.html">阅读全文&nbsp;<i class="icon fas fa-angle-right"></i></a></div></div></li><li class="home-post-item"><div class="home-post-item-bottom border-box"><h3 class="home-post-title border-box"><a href="/b156821.html">切换到Linux工作环境</a></h3><div class="home-post-content keep-markdown-body"><figure><img lazyload alt="image" data-src="../assets/screen_shot_.png" alt="I use Arch btw :)"><figcaption aria-hidden="true">I use Arch btw :)</figcaption></figure></div><div class="post-meta-info-container border-box home"><div class="post-meta-info border-box"><span class="meta-info-item border-box"><i class="icon fa-solid fa-history"></i>&nbsp;<span class="home-post-history" data-updated="Tue Apr 01 2025 00:38:55 GMT+0800">2025-04-01 00:38:55</span> </span><span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;<ul class="post-category-ul"><li class="category-item"><a href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></li><li class="category-item">&nbsp;<i class="icon fas fa-angle-right"></i>&nbsp;<a href="/categories/%E9%9A%8F%E7%AC%94/%E6%8A%80%E6%9C%AF/">技术</a></li></ul></span></div><a class="home-read-more" href="/b156821.html">阅读全文&nbsp;<i class="icon fas fa-angle-right"></i></a></div></div></li></ul><div class="paginator border-box flex-center"><div class="border-box first-page paginator-btn not-allow"><a class="border-box"><i class="fa-solid fa-angle-double-left"></i></a></div><div class="border-box paginator-btn"><a class="border-box" href="/"><i class="fa-solid fa-chevron-left"></i></a></div><div class="page-number-box border-box flex-center"><input class="page-number-input border-box base-style" type="number" value="1" min="1" max="3"><span class="delimiter base-style">/</span><span class="base-style">3</span></div><div class="border-box paginator-btn allowed"><a class="border-box" href="/page/2/"><i class="fa-solid fa-chevron-right"></i></a></div><div class="border-box last-page paginator-btn allowed"><a class="border-box"><i class="fa-solid fa-angle-double-right"></i></a></div></div></div></div></div><div class="page-main-content-bottom border-box"><footer class="footer border-box"><div class="copyright-info info-item">&copy;&nbsp;<span>2022</span>&nbsp;-&nbsp;2025 &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Swizzer</a></div><div class="theme-info info-item">由&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;驱动&nbsp;&&nbsp;主题&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a></div><div class="count-info info-item"><span class="count-item border-box uv"><span class="item-type border-box">访客数</span> <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span> </span><span class="count-item border-box pv"><span class="item-type border-box">访问量</span> <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span></span></div></footer></div></div><div class="side-tools"><div class="side-tools-container border-box side-tools-show-handle"><ul class="side-tools-list side-tools-show-handle border-box"><li class="tools-item tool-font-adjust-plus flex-center"><i class="fas fa-search-plus"></i></li><li class="tools-item tool-font-adjust-minus flex-center"><i class="fas fa-search-minus"></i></li><li class="tools-item tool-toggle-theme-mode flex-center"><i class="fas fa-moon"></i></li><li class="tools-item tool-scroll-to-bottom flex-center"><i class="fas fa-arrow-down"></i></li></ul><ul class="exposed-tools-list border-box"><li class="tools-item tool-toggle-show flex-center"><i class="fas fa-cog fa-spin"></i></li><li class="tools-item tool-scroll-to-top flex-center show-arrow"><i class="arrow fas fa-arrow-up"></i> <span class="percent"></span></li></ul></div></div><div class="zoom-in-image-mask"><img class="zoom-in-image"></div><div class="search-pop-overlay"><div class="popup search-popup"><div class="search-header"><span class="search-input-field-pre"><i class="fas fa-keyboard"></i></span><div class="search-input-container"><input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="搜索..." spellcheck="false" type="search" class="search-input"></div><span class="close-popup-btn"><i class="fas fa-times"></i></span></div><div id="search-result"><div id="no-result"><i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i></div></div></div></div></main><script src="/js/utils.js"></script><script src="/js/header-shrink.js"></script><script src="/js/back2top.js"></script><script src="/js/toggle-theme.js"></script><script src="/js/code-block.js"></script><script src="/js/main.js"></script><script src="/js/libs/anime.min.js"></script><script src="/js/local-search.js"></script><script src="/js/lazyload.js"></script><div class="pjax"><script src="/js/page/home-page.js"></script></div><script src="/js/libs/pjax.min.js"></script><script>window.addEventListener("DOMContentLoaded",()=>{window.pjax=new Pjax({selectors:["head title",".page-container",".pjax"],history:!0,debug:!1,cacheBust:!1,timeout:0,analytics:!1,currentUrlFullReload:!1,scrollRestoration:!1}),document.addEventListener("pjax:send",()=>{KEEP.utils.pjaxProgressBarStart()}),document.addEventListener("pjax:complete",()=>{KEEP.utils.pjaxProgressBarEnd(),window.pjax.executeScripts(document.querySelectorAll("script[data-pjax], .pjax script")),KEEP.initExecute()})})</script></body></html>

@@ -1,794 +1,113 @@
-
-
-<!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=dark>
-
-
-
-<head>
-  <meta name="google-site-verification" content="vfJ2GJW1_Q4AOrJXuD5IJvdntHtM2T5hXhBiq3pLXiw" />
-  <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
-  <link rel="icon" href="/img/fluid.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-  
-  <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="Lambert Swizzer">
-  <meta name="keywords" content="">
-  
-    <meta name="description" content="虽然往届CISCN多有烂活，但是像今年这样强制要求集中参赛还得统一双机位录制、连离开座位都要线上申请的烂活，似乎还是历史首次。至于解题更是限制颇多，甚至不允许使用大语言模型...">
-<meta property="og:type" content="article">
-<meta property="og:title" content="2025 CISCNxCCB Qual Writeup">
-<meta property="og:url" content="https://eupho.me/1deedd32.html">
-<meta property="og:site_name" content="Euphome">
-<meta property="og:description" content="虽然往届CISCN多有烂活，但是像今年这样强制要求集中参赛还得统一双机位录制、连离开座位都要线上申请的烂活，似乎还是历史首次。至于解题更是限制颇多，甚至不允许使用大语言模型...">
-<meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://eupho.me/assets/image-13.png">
-<meta property="og:image" content="https://eupho.me/assets/image-14.png">
-<meta property="article:published_time" content="2024-12-18T14:23:33.000Z">
-<meta property="article:modified_time" content="2025-03-31T16:38:45.702Z">
-<meta property="article:author" content="Lambert Swizzer">
-<meta property="article:tag" content="CTF">
-<meta property="article:tag" content="Crypto">
-<meta property="article:tag" content="Misc">
-<meta property="article:tag" content="Reverse">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://eupho.me/assets/image-13.png">
-  
-  
-  
-  <title>2025 CISCNxCCB Qual Writeup - Euphome</title>
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
-
-
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
-
-
-<!-- 主题依赖的图标库，不要自行修改 -->
-<!-- Do not modify the link that theme dependent icons -->
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
-
-
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
-
-
-<link  rel="stylesheet" href="/css/main.css" />
-
-
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
-  
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
-  
-
-
-
-  
-<link rel="stylesheet" href="/css/mac.css">
-
-
-
-  <script id="fluid-configs">
-    var Fluid = window.Fluid || {};
-    Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"eupho.me","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":false,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
-
-    if (CONFIG.web_analytics.follow_dnt) {
-      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
-      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
-    }
-  </script>
-  <script  src="/js/utils.js" ></script>
-  <script  src="/js/color-schema.js" ></script>
-  
-
-
-  
-<meta name="generator" content="Hexo 6.3.0"></head>
-
-
-<body>
-  
-
-  <header>
-    
-
-<div class="header-inner" style="height: 70vh;">
-  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="/">
-      <strong>Euphome</strong>
-    </a>
-
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <div class="animated-icon"><span></span><span></span><span></span></div>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto text-center">
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/">
-                <i class="iconfont icon-home-fill"></i>
-                <span>首页</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/archives/">
-                <i class="iconfont icon-archive-fill"></i>
-                <span>归档</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/categories/">
-                <i class="iconfont icon-category-fill"></i>
-                <span>分类</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/tags/">
-                <i class="iconfont icon-tags-fill"></i>
-                <span>标签</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                <span>关于</span>
-              </a>
-            </li>
-          
-        
-        
-          <li class="nav-item" id="search-btn">
-            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              <i class="iconfont icon-search"></i>
-            </a>
-          </li>
-          
-        
-        
-          <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
-              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
-            </a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-</nav>
-
-  
-
-<div id="banner" class="banner" parallax=true
-     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
-  <div class="full-bg-img">
-    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-      <div class="banner-text text-center fade-in-up">
-        <div class="h2">
-          
-            <span id="subtitle" data-typed-text="2025 CISCNxCCB Qual Writeup"></span>
-          
-        </div>
-
-        
-          
-  <div class="mt-3">
-    
-    
-      <span class="post-meta">
-        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-12-18 22:23" pubdate>
-          2024年12月18日 晚上
-        </time>
-      </span>
-    
-  </div>
-
-  <div class="mt-1">
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-chart"></i>
-        
-          6k 字
-        
-      </span>
-    
-
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-clock-fill"></i>
-        
-        
-        
-          10 分钟
-        
-      </span>
-    
-
-    
-    
-  </div>
-
-
-        
-      </div>
-
-      
-    </div>
-  </div>
-</div>
-
-</div>
-
-  </header>
-
-  <main>
-    
-      
-
-<div class="container-fluid nopadding-x">
-  <div class="row nomargin-x">
-    <div class="side-col d-none d-lg-block col-lg-2">
-      
-
-    </div>
-
-    <div class="col-lg-8 nopadding-x-md">
-      <div class="container nopadding-x-md" id="board-ctn">
-        <div id="board">
-          <article class="post-content mx-auto">
-            <!-- SEO header -->
-            <h1 style="display: none">2025 CISCNxCCB Qual Writeup</h1>
-            
-              <p class="note note-info">
-                
-                  
-                    本文最后更新于：2025年4月1日 凌晨
-                  
-                
-              </p>
-            
-            
-              <div class="markdown-body">
-                
-                <p>虽然往届CISCN多有烂活，但是像今年这样强制要求集中参赛还得统一双机位录制、连离开座位都要线上申请的烂活，似乎还是历史首次。至于解题更是限制颇多，甚至不允许使用大语言模型...</p>
-<span id="more"></span>
-<h2 id="crypto">Crypto</h2>
-<h3 id="rasnd">rasnd</h3>
-<p>前半部分经典套路，x1和x2均可爆破，然后就能两个方程联立消去p得到一个关于q的一次方程f(q)，接着gcd(n,f(q))就能获得q。</p>
-<p>后半部分给的hint事实上就是 <span class="math inline">\((514*p -
-114*q)^{-1}\bmod{n}\)</span> ，inverse()然后解方程就能获得p，q。</p>
-<blockquote>
-<p>exp</p>
-</blockquote>
-<figure class="highlight python"><i class="iconfont icon-github-fill" type="button" data-toggle="collapse" data-target="#collapse-vt3fl5m8xc7gr6"></i><span>python</span><div class="collapse show" id="collapse-vt3fl5m8xc7gr6"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/sage</span><br><span class="hljs-keyword">from</span> Crypto.Util.number <span class="hljs-keyword">import</span> *<br><span class="hljs-keyword">import</span> itertools<br><span class="hljs-keyword">from</span> tqdm <span class="hljs-keyword">import</span> tqdm, trange<br><br>hint1 = <br>hint2 = <br>n1 = <br><span class="hljs-keyword">for</span> a,b <span class="hljs-keyword">in</span> tqdm(itertools.product(<span class="hljs-built_in">range</span>(<span class="hljs-number">2</span>**<span class="hljs-number">11</span>),repeat=<span class="hljs-number">2</span>)):<br>    q = GCD(a*(hint1+<span class="hljs-number">0x114</span>)-b*(hint2+<span class="hljs-number">0x514</span>),n1)<br>    <span class="hljs-keyword">if</span> q != <span class="hljs-number">1</span> <span class="hljs-keyword">and</span> q!= n1:<br>        <span class="hljs-built_in">print</span>(q,n1//q)<br>        <span class="hljs-keyword">break</span><br>q1,p1 =q, n1//q<br>c1 = <br>d = inverse(<span class="hljs-number">65537</span>,(p1-<span class="hljs-number">1</span>)*(q1-<span class="hljs-number">1</span>))<br><span class="hljs-built_in">print</span>(long_to_bytes(<span class="hljs-built_in">pow</span>(c1,d,n1)))<br>hint3 = <br>n2 = <br>gao = inverse(hint3,n2)<br>var(<span class="hljs-string">&#x27;p2 q2&#x27;</span>)<br>eq1 = <span class="hljs-number">514</span>*p2-<span class="hljs-number">114</span>*q2-gao<br>eq2 = p2*q2-n2<br>sol = solve([eq1,eq2],p2,q2)<br>d = inverse(<span class="hljs-number">65537</span>,(p2-<span class="hljs-number">1</span>)*(q2-<span class="hljs-number">1</span>))<br><span class="hljs-built_in">print</span>(long_to_bytes(<span class="hljs-built_in">pow</span>(c,d,n2)))<br></code></pre></td></tr></table></div></figure>
-<h3 id="fffffhash">fffffhash</h3>
-<p>2023 DownUnder
-CTF的原题，同时也是去年CISCN考过的考点。原题有MITM和格两种预期解，不过这题长度比较长，MITM大概是很困难的。</p>
-<p>所以直接套用DUCTF的官方的格做法就好了：</p>
-<blockquote>
-<p>exp</p>
-</blockquote>
-<figure class="highlight python"><i class="iconfont icon-github-fill" type="button" data-toggle="collapse" data-target="#collapse-1kaiudm8xc7gr6"></i><span>python</span><div class="collapse show" id="collapse-1kaiudm8xc7gr6"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> Crypto.Util.number <span class="hljs-keyword">import</span> *<br><span class="hljs-keyword">import</span> itertools<br><span class="hljs-keyword">from</span> tqdm <span class="hljs-keyword">import</span> tqdm, trange<br>TARGET = <span class="hljs-number">201431453607244229943761366749810895688</span><br>h0 = <span class="hljs-number">0x6c62272e07bb014262b821756295c58d</span><br>p = <span class="hljs-number">0x0000000001000000000000000000013b</span><br>MOD = <span class="hljs-number">2</span>^<span class="hljs-number">128</span><br><br>n = <span class="hljs-number">16</span><br>M = Matrix.column([p^(n - i - <span class="hljs-number">1</span>) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n)] + [-(TARGET - h0*p^n), MOD])<br>M = M.augment(identity_matrix(n+<span class="hljs-number">1</span>).stack(vector([<span class="hljs-number">0</span>] * (n+<span class="hljs-number">1</span>))))<br>Q = Matrix.diagonal([<span class="hljs-number">2</span>^<span class="hljs-number">128</span>] + [<span class="hljs-number">2</span>^<span class="hljs-number">4</span>] * n + [<span class="hljs-number">2</span>^<span class="hljs-number">8</span>])<br>M *= Q<br>M = M.BKZ()<br>M /= Q<br><span class="hljs-keyword">for</span> r <span class="hljs-keyword">in</span> M:<br>    <span class="hljs-keyword">if</span> r[<span class="hljs-number">0</span>] == <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">abs</span>(r[-<span class="hljs-number">1</span>]) == <span class="hljs-number">1</span>:<br>        r *= r[-<span class="hljs-number">1</span>]<br>        good = r[<span class="hljs-number">1</span>:-<span class="hljs-number">1</span>]<br>        <span class="hljs-built_in">print</span>(good)<br>        <span class="hljs-keyword">break</span><br>inp = []<br>y = <span class="hljs-built_in">int</span>(h0*p)<br>t = (h0*p^n + good[<span class="hljs-number">0</span>] * p^(n-<span class="hljs-number">1</span>)) % MOD<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n):<br>    <span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">256</span>):<br>        y_ = (<span class="hljs-built_in">int</span>(y) ^^ <span class="hljs-built_in">int</span>(x)) * p^(n-i-<span class="hljs-number">1</span>) % MOD<br>        <span class="hljs-keyword">if</span> y_ == t:<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;good&#x27;</span>, i, x)<br>            inp.append(x)<br>            <span class="hljs-keyword">if</span> i &lt; n-<span class="hljs-number">1</span>:<br>                t = (t + good[i+<span class="hljs-number">1</span>] * p^(n-i-<span class="hljs-number">2</span>)) % MOD<br>                y = ((<span class="hljs-built_in">int</span>(y) ^^ <span class="hljs-built_in">int</span>(x)) * p) % MOD<br>            <span class="hljs-keyword">break</span><br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;bad&#x27;</span>, i)<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">bytes</span>(inp).<span class="hljs-built_in">hex</span>())<br></code></pre></td></tr></table></div></figure>
-<p>这题还拿了个二血XD</p>
-<h3 id="lwewl">*LWEWL</h3>
-<p>铸币了，后半部分的RLWE当天上午就解决了，结果前半部分的LWE因为没注意到两个pubkey的线性关系所以一直纳闷怎么在一个1124x1124的格上做LLL，还尝试了一堆黑科技和数学操作——结果当然也是不成功的，于是当天下午就直接把这题全盘扔给新人去看了XD</p>
-<blockquote>
-<p>还是要认真审计代码</p>
-</blockquote>
-<p>贴个Astrageldon师傅的代码(略有改动)，RLWE的思路跟我的比较像但是代码比我的美观多了QQ</p>
-<figure class="highlight python"><i class="iconfont icon-github-fill" type="button" data-toggle="collapse" data-target="#collapse-z6utm4m8xc7gr6"></i><span>python</span><div class="collapse show" id="collapse-z6utm4m8xc7gr6"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/sage</span><br>a, b, f, rlwe_modulus = load(<span class="hljs-string">&quot;rlwe_ciphertext.sobj&quot;</span>)<br>rlwe_dim = <span class="hljs-number">64</span><br>names = <span class="hljs-string">&#x27;,&#x27;</span>.join([<span class="hljs-string">&#x27;x&#x27;</span>] + [<span class="hljs-string">f&#x27;s<span class="hljs-subst">&#123;i&#125;</span>&#x27;</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(rlwe_dim)])<br>P = PolynomialRing(GF(rlwe_modulus), names = names)<br>x = P.gen(<span class="hljs-number">0</span>)<br>a = <span class="hljs-built_in">sum</span>(a_*x^i <span class="hljs-keyword">for</span> i,a_ <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(<span class="hljs-built_in">list</span>(a)))<br>b = <span class="hljs-built_in">sum</span>(b_*x^i <span class="hljs-keyword">for</span> i,b_ <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(<span class="hljs-built_in">list</span>(b)))<br>f = <span class="hljs-built_in">sum</span>(f_*x^i <span class="hljs-keyword">for</span> i,f_ <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(<span class="hljs-built_in">list</span>(f)))<br>Q = P.quo(f)<br><br><br>s = P.gens()[<span class="hljs-number">1</span>:]<br>t = Q(<span class="hljs-built_in">sum</span>(a.monomial_coefficient(x^i)*x^i <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(rlwe_dim))) * Q(<span class="hljs-built_in">sum</span>(s_*x^i <span class="hljs-keyword">for</span> i,s_ <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(<span class="hljs-built_in">list</span>(s))))<br>tl = t.lift()<br>tm = tl.monomials()<br>tc = tl.coefficients()<br><br><br>L = zero_matrix(ZZ, <span class="hljs-number">2</span>*rlwe_dim + <span class="hljs-number">1</span>, <span class="hljs-number">2</span>*rlwe_dim + <span class="hljs-number">1</span>)<br><span class="hljs-keyword">for</span> c, m <span class="hljs-keyword">in</span> <span class="hljs-built_in">zip</span>(tc, tm):<br>    j = m.degree(x)<br>    i = s.index(m // x^j)<br>    L[i, j] = c<br><br><br><span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(rlwe_dim):<br>    L[j + rlwe_dim, j] = rlwe_modulus<br>    L[j, j + rlwe_dim] = <span class="hljs-number">1</span><br>    L[<span class="hljs-number">2</span>*rlwe_dim, j] = -b.monomial_coefficient(x^j)<br>L[<span class="hljs-number">2</span>*rlwe_dim, <span class="hljs-number">2</span>*rlwe_dim] = <span class="hljs-number">1</span><br></code></pre></td></tr></table></div></figure>
-<h2 id="re">Re</h2>
-<h3 id="ezcsky">ezCsky</h3>
-<p>IDA跟BinaryNinja都反编译不了，识别了一下貌似是M
-Core架构(什么偏门的Motorola处理器)</p>
-<p>Google到相关企业给的开发手册，对着手册嗯看汇编识别出RC4，.rodata段里找到密文，key应该是strings里的<code>testkey</code></p>
-<p>但是直接解密出来是乱码：</p>
-<figure>
-<img src="../assets/image-13.png" srcset="/img/loading.gif" lazyload alt="是时候通灵了" />
-<figcaption aria-hidden="true">是时候通灵了</figcaption>
-</figure>
-<p>因为最后一位是对的所以猜一个逐字符异或：</p>
-<figure class="highlight python"><i class="iconfont icon-github-fill" type="button" data-toggle="collapse" data-target="#collapse-g9nvs6m8xc7gr6"></i><span>python</span><div class="collapse show" id="collapse-g9nvs6m8xc7gr6"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> Crypto.Util.number <span class="hljs-keyword">import</span> *<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">KSA</span>(<span class="hljs-params">key</span>):<br>    <span class="hljs-string">&quot;&quot;&quot; Key-Scheduling Algorithm (KSA) &quot;&quot;&quot;</span><br>    S = <span class="hljs-built_in">list</span>(<span class="hljs-built_in">range</span>(<span class="hljs-number">256</span>))<br>    j = <span class="hljs-number">0</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">256</span>):<br>        j = (j + S[i] + key[i % <span class="hljs-built_in">len</span>(key)]) % <span class="hljs-number">256</span><br>        S[i], S[j] = S[j], S[i]<br>    <span class="hljs-keyword">return</span> S<br> <br><span class="hljs-keyword">def</span> <span class="hljs-title function_">PRGA</span>(<span class="hljs-params">S</span>):<br>    <span class="hljs-string">&quot;&quot;&quot; Pseudo-Random Generation Algorithm (PRGA) &quot;&quot;&quot;</span><br>    i, j = <span class="hljs-number">0</span>, <span class="hljs-number">0</span><br>    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>        i = (i + <span class="hljs-number">1</span>) % <span class="hljs-number">256</span><br>        j = (j + S[i]) % <span class="hljs-number">256</span><br>        S[i], S[j] = S[j], S[i]<br>        K = S[(S[i] + S[j]) % <span class="hljs-number">256</span>]<br>        <span class="hljs-keyword">yield</span> K<br> <br><span class="hljs-keyword">def</span> <span class="hljs-title function_">RC4</span>(<span class="hljs-params">key, text</span>):<br>    <span class="hljs-string">&quot;&quot;&quot; RC4 encryption/decryption &quot;&quot;&quot;</span><br>    S = KSA(key)<br>    keystream = PRGA(S)<br>    res = []<br>    <span class="hljs-keyword">for</span> char <span class="hljs-keyword">in</span> text:<br>        res.append(char ^ <span class="hljs-built_in">next</span>(keystream))<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">bytes</span>(res)<br><br><br>c=[<span class="hljs-number">0x96</span>, <span class="hljs-number">0x8F</span>, <span class="hljs-number">0xB8</span>, <span class="hljs-number">0x08</span>, <span class="hljs-number">0x5D</span>, <span class="hljs-number">0xA7</span>, <span class="hljs-number">0x68</span>, <span class="hljs-number">0x44</span>, <span class="hljs-number">0xF2</span>, <span class="hljs-number">0x64</span>, <br>  <span class="hljs-number">0x92</span>, <span class="hljs-number">0x64</span>, <span class="hljs-number">0x42</span>, <span class="hljs-number">0x7A</span>, <span class="hljs-number">0x78</span>, <span class="hljs-number">0xE6</span>, <span class="hljs-number">0xEA</span>, <span class="hljs-number">0xC2</span>, <span class="hljs-number">0x78</span>, <span class="hljs-number">0xB8</span>, <br>  <span class="hljs-number">0x63</span>, <span class="hljs-number">0x9E</span>, <span class="hljs-number">0x5B</span>, <span class="hljs-number">0x3D</span>, <span class="hljs-number">0xD9</span>, <span class="hljs-number">0x28</span>, <span class="hljs-number">0x3F</span>, <span class="hljs-number">0xC8</span>, <span class="hljs-number">0x73</span>, <span class="hljs-number">0x06</span>, <br>  <span class="hljs-number">0xEE</span>, <span class="hljs-number">0x6B</span>, <span class="hljs-number">0x8D</span>, <span class="hljs-number">0x0C</span>, <span class="hljs-number">0x4B</span>, <span class="hljs-number">0xA3</span>, <span class="hljs-number">0x23</span>, <span class="hljs-number">0xAE</span>, <span class="hljs-number">0xCA</span>, <span class="hljs-number">0x40</span>, <br>  <span class="hljs-number">0xED</span>, <span class="hljs-number">0xD1</span>]<br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    <span class="hljs-comment"># with open(&#x27;./ezCsky&#x27;,&#x27;rb&#x27;)as f:</span><br>    <span class="hljs-comment">#     data = f.read()</span><br>    key = <span class="hljs-string">b&#x27;testkey&#x27;</span>  <span class="hljs-comment"># 加密key</span><br>    m = RC4(key,<span class="hljs-built_in">bytes</span>(c))<br>    <span class="hljs-built_in">print</span>(m)<br>    m = <span class="hljs-built_in">list</span>(m)<br>    i = <span class="hljs-built_in">len</span>(m)-<span class="hljs-number">2</span><br>    <span class="hljs-keyword">while</span> i&gt;=<span class="hljs-number">0</span>:<br>        m[i]=m[i]^m[i+<span class="hljs-number">1</span>]<br>        i-=<span class="hljs-number">1</span><br>    m= <span class="hljs-built_in">bytes</span>(m)<br>    <span class="hljs-built_in">print</span>(m)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-built_in">len</span>(c))<br></code></pre></td></tr></table></div></figure>
-<p>然后就出了。</p>
-<h3 id="dump">dump</h3>
-<p>单字节加密，直接当古典密码做就行。</p>
-<blockquote>
-<p>exp</p>
-</blockquote>
-<figure class="highlight python"><i class="iconfont icon-github-fill" type="button" data-toggle="collapse" data-target="#collapse-iii2upm8xc7gr6"></i><span>python</span><div class="collapse show" id="collapse-iii2upm8xc7gr6"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> subprocess<br><br>program_path = <span class="hljs-string">&quot;./re.exe&quot;</span>  <br>visible_characters = <span class="hljs-string">&#x27;&#x27;</span>.join([<span class="hljs-built_in">chr</span>(i) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">32</span>, <span class="hljs-number">127</span>)])  <span class="hljs-comment"># ASCII 可见字符</span><br><br><span class="hljs-keyword">try</span>:<br>    result = subprocess.run([program_path, visible_characters], <br>                            capture_output=<span class="hljs-literal">True</span>, text=<span class="hljs-literal">True</span>, check=<span class="hljs-literal">True</span>)<br>    program_output = result.stdout.strip()<br><span class="hljs-keyword">except</span> subprocess.CalledProcessError <span class="hljs-keyword">as</span> e:<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Error occurred while running the program:&quot;</span>, e)<br>    exit(<span class="hljs-number">1</span>)<br><br><span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(program_output) % <span class="hljs-number">2</span> != <span class="hljs-number">0</span>:<br>    <span class="hljs-keyword">raise</span> ValueError(<span class="hljs-string">&quot;Program output length must be even to map pairs of characters.&quot;</span>)<br><br>output_mapping = &#123;&#125;<br><span class="hljs-comment"># 把所有可见字符喂进去构建出的明密文映射字典</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>, <span class="hljs-built_in">len</span>(program_output), <span class="hljs-number">2</span>):<br>    output_pair = program_output[i:i+<span class="hljs-number">2</span>]<br>    key = visible_characters[i // <span class="hljs-number">2</span>]<br>    output_mapping[key] = output_pair<br><br>encoded_string = <span class="hljs-string">&quot;23291e24380e1520370e0520000e37121d0f24010139&quot;</span><br><br>decoded_string = <span class="hljs-string">&quot;&quot;</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>, <span class="hljs-built_in">len</span>(encoded_string), <span class="hljs-number">2</span>):<br>    encoded_pair = encoded_string[i:i+<span class="hljs-number">2</span>]<br>    <br>    <span class="hljs-keyword">for</span> key, value <span class="hljs-keyword">in</span> output_mapping.items():<br>        <span class="hljs-keyword">if</span> value == encoded_pair:<br>            decoded_string += key<br>            <span class="hljs-keyword">break</span><br><br><br><span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Decoded String: <span class="hljs-subst">&#123;decoded_string&#125;</span>&quot;</span>)<br></code></pre></td></tr></table></div></figure>
-<h2 id="misc">Misc</h2>
-<p>类别虽然标了Misc但是今年的Misc全是类似取证的玩意儿。</p>
-<h3 id="zeroshell系列">zeroshell系列</h3>
-<p>流量包是队友分析的，略。拿火眼之类的取证工具能从虚拟机磁盘里提取出来<code>.nginx</code>，此为<code>zeroshell_4</code>。</p>
-<p>IDA拖进去肉眼搜索字符串就能解决掉<code>zeroshell_3</code>&amp;<code>zeroshell_5</code>。</p>
-<h3 id="winft系列">WinFT系列</h3>
-<p>火绒剑打开观察外联+VirusTotal扫描<code>flvupdate.exe</code>搞定1。</p>
-<p>2的启动项是计划任务里那个<code>\DriverUpdates</code>，火绒剑看得不太方便，用Sysinternals里的Autoruns工具扫描看得更清楚。</p>
-<p>5可以从流量包里提取出<code>server</code>&amp;<code>client</code>两个文件，010editor看了看感觉应该是一个压缩包的两部分，拼接起来之后从虚拟机里找到一个同样大小的Everything_xxxxx.zip后打明文攻击拿到flag。</p>
-<h2 id="结语">结语</h2>
-<p>因为社团的安排，今年没能在一队a题，而是到了二队带带新人。唉，密码！要是复赛有密码题大概也不至于进不了一队吧（</p>
-<p>上午拿了fffffhash的二血后最高排名来到了全国第一：</p>
-<figure>
-<img src="../assets/image-14.png" srcset="/img/loading.gif" lazyload alt="这是我最后的波纹了" />
-<figcaption aria-hidden="true">这是我最后的波纹了</figcaption>
-</figure>
-<p>可惜LWE没出，下午嗯做逆向导致最后一堆取证也来不及做了，几个简单题没拿到手。不过勉勉强强挤进前400，复赛大概有望吧。</p>
-<p>赛前作为练手打了个印度佬的niteCTF，跟队友keyboard合力拿下23名。赛后在Discord
-server遇到了<a
-target="_blank" rel="noopener" href="https://ctftime.org/team/365958">正规子群</a>的OV3师傅，
-因为一直是他的忠实读者，如此难得的机会就加了对方的Discord好友。</p>
-<p>于是顺便也被邀请加入了正规子群（</p>
-<p>大概是本科最后一次CISCN了（如果未来不延毕的话）？比起以前实在是顺利太多。
-社团、课程也都逐渐有了起色，Del0n1x能在一个没有网安专业的学校开花，多有困难，也不乏幸运。</p>
-<p>自己因为一直心心念念数学顺理成章地做起密码，现在也算是有一点水平；从隔壁电信学院抽卡出了SSR级别的逆向手；队长和副队长分别在pwn和web上颇有研究。
-初次启航的战队，就这么奇迹般地凑齐了所有方向，而且每个方向都有一定的竞争力，无疑是幸运的。</p>
-<p>2024.2初次成军，今年前前后后已经进了四五次线下赛，也在鹏城杯的赛场第一次拿到了比赛奖金。</p>
-<p>未来，Del0n1x会有更好的成绩吗？</p>
-
-                
-              </div>
-            
-            <hr/>
-            <div>
-              <div class="post-metas my-3">
-  
-    <div class="post-meta mr-3 d-flex align-items-center">
-      <i class="iconfont icon-category"></i>
-      
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Writeups/" class="category-chain-item">Writeups</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-    </div>
-  
-  
-    <div class="post-meta">
-      <i class="iconfont icon-tags"></i>
-      
-        <a href="/tags/CTF/">#CTF</a>
-      
-        <a href="/tags/Crypto/">#Crypto</a>
-      
-        <a href="/tags/Misc/">#Misc</a>
-      
-        <a href="/tags/Reverse/">#Reverse</a>
-      
-    </div>
-  
-</div>
-
-
-              
-  
-
-  <div class="license-box my-3">
-    <div class="license-title">
-      <div>2025 CISCNxCCB Qual Writeup</div>
-      <div>https://eupho.me/1deedd32.html</div>
-    </div>
-    <div class="license-meta">
-      
-        <div class="license-meta-item">
-          <div>作者</div>
-          <div>Lambert Swizzer</div>
-        </div>
-      
-      
-        <div class="license-meta-item license-meta-date">
-          <div>发布于</div>
-          <div>2024年12月18日</div>
-        </div>
-      
-      
-      
-        <div class="license-meta-item">
-          <div>许可协议</div>
-          <div>
-            
-              
-              
-                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
-                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
-                    <i class="iconfont icon-by"></i>
-                  </span>
-                </a>
-              
-                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
-                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
-                    <i class="iconfont icon-nc"></i>
-                  </span>
-                </a>
-              
-                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
-                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
-                    <i class="iconfont icon-sa"></i>
-                  </span>
-                </a>
-              
-            
-          </div>
-        </div>
-      
-    </div>
-    <div class="license-icon iconfont"></div>
-  </div>
-
-
-
-              
-                <div class="post-prevnext my-3">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/35228183.html" title="NoisyCRT">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">NoisyCRT</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                      <a href="/c9ca854d.html" title="Set proxy for Discord on Linux Desktop">
-                        <span class="hidden-mobile">Set proxy for Discord on Linux Desktop</span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
-                    
-                  </article>
-                </div>
-              
-            </div>
-
-            
-  
-  
-    <article id="comments" lazyload>
-      
-  <script type="text/javascript">
-    Fluid.utils.loadComments('#comments', function() {
-      var light = 'github-light';
-      var dark = 'github-dark';
-      var schema = document.documentElement.getAttribute('data-user-color-scheme');
-      if (schema === 'dark') {
-        schema = dark;
-      } else {
-        schema = light;
-      }
-      window.UtterancesThemeLight = light;
-      window.UtterancesThemeDark = dark;
-      var s = document.createElement('script');
-      s.setAttribute('src', 'https://utteranc.es/client.js');
-      s.setAttribute('repo', 'Swizzzer/blogComments');
-      s.setAttribute('issue-term', 'pathname');
-      
-      s.setAttribute('label', 'utterances');
-      
-      s.setAttribute('theme', schema);
-      s.setAttribute('crossorigin', 'anonymous');
-      document.getElementById('comments').appendChild(s);
-    })
-  </script>
-  <noscript>Please enable JavaScript to view the comments</noscript>
-
-
-    </article>
-  
-
-
-          </article>
-        </div>
-      </div>
-    </div>
-
-    <div class="side-col d-none d-lg-block col-lg-2">
-      
-  <aside class="sidebar" style="margin-left: -1rem">
-    <div id="toc">
-  <p class="toc-header">
-    <i class="iconfont icon-list"></i>
-    <span>目录</span>
-  </p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
-
-
-
-  </aside>
-
-
-    </div>
-  </div>
-</div>
-
-
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-
-
-
-
-    
-
-    
-      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
-        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-      </a>
-    
-
-    
-      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
-        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
-        </div>
-        <div class="list-group" id="local-search-result"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-    
-
-    
-  </main>
-
-  <footer>
-    <div class="footer-inner">
-  
-    <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
-    </div>
-  
-  
-  
-  
-</div>
-
-  </footer>
-
-  <!-- Scripts -->
-  
-  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
-
-
-<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
-<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
-
-
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var subtitle = document.getElementById('subtitle');
-      if (!subtitle || !typing) {
-        return;
-      }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
-    })(window, document);
-  </script>
-
-
-
-
-  
-    <script  src="/js/img-lazyload.js" ></script>
-  
-
-
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
-    var toc = jQuery('#toc');
-    if (toc.length === 0 || !window.tocbot) { return; }
-    var boardCtn = jQuery('#board-ctn');
-    var boardTop = boardCtn.offset().top;
-
-    window.tocbot.init(Object.assign({
-      tocSelector     : '#toc-body',
-      contentSelector : '.markdown-body',
-      linkClass       : 'tocbot-link',
-      activeLinkClass : 'tocbot-active-link',
-      listClass       : 'tocbot-list',
-      isCollapsedClass: 'tocbot-is-collapsed',
-      collapsibleClass: 'tocbot-is-collapsible',
-      scrollSmooth    : true,
-      includeTitleTags: true,
-      headingsOffset  : -boardTop,
-    }, CONFIG.toc));
-    if (toc.find('.toc-list-item').length > 0) {
-      toc.css('visibility', 'visible');
-    }
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('tocbot' in window) {
-        tocbot.refresh();
-        var toc = jQuery('#toc');
-        if (toc.length === 0 || !tocbot) {
-          return;
-        }
-        if (toc.find('.toc-list-item').length > 0) {
-          toc.css('visibility', 'visible');
-        }
-      }
-    });
-  });
-</script>
-
-
-  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
-
-  <script>Fluid.plugins.codeWidget();</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
-    window.anchors.options = {
-      placement: CONFIG.anchorjs.placement,
-      visible  : CONFIG.anchorjs.visible
-    };
-    if (CONFIG.anchorjs.icon) {
-      window.anchors.options.icon = CONFIG.anchorjs.icon;
-    }
-    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-    var res = [];
-    for (var item of el) {
-      res.push('.markdown-body > ' + item.trim());
-    }
-    if (CONFIG.anchorjs.placement === 'left') {
-      window.anchors.options.class = 'anchorjs-link-left';
-    }
-    window.anchors.add(res.join(', '));
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('anchors' in window) {
-        anchors.removeAll();
-        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-        var res = [];
-        for (var item of el) {
-          res.push('.markdown-body > ' + item.trim());
-        }
-        if (CONFIG.anchorjs.placement === 'left') {
-          anchors.options.class = 'anchorjs-link-left';
-        }
-        anchors.add(res.join(', '));
-      }
-    });
-  });
-</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
-    Fluid.plugins.fancyBox();
-  });
-</script>
-
-
-  <script>Fluid.plugins.imageCaption();</script>
-
-  <script  src="/js/local-search.js" ></script>
-
-
-
-
-
-<!-- 主题的启动项，将它保持在最底部 -->
-<!-- the boot of the theme, keep it at the bottom -->
-<script  src="/js/boot.js" ></script>
-
-
-  
-
-  <noscript>
-    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
-  </noscript>
-</body>
-</html>
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="keywords" content="Hexo Theme Keep"><meta name="description" content="Hexo Theme Keep"><meta name="author" content="Swizzer"><title>2025 CISCNxCCB Qual Writeup | Swizzer&#39;s euphonium</title><link rel="stylesheet" href="/css/style.css"><link rel="shortcut icon" href="/images/favicon.png"><link rel="stylesheet" href="/font/css/fontawesome.min.css"><link rel="stylesheet" href="/font/css/regular.min.css"><link rel="stylesheet" href="/font/css/solid.min.css"><link rel="stylesheet" href="/font/css/brands.min.css"><link rel="stylesheet" href="/css/slogan.css"><script class="keep-theme-configurations">const KEEP=window.KEEP||{};KEEP.hexo_config={hostname:"eupho.me",root:"/",language:"zh-CN",path:"search.json"},KEEP.theme_config={base_info:{primary_color:"#5dffe4",title:"Swizzer's euphonium",author:"Swizzer",avatar:"/img/avatar.png",logo:"/img/logo.png",favicon:"/images/favicon.png"},menu:{home:"/",archives:"/archives",tags:"/tags",categories:"/categories",about:"/about"},first_screen:{enable:!0,background_img:"/img/banner.jpg",background_img_dark:"/img/banner.jpg",description:"No, thank you!",hitokoto:!1},social_contact:{enable:!0,links:{github:"https://github.com/Swizzzer",bilibili:"https://space.bilibili.com/446708215",email:"kyoshaft@outlook.com"}},scroll:{progress_bar:!0,percent:!1,hide_header:!0},home:{announcement:null,category:!0,tag:!0,post_datetime:"updated"},post:{author_badge:{enable:!1,level_badge:!1,custom_badge:"Mio"},word_count:{wordcount:!0,min2read:!0},datetime_format:"YYYY-MM-DD HH:mm:ss",copyright_info:!0,share:!0,reward:{enable:!1,img_link:null,text:null}},code_block:{tools:{enable:!0,style:"default"},highlight_theme:"default"},toc:{enable:!0,number:!1,expand_all:!0,init_open:!0,layout:"right"},website_count:{busuanzi_count:{enable:!0,site_uv:!0,site_pv:!0,page_pv:!0}},local_search:{enable:!0,preload:!0},comment:{enable:!1,use:"gisqus",valine:{appid:null,appkey:null,server_urls:null,placeholder:null},gitalk:{github_id:null,github_admins:null,repository:null,client_id:null,client_secret:null,proxy:null},twikoo:{env_id:null,region:null,version:"1.6.36"},waline:{server_url:null,reaction:!1,version:"3.2.1"},giscus:{repo:"Swizzzer/blogComments",repo_id:"R_kgDOJWumvw",category:"Q&A",category_id:"DIC_kwDOJWumv84CopXz",reactions_enabled:!0},artalk:{server:null},disqus:{shortname:null}},rss:{enable:!1},lazyload:{enable:!0},cdn:{enable:!1,provider:"cdnjs"},pjax:{enable:!0},footer:{since:2022,word_count:!1,site_deploy:{enable:!1,provider:"github",url:null},record:{enable:!1,list:[{code:null,link:null}]}},inject:{enable:!0,css:[["/css/slogan.css"]],js:[null]},root:"",source_data:{},version:"4.2.5"},KEEP.language_ago={second:"%s 秒前",minute:"%s 分钟前",hour:"%s 小时前",day:"%s 天前",week:"%s 周前",month:"%s 个月前",year:"%s 年前"},KEEP.language_code_block={copy:"复制代码",copied:"已复制",fold:"折叠代码块",folded:"已折叠"},KEEP.language_copy_copyright={copy:"复制版权信息",copied:"已复制",title:"原文标题",author:"原文作者",link:"原文链接"}</script><meta name="generator" content="Hexo 6.3.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head><body><div class="progress-bar-container"><span class="scroll-progress-bar"></span> <span class="pjax-progress-bar"></span> <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i></div><main class="page-container border-box"><div class="page-main-content border-box"><div class="page-main-content-top"><header class="header-wrapper"><div class="border-box header-content"><div class="left flex-start border-box"><a class="logo-image border-box" href="/"><img src="/img/logo.png"> </a><a class="site-name border-box" href="/">Swizzer&#39;s euphonium</a></div><div class="right border-box"><div class="pc border-box"><ul class="menu-list border-box"><li class="menu-item flex-start border-box"><a class="menu-text-color border-box" href="/">首页</a></li><li class="menu-item flex-start border-box"><a class="menu-text-color border-box" href="/archives">归档</a></li><li class="menu-item flex-start border-box"><a class="menu-text-color border-box" href="/tags">标签</a></li><li class="menu-item flex-start border-box"><a class="menu-text-color border-box" href="/categories">分类</a></li><li class="menu-item flex-start border-box"><a class="menu-text-color border-box" href="/about">关于</a></li><li class="menu-item search search-popup-trigger"><i class="menu-text-color fas search fa-search"></i></li></ul></div><div class="mobile border-box flex-start"><div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div><div class="icon-item menu-bar"><div class="menu-bar-middle"></div></div></div></div></div><div class="header-drawer"><ul class="drawer-menu-list border-box"><li class="drawer-menu-item border-box not-sub-menu"><label class="drawer-menu-label border-box"><a class="drawer-menu-text-color left-side flex-start border-box" href="/">首页</a></label></li><li class="drawer-menu-item border-box not-sub-menu"><label class="drawer-menu-label border-box"><a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">归档</a></label></li><li class="drawer-menu-item border-box not-sub-menu"><label class="drawer-menu-label border-box"><a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">标签</a></label></li><li class="drawer-menu-item border-box not-sub-menu"><label class="drawer-menu-label border-box"><a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">分类</a></label></li><li class="drawer-menu-item border-box not-sub-menu"><label class="drawer-menu-label border-box"><a class="drawer-menu-text-color left-side flex-start border-box" href="/about">关于</a></label></li></ul></div><div class="window-mask"></div></header></div><div class="page-main-content-middle border-box"><div class="main-content border-box"><div class="fade-in-down-animation"><div class="post-page-container border-box"><div class="post-content-container border-box"><div class="post-content-bottom border-box"><div class="post-title">2025 CISCNxCCB Qual Writeup</div><div class="post-header border-box"><div class="avatar-box border-box"><img src="/img/avatar.png"></div><div class="info-box"><div class="author border-box"><span class="name">Swizzer</span></div><div class="meta-info border-box"><div class="post-meta-info-container border-box post"><div class="post-meta-info border-box"><span class="meta-info-item post-create-date"><i class="icon fa-solid fa-calendar-plus"></i>&nbsp; <span class="datetime">2024-12-18 22:23:33</span> </span><span class="meta-info-item post-update-date"><i class="icon fa-solid fa-file-pen"></i>&nbsp; <span class="datetime" data-updated="Tue Apr 01 2025 00:38:45 GMT+0800">2025-04-01 00:38:45</span> </span><span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;<ul class="post-category-ul"><li class="category-item"><a href="/categories/Writeups/">Writeups</a></li></ul></span><span class="post-tag meta-info-item border-box"><ul class="post-tag-ul"><li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/CTF/">CTF</a></li><li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Crypto/">Crypto</a></li><li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Misc/">Misc</a></li><li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Reverse/">Reverse</a></li></ul></span><span class="meta-info-item post-wordcount"><i class="icon fas fa-file-word"></i>&nbsp;<span>1.9k 字</span> </span><span class="meta-info-item post-min2read"><i class="icon fas fa-clock"></i>&nbsp;<span>8 分钟</span> </span><span class="meta-info-item post-pv"><i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span></span></div></div></div></div></div><div class="post-content keep-markdown-body"><p>虽然往届CISCN多有烂活，但是像今年这样强制要求集中参赛还得统一双机位录制、连离开座位都要线上申请的烂活，似乎还是历史首次。至于解题更是限制颇多，甚至不允许使用大语言模型...</p><span id="more"></span><h2 id="crypto">Crypto</h2><h3 id="rasnd">rasnd</h3><p>前半部分经典套路，x1和x2均可爆破，然后就能两个方程联立消去p得到一个关于q的一次方程f(q)，接着gcd(n,f(q))就能获得q。</p><p>后半部分给的hint事实上就是 <span class="math inline"><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align:-.566ex" xmlns="http://www.w3.org/2000/svg" width="26.886ex" height="2.452ex" role="img" focusable="false" viewBox="0 -833.9 11883.6 1083.9"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mo"><path data-c="28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path></g><g data-mml-node="mn" transform="translate(389,0)"><path data-c="35" d="M164 157Q164 133 148 117T109 101H102Q148 22 224 22Q294 22 326 82Q345 115 345 210Q345 313 318 349Q292 382 260 382H254Q176 382 136 314Q132 307 129 306T114 304Q97 304 95 310Q93 314 93 485V614Q93 664 98 664Q100 666 102 666Q103 666 123 658T178 642T253 634Q324 634 389 662Q397 666 402 666Q410 666 410 648V635Q328 538 205 538Q174 538 149 544L139 546V374Q158 388 169 396T205 412T256 420Q337 420 393 355T449 201Q449 109 385 44T229 -22Q148 -22 99 32T50 154Q50 178 61 192T84 210T107 214Q132 214 148 197T164 157Z"></path><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z" transform="translate(500,0)"></path><path data-c="34" d="M462 0Q444 3 333 3Q217 3 199 0H190V46H221Q241 46 248 46T265 48T279 53T286 61Q287 63 287 115V165H28V211L179 442Q332 674 334 675Q336 677 355 677H373L379 671V211H471V165H379V114Q379 73 379 66T385 54Q393 47 442 46H471V0H462ZM293 211V545L74 212L183 211H293Z" transform="translate(1000,0)"></path></g><g data-mml-node="mo" transform="translate(2111.2,0)"><path data-c="2217" d="M229 286Q216 420 216 436Q216 454 240 464Q241 464 245 464T251 465Q263 464 273 456T283 436Q283 419 277 356T270 286L328 328Q384 369 389 372T399 375Q412 375 423 365T435 338Q435 325 425 315Q420 312 357 282T289 250L355 219L425 184Q434 175 434 161Q434 146 425 136T401 125Q393 125 383 131T328 171L270 213Q283 79 283 63Q283 53 276 44T250 35Q231 35 224 44T216 63Q216 80 222 143T229 213L171 171Q115 130 110 127Q106 124 100 124Q87 124 76 134T64 161Q64 166 64 169T67 175T72 181T81 188T94 195T113 204T138 215T170 230T210 250L74 315Q65 324 65 338Q65 353 74 363T98 374Q106 374 116 368T171 328L229 286Z"></path></g><g data-mml-node="mi" transform="translate(2833.4,0)"><path data-c="1D45D" d="M23 287Q24 290 25 295T30 317T40 348T55 381T75 411T101 433T134 442Q209 442 230 378L240 387Q302 442 358 442Q423 442 460 395T497 281Q497 173 421 82T249 -10Q227 -10 210 -4Q199 1 187 11T168 28L161 36Q160 35 139 -51T118 -138Q118 -144 126 -145T163 -148H188Q194 -155 194 -157T191 -175Q188 -187 185 -190T172 -194Q170 -194 161 -194T127 -193T65 -192Q-5 -192 -24 -194H-32Q-39 -187 -39 -183Q-37 -156 -26 -148H-6Q28 -147 33 -136Q36 -130 94 103T155 350Q156 355 156 364Q156 405 131 405Q109 405 94 377T71 316T59 280Q57 278 43 278H29Q23 284 23 287ZM178 102Q200 26 252 26Q282 26 310 49T356 107Q374 141 392 215T411 325V331Q411 405 350 405Q339 405 328 402T306 393T286 380T269 365T254 350T243 336T235 326L232 322Q232 321 229 308T218 264T204 212Q178 106 178 102Z"></path></g><g data-mml-node="mo" transform="translate(3558.7,0)"><path data-c="2212" d="M84 237T84 250T98 270H679Q694 262 694 250T679 230H98Q84 237 84 250Z"></path></g><g data-mml-node="mn" transform="translate(4558.9,0)"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z" transform="translate(500,0)"></path><path data-c="34" d="M462 0Q444 3 333 3Q217 3 199 0H190V46H221Q241 46 248 46T265 48T279 53T286 61Q287 63 287 115V165H28V211L179 442Q332 674 334 675Q336 677 355 677H373L379 671V211H471V165H379V114Q379 73 379 66T385 54Q393 47 442 46H471V0H462ZM293 211V545L74 212L183 211H293Z" transform="translate(1000,0)"></path></g><g data-mml-node="mo" transform="translate(6281.1,0)"><path data-c="2217" d="M229 286Q216 420 216 436Q216 454 240 464Q241 464 245 464T251 465Q263 464 273 456T283 436Q283 419 277 356T270 286L328 328Q384 369 389 372T399 375Q412 375 423 365T435 338Q435 325 425 315Q420 312 357 282T289 250L355 219L425 184Q434 175 434 161Q434 146 425 136T401 125Q393 125 383 131T328 171L270 213Q283 79 283 63Q283 53 276 44T250 35Q231 35 224 44T216 63Q216 80 222 143T229 213L171 171Q115 130 110 127Q106 124 100 124Q87 124 76 134T64 161Q64 166 64 169T67 175T72 181T81 188T94 195T113 204T138 215T170 230T210 250L74 315Q65 324 65 338Q65 353 74 363T98 374Q106 374 116 368T171 328L229 286Z"></path></g><g data-mml-node="mi" transform="translate(7003.3,0)"><path data-c="1D45E" d="M33 157Q33 258 109 349T280 441Q340 441 372 389Q373 390 377 395T388 406T404 418Q438 442 450 442Q454 442 457 439T460 434Q460 425 391 149Q320 -135 320 -139Q320 -147 365 -148H390Q396 -156 396 -157T393 -175Q389 -188 383 -194H370Q339 -192 262 -192Q234 -192 211 -192T174 -192T157 -193Q143 -193 143 -185Q143 -182 145 -170Q149 -154 152 -151T172 -148Q220 -148 230 -141Q238 -136 258 -53T279 32Q279 33 272 29Q224 -10 172 -10Q117 -10 75 30T33 157ZM352 326Q329 405 277 405Q242 405 210 374T160 293Q131 214 119 129Q119 126 119 118T118 106Q118 61 136 44T179 26Q233 26 290 98L298 109L352 326Z"></path></g><g data-mml-node="msup" transform="translate(7463.3,0)"><g data-mml-node="mo"><path data-c="29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></g><g data-mml-node="TeXAtom" transform="translate(422,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mo"><path data-c="2212" d="M84 237T84 250T98 270H679Q694 262 694 250T679 230H98Q84 237 84 250Z"></path></g><g data-mml-node="mn" transform="translate(778,0)"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></g></g></g><g data-mml-node="mo" transform="translate(9116.8,0)"><path data-c="6D" d="M41 46H55Q94 46 102 60V68Q102 77 102 91T102 122T103 161T103 203Q103 234 103 269T102 328V351Q99 370 88 376T43 385H25V408Q25 431 27 431L37 432Q47 433 65 434T102 436Q119 437 138 438T167 441T178 442H181V402Q181 364 182 364T187 369T199 384T218 402T247 421T285 437Q305 442 336 442Q351 442 364 440T387 434T406 426T421 417T432 406T441 395T448 384T452 374T455 366L457 361L460 365Q463 369 466 373T475 384T488 397T503 410T523 422T546 432T572 439T603 442Q729 442 740 329Q741 322 741 190V104Q741 66 743 59T754 49Q775 46 803 46H819V0H811L788 1Q764 2 737 2T699 3Q596 3 587 0H579V46H595Q656 46 656 62Q657 64 657 200Q656 335 655 343Q649 371 635 385T611 402T585 404Q540 404 506 370Q479 343 472 315T464 232V168V108Q464 78 465 68T468 55T477 49Q498 46 526 46H542V0H534L510 1Q487 2 460 2T422 3Q319 3 310 0H302V46H318Q379 46 379 62Q380 64 380 200Q379 335 378 343Q372 371 358 385T334 402T308 404Q263 404 229 370Q202 343 195 315T187 232V168V108Q187 78 188 68T191 55T200 49Q221 46 249 46H265V0H257L234 1Q210 2 183 2T145 3Q42 3 33 0H25V46H41Z"></path><path data-c="6F" d="M28 214Q28 309 93 378T250 448Q340 448 405 380T471 215Q471 120 407 55T250 -10Q153 -10 91 57T28 214ZM250 30Q372 30 372 193V225V250Q372 272 371 288T364 326T348 362T317 390T268 410Q263 411 252 411Q222 411 195 399Q152 377 139 338T126 246V226Q126 130 145 91Q177 30 250 30Z" transform="translate(833,0)"></path><path data-c="64" d="M376 495Q376 511 376 535T377 568Q377 613 367 624T316 637H298V660Q298 683 300 683L310 684Q320 685 339 686T376 688Q393 689 413 690T443 693T454 694H457V390Q457 84 458 81Q461 61 472 55T517 46H535V0Q533 0 459 -5T380 -11H373V44L365 37Q307 -11 235 -11Q158 -11 96 50T34 215Q34 315 97 378T244 442Q319 442 376 393V495ZM373 342Q328 405 260 405Q211 405 173 369Q146 341 139 305T131 211Q131 155 138 120T173 59Q203 26 251 26Q322 26 373 103V342Z" transform="translate(1333,0)"></path></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(11283.6,0)"><g data-mml-node="mi"><path data-c="1D45B" d="M21 287Q22 293 24 303T36 341T56 388T89 425T135 442Q171 442 195 424T225 390T231 369Q231 367 232 367L243 378Q304 442 382 442Q436 442 469 415T503 336T465 179T427 52Q427 26 444 26Q450 26 453 27Q482 32 505 65T540 145Q542 153 560 153Q580 153 580 145Q580 144 576 130Q568 101 554 73T508 17T439 -10Q392 -10 371 17T350 73Q350 92 386 193T423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 180T152 343Q153 348 153 366Q153 405 129 405Q91 405 66 305Q60 285 60 284Q58 278 41 278H27Q21 284 21 287Z"></path></g></g></g></g></svg></mjx-container></span>，inverse()然后解方程就能获得p，q。</p><blockquote><p>exp</p></blockquote><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/sage</span></span><br><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> itertools</span><br><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> tqdm, trange</span><br><span class="line"></span><br><span class="line">hint1 = </span><br><span class="line">hint2 = </span><br><span class="line">n1 = </span><br><span class="line"><span class="keyword">for</span> a,b <span class="keyword">in</span> tqdm(itertools.product(<span class="built_in">range</span>(<span class="number">2</span>**<span class="number">11</span>),repeat=<span class="number">2</span>)):</span><br><span class="line">    q = GCD(a*(hint1+<span class="number">0x114</span>)-b*(hint2+<span class="number">0x514</span>),n1)</span><br><span class="line">    <span class="keyword">if</span> q != <span class="number">1</span> <span class="keyword">and</span> q!= n1:</span><br><span class="line">        <span class="built_in">print</span>(q,n1//q)</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">q1,p1 =q, n1//q</span><br><span class="line">c1 = </span><br><span class="line">d = inverse(<span class="number">65537</span>,(p1-<span class="number">1</span>)*(q1-<span class="number">1</span>))</span><br><span class="line"><span class="built_in">print</span>(long_to_bytes(<span class="built_in">pow</span>(c1,d,n1)))</span><br><span class="line">hint3 = </span><br><span class="line">n2 = </span><br><span class="line">gao = inverse(hint3,n2)</span><br><span class="line">var(<span class="string">'p2 q2'</span>)</span><br><span class="line">eq1 = <span class="number">514</span>*p2-<span class="number">114</span>*q2-gao</span><br><span class="line">eq2 = p2*q2-n2</span><br><span class="line">sol = solve([eq1,eq2],p2,q2)</span><br><span class="line">d = inverse(<span class="number">65537</span>,(p2-<span class="number">1</span>)*(q2-<span class="number">1</span>))</span><br><span class="line"><span class="built_in">print</span>(long_to_bytes(<span class="built_in">pow</span>(c,d,n2)))</span><br></pre></td></tr></table></figure><h3 id="fffffhash">fffffhash</h3><p>2023 DownUnder CTF的原题，同时也是去年CISCN考过的考点。原题有MITM和格两种预期解，不过这题长度比较长，MITM大概是很困难的。</p><p>所以直接套用DUCTF的官方的格做法就好了：</p><blockquote><p>exp</p></blockquote><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> itertools</span><br><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> tqdm, trange</span><br><span class="line">TARGET = <span class="number">201431453607244229943761366749810895688</span></span><br><span class="line">h0 = <span class="number">0x6c62272e07bb014262b821756295c58d</span></span><br><span class="line">p = <span class="number">0x0000000001000000000000000000013b</span></span><br><span class="line">MOD = <span class="number">2</span>^<span class="number">128</span></span><br><span class="line"></span><br><span class="line">n = <span class="number">16</span></span><br><span class="line">M = Matrix.column([p^(n - i - <span class="number">1</span>) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n)] + [-(TARGET - h0*p^n), MOD])</span><br><span class="line">M = M.augment(identity_matrix(n+<span class="number">1</span>).stack(vector([<span class="number">0</span>] * (n+<span class="number">1</span>))))</span><br><span class="line">Q = Matrix.diagonal([<span class="number">2</span>^<span class="number">128</span>] + [<span class="number">2</span>^<span class="number">4</span>] * n + [<span class="number">2</span>^<span class="number">8</span>])</span><br><span class="line">M *= Q</span><br><span class="line">M = M.BKZ()</span><br><span class="line">M /= Q</span><br><span class="line"><span class="keyword">for</span> r <span class="keyword">in</span> M:</span><br><span class="line">    <span class="keyword">if</span> r[<span class="number">0</span>] == <span class="number">0</span> <span class="keyword">and</span> <span class="built_in">abs</span>(r[-<span class="number">1</span>]) == <span class="number">1</span>:</span><br><span class="line">        r *= r[-<span class="number">1</span>]</span><br><span class="line">        good = r[<span class="number">1</span>:-<span class="number">1</span>]</span><br><span class="line">        <span class="built_in">print</span>(good)</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">inp = []</span><br><span class="line">y = <span class="built_in">int</span>(h0*p)</span><br><span class="line">t = (h0*p^n + good[<span class="number">0</span>] * p^(n-<span class="number">1</span>)) % MOD</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">256</span>):</span><br><span class="line">        y_ = (<span class="built_in">int</span>(y) ^^ <span class="built_in">int</span>(x)) * p^(n-i-<span class="number">1</span>) % MOD</span><br><span class="line">        <span class="keyword">if</span> y_ == t:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">'good'</span>, i, x)</span><br><span class="line">            inp.append(x)</span><br><span class="line">            <span class="keyword">if</span> i &lt; n-<span class="number">1</span>:</span><br><span class="line">                t = (t + good[i+<span class="number">1</span>] * p^(n-i-<span class="number">2</span>)) % MOD</span><br><span class="line">                y = ((<span class="built_in">int</span>(y) ^^ <span class="built_in">int</span>(x)) * p) % MOD</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">'bad'</span>, i)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">bytes</span>(inp).<span class="built_in">hex</span>())</span><br></pre></td></tr></table></figure><p>这题还拿了个二血XD</p><h3 id="lwewl">*LWEWL</h3><p>铸币了，后半部分的RLWE当天上午就解决了，结果前半部分的LWE因为没注意到两个pubkey的线性关系所以一直纳闷怎么在一个1124x1124的格上做LLL，还尝试了一堆黑科技和数学操作——结果当然也是不成功的，于是当天下午就直接把这题全盘扔给新人去看了XD</p><blockquote><p>还是要认真审计代码</p></blockquote><p>贴个Astrageldon师傅的代码(略有改动)，RLWE的思路跟我的比较像但是代码比我的美观多了QQ</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/sage</span></span><br><span class="line">a, b, f, rlwe_modulus = load(<span class="string">"rlwe_ciphertext.sobj"</span>)</span><br><span class="line">rlwe_dim = <span class="number">64</span></span><br><span class="line">names = <span class="string">','</span>.join([<span class="string">'x'</span>] + [<span class="string">f's<span class="subst">{i}</span>'</span> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(rlwe_dim)])</span><br><span class="line">P = PolynomialRing(GF(rlwe_modulus), names = names)</span><br><span class="line">x = P.gen(<span class="number">0</span>)</span><br><span class="line">a = <span class="built_in">sum</span>(a_*x^i <span class="keyword">for</span> i,a_ <span class="keyword">in</span> <span class="built_in">enumerate</span>(<span class="built_in">list</span>(a)))</span><br><span class="line">b = <span class="built_in">sum</span>(b_*x^i <span class="keyword">for</span> i,b_ <span class="keyword">in</span> <span class="built_in">enumerate</span>(<span class="built_in">list</span>(b)))</span><br><span class="line">f = <span class="built_in">sum</span>(f_*x^i <span class="keyword">for</span> i,f_ <span class="keyword">in</span> <span class="built_in">enumerate</span>(<span class="built_in">list</span>(f)))</span><br><span class="line">Q = P.quo(f)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">s = P.gens()[<span class="number">1</span>:]</span><br><span class="line">t = Q(<span class="built_in">sum</span>(a.monomial_coefficient(x^i)*x^i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(rlwe_dim))) * Q(<span class="built_in">sum</span>(s_*x^i <span class="keyword">for</span> i,s_ <span class="keyword">in</span> <span class="built_in">enumerate</span>(<span class="built_in">list</span>(s))))</span><br><span class="line">tl = t.lift()</span><br><span class="line">tm = tl.monomials()</span><br><span class="line">tc = tl.coefficients()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">L = zero_matrix(ZZ, <span class="number">2</span>*rlwe_dim + <span class="number">1</span>, <span class="number">2</span>*rlwe_dim + <span class="number">1</span>)</span><br><span class="line"><span class="keyword">for</span> c, m <span class="keyword">in</span> <span class="built_in">zip</span>(tc, tm):</span><br><span class="line">    j = m.degree(x)</span><br><span class="line">    i = s.index(m // x^j)</span><br><span class="line">    L[i, j] = c</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(rlwe_dim):</span><br><span class="line">    L[j + rlwe_dim, j] = rlwe_modulus</span><br><span class="line">    L[j, j + rlwe_dim] = <span class="number">1</span></span><br><span class="line">    L[<span class="number">2</span>*rlwe_dim, j] = -b.monomial_coefficient(x^j)</span><br><span class="line">L[<span class="number">2</span>*rlwe_dim, <span class="number">2</span>*rlwe_dim] = <span class="number">1</span></span><br></pre></td></tr></table></figure><h2 id="re">Re</h2><h3 id="ezcsky">ezCsky</h3><p>IDA跟BinaryNinja都反编译不了，识别了一下貌似是M Core架构(什么偏门的Motorola处理器)</p><p>Google到相关企业给的开发手册，对着手册嗯看汇编识别出RC4，.rodata段里找到密文，key应该是strings里的<code>testkey</code></p><p>但是直接解密出来是乱码：</p><figure><img lazyload="" alt="是时候通灵了" data-src="../assets/image-13.png"><figcaption aria-hidden="true">是时候通灵了</figcaption></figure><p>因为最后一位是对的所以猜一个逐字符异或：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">KSA</span>(<span class="params">key</span>):</span><br><span class="line">    <span class="string">""" Key-Scheduling Algorithm (KSA) """</span></span><br><span class="line">    S = <span class="built_in">list</span>(<span class="built_in">range</span>(<span class="number">256</span>))</span><br><span class="line">    j = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">256</span>):</span><br><span class="line">        j = (j + S[i] + key[i % <span class="built_in">len</span>(key)]) % <span class="number">256</span></span><br><span class="line">        S[i], S[j] = S[j], S[i]</span><br><span class="line">    <span class="keyword">return</span> S</span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">PRGA</span>(<span class="params">S</span>):</span><br><span class="line">    <span class="string">""" Pseudo-Random Generation Algorithm (PRGA) """</span></span><br><span class="line">    i, j = <span class="number">0</span>, <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        i = (i + <span class="number">1</span>) % <span class="number">256</span></span><br><span class="line">        j = (j + S[i]) % <span class="number">256</span></span><br><span class="line">        S[i], S[j] = S[j], S[i]</span><br><span class="line">        K = S[(S[i] + S[j]) % <span class="number">256</span>]</span><br><span class="line">        <span class="keyword">yield</span> K</span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">RC4</span>(<span class="params">key, text</span>):</span><br><span class="line">    <span class="string">""" RC4 encryption/decryption """</span></span><br><span class="line">    S = KSA(key)</span><br><span class="line">    keystream = PRGA(S)</span><br><span class="line">    res = []</span><br><span class="line">    <span class="keyword">for</span> char <span class="keyword">in</span> text:</span><br><span class="line">        res.append(char ^ <span class="built_in">next</span>(keystream))</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">bytes</span>(res)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">c=[<span class="number">0x96</span>, <span class="number">0x8F</span>, <span class="number">0xB8</span>, <span class="number">0x08</span>, <span class="number">0x5D</span>, <span class="number">0xA7</span>, <span class="number">0x68</span>, <span class="number">0x44</span>, <span class="number">0xF2</span>, <span class="number">0x64</span>, </span><br><span class="line">  <span class="number">0x92</span>, <span class="number">0x64</span>, <span class="number">0x42</span>, <span class="number">0x7A</span>, <span class="number">0x78</span>, <span class="number">0xE6</span>, <span class="number">0xEA</span>, <span class="number">0xC2</span>, <span class="number">0x78</span>, <span class="number">0xB8</span>, </span><br><span class="line">  <span class="number">0x63</span>, <span class="number">0x9E</span>, <span class="number">0x5B</span>, <span class="number">0x3D</span>, <span class="number">0xD9</span>, <span class="number">0x28</span>, <span class="number">0x3F</span>, <span class="number">0xC8</span>, <span class="number">0x73</span>, <span class="number">0x06</span>, </span><br><span class="line">  <span class="number">0xEE</span>, <span class="number">0x6B</span>, <span class="number">0x8D</span>, <span class="number">0x0C</span>, <span class="number">0x4B</span>, <span class="number">0xA3</span>, <span class="number">0x23</span>, <span class="number">0xAE</span>, <span class="number">0xCA</span>, <span class="number">0x40</span>, </span><br><span class="line">  <span class="number">0xED</span>, <span class="number">0xD1</span>]</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    <span class="comment"># with open('./ezCsky','rb')as f:</span></span><br><span class="line">    <span class="comment">#     data = f.read()</span></span><br><span class="line">    key = <span class="string">b'testkey'</span>  <span class="comment"># 加密key</span></span><br><span class="line">    m = RC4(key,<span class="built_in">bytes</span>(c))</span><br><span class="line">    <span class="built_in">print</span>(m)</span><br><span class="line">    m = <span class="built_in">list</span>(m)</span><br><span class="line">    i = <span class="built_in">len</span>(m)-<span class="number">2</span></span><br><span class="line">    <span class="keyword">while</span> i&gt;=<span class="number">0</span>:</span><br><span class="line">        m[i]=m[i]^m[i+<span class="number">1</span>]</span><br><span class="line">        i-=<span class="number">1</span></span><br><span class="line">    m= <span class="built_in">bytes</span>(m)</span><br><span class="line">    <span class="built_in">print</span>(m)</span><br><span class="line">    <span class="built_in">print</span>(<span class="built_in">len</span>(c))</span><br></pre></td></tr></table></figure><p>然后就出了。</p><h3 id="dump">dump</h3><p>单字节加密，直接当古典密码做就行。</p><blockquote><p>exp</p></blockquote><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"></span><br><span class="line">program_path = <span class="string">"./re.exe"</span>  </span><br><span class="line">visible_characters = <span class="string">''</span>.join([<span class="built_in">chr</span>(i) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>, <span class="number">127</span>)])  <span class="comment"># ASCII 可见字符</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    result = subprocess.run([program_path, visible_characters], </span><br><span class="line">                            capture_output=<span class="literal">True</span>, text=<span class="literal">True</span>, check=<span class="literal">True</span>)</span><br><span class="line">    program_output = result.stdout.strip()</span><br><span class="line"><span class="keyword">except</span> subprocess.CalledProcessError <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"Error occurred while running the program:"</span>, e)</span><br><span class="line">    exit(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="built_in">len</span>(program_output) % <span class="number">2</span> != <span class="number">0</span>:</span><br><span class="line">    <span class="keyword">raise</span> ValueError(<span class="string">"Program output length must be even to map pairs of characters."</span>)</span><br><span class="line"></span><br><span class="line">output_mapping = {}</span><br><span class="line"><span class="comment"># 把所有可见字符喂进去构建出的明密文映射字典</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(program_output), <span class="number">2</span>):</span><br><span class="line">    output_pair = program_output[i:i+<span class="number">2</span>]</span><br><span class="line">    key = visible_characters[i // <span class="number">2</span>]</span><br><span class="line">    output_mapping[key] = output_pair</span><br><span class="line"></span><br><span class="line">encoded_string = <span class="string">"23291e24380e1520370e0520000e37121d0f24010139"</span></span><br><span class="line"></span><br><span class="line">decoded_string = <span class="string">""</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(encoded_string), <span class="number">2</span>):</span><br><span class="line">    encoded_pair = encoded_string[i:i+<span class="number">2</span>]</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> key, value <span class="keyword">in</span> output_mapping.items():</span><br><span class="line">        <span class="keyword">if</span> value == encoded_pair:</span><br><span class="line">            decoded_string += key</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f"Decoded String: <span class="subst">{decoded_string}</span>"</span>)</span><br></pre></td></tr></table></figure><h2 id="misc">Misc</h2><p>类别虽然标了Misc但是今年的Misc全是类似取证的玩意儿。</p><h3 id="zeroshell系列">zeroshell系列</h3><p>流量包是队友分析的，略。拿火眼之类的取证工具能从虚拟机磁盘里提取出来<code>.nginx</code>，此为<code>zeroshell_4</code>。</p><p>IDA拖进去肉眼搜索字符串就能解决掉<code>zeroshell_3</code>&amp;<code>zeroshell_5</code>。</p><h3 id="winft系列">WinFT系列</h3><p>火绒剑打开观察外联+VirusTotal扫描<code>flvupdate.exe</code>搞定1。</p><p>2的启动项是计划任务里那个<code>\DriverUpdates</code>，火绒剑看得不太方便，用Sysinternals里的Autoruns工具扫描看得更清楚。</p><p>5可以从流量包里提取出<code>server</code>&amp;<code>client</code>两个文件，010editor看了看感觉应该是一个压缩包的两部分，拼接起来之后从虚拟机里找到一个同样大小的Everything_xxxxx.zip后打明文攻击拿到flag。</p><h2 id="结语">结语</h2><p>因为社团的安排，今年没能在一队a题，而是到了二队带带新人。唉，密码！要是复赛有密码题大概也不至于进不了一队吧（</p><p>上午拿了fffffhash的二血后最高排名来到了全国第一：</p><figure><img lazyload="" alt="这是我最后的波纹了" data-src="../assets/image-14.png"><figcaption aria-hidden="true">这是我最后的波纹了</figcaption></figure><p>可惜LWE没出，下午嗯做逆向导致最后一堆取证也来不及做了，几个简单题没拿到手。不过勉勉强强挤进前400，复赛大概有望吧。</p><p>赛前作为练手打了个印度佬的niteCTF，跟队友keyboard合力拿下23名。赛后在Discord server遇到了<a class="link" target="_blank" rel="noopener" href="https://ctftime.org/team/365958">正规子群<i class="fas fa-external-link-alt"></i></a>的OV3师傅， 因为一直是他的忠实读者，如此难得的机会就加了对方的Discord好友。</p><p>于是顺便也被邀请加入了正规子群（</p><p>大概是本科最后一次CISCN了（如果未来不延毕的话）？比起以前实在是顺利太多。 社团、课程也都逐渐有了起色，Del0n1x能在一个没有网安专业的学校开花，多有困难，也不乏幸运。</p><p>自己因为一直心心念念数学顺理成章地做起密码，现在也算是有一点水平；从隔壁电信学院抽卡出了SSR级别的逆向手；队长和副队长分别在pwn和web上颇有研究。 初次启航的战队，就这么奇迹般地凑齐了所有方向，而且每个方向都有一定的竞争力，无疑是幸运的。</p><p>2024.2初次成军，今年前前后后已经进了四五次线下赛，也在鹏城杯的赛场第一次拿到了比赛奖金。</p><p>未来，Del0n1x会有更好的成绩吗？</p></div><div class="post-copyright-info-container border-box"><div class="copyright-info-content border-box"><div class="copyright-info-top border-box"><div class="copyright-post-title border-box text-ellipsis">2025 CISCNxCCB Qual Writeup</div><div class="copyright-post-link border-box text-ellipsis">1deedd32.html</div></div><div class="copyright-info-bottom border-box"><div class="copyright-post-author bottom-item"><div class="type">作者</div><div class="content">Swizzer</div></div><div class="post-time bottom-item"><div class="type">发布于</div><div class="content">2024-12-18 22:23</div></div><div class="post-license bottom-item"><div class="type">许可</div><div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank"><i class="fa-brands fa-creative-commons"></i> <i class="fa-brands fa-creative-commons-by"></i> <i class="fa-brands fa-creative-commons-nc"></i> <i class="fa-brands fa-creative-commons-sa"></i></a></div></div></div><i class="copyright-bg fa-solid fa-copyright"></i></div><div class="copy-copyright-info flex-center tooltip" data-tooltip-content="复制版权信息" data-tooltip-offset-y="-2px"><i class="fa-solid fa-copy"></i></div></div><div class="post-bottom-tags-and-share border-box"><div><ul class="post-tags-box border-box"><li class="tag-item border-box"><i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/CTF/">CTF</a></li><li class="tag-item border-box"><i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Crypto/">Crypto</a></li><li class="tag-item border-box"><i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Misc/">Misc</a></li><li class="tag-item border-box"><i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Reverse/">Reverse</a></li></ul></div><div><div class="post-share-container border-box"><ul class="share-list-wrap border-box"><li class="qq share-item border-box flex-center tooltip" data-tooltip-content="分享到 QQ"><i class="fa-brands fa-qq"></i></li><li class="wechat share-item border-box flex-center tooltip tooltip-img" data-tooltip-content="分享到微信" data-tooltip-img-tip="微信扫一扫" data-tooltip-img-style="background-color: #fff; top: -10px; padding: 0.6rem 0.6rem 0.1rem 0.6rem;"><i class="fa-brands fa-weixin"></i></li><li class="weibo share-item border-box flex-center tooltip" data-tooltip-content="分享到微博"><i class="fa-brands fa-weibo"></i></li></ul></div></div></div><div class="post-nav border-box"><div class="prev-post"><a class="prev" rel="prev" href="/35228183.html" title="NoisyCRT"><span class="left arrow-icon flex-center"><i class="fas fa-chevron-left"></i> </span><span class="title flex-center"><span class="post-nav-title-item text-ellipsis">NoisyCRT</span> <span class="post-nav-item">上一篇</span></span></a></div><div class="next-post"><a class="next" rel="next" href="/c9ca854d.html" title="Set proxy for Discord on Linux Desktop"><span class="title flex-center"><span class="post-nav-title-item text-ellipsis">Set proxy for Discord on Linux Desktop</span> <span class="post-nav-item">下一篇</span> </span><span class="right arrow-icon flex-center"><i class="fas fa-chevron-right"></i></span></a></div></div></div></div><div class="pc-post-toc right-toc"><div class="post-toc-wrap border-box"><div class="post-toc border-box"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#crypto"><span class="nav-text">Crypto</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#rasnd"><span class="nav-text">rasnd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fffffhash"><span class="nav-text">fffffhash</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lwewl"><span class="nav-text">*LWEWL</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#re"><span class="nav-text">Re</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ezcsky"><span class="nav-text">ezCsky</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dump"><span class="nav-text">dump</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#misc"><span class="nav-text">Misc</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#zeroshell%E7%B3%BB%E5%88%97"><span class="nav-text">zeroshell系列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#winft%E7%B3%BB%E5%88%97"><span class="nav-text">WinFT系列</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AF%AD"><span class="nav-text">结语</span></a></li></ol></div></div></div></div></div></div></div><div class="page-main-content-bottom border-box"><footer class="footer border-box"><div class="copyright-info info-item">&copy;&nbsp;<span>2022</span>&nbsp;-&nbsp;2025 &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Swizzer</a></div><div class="theme-info info-item">由&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;驱动&nbsp;&&nbsp;主题&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a></div><div class="count-info info-item"><span class="count-item border-box uv"><span class="item-type border-box">访客数</span> <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span> </span><span class="count-item border-box pv"><span class="item-type border-box">访问量</span> <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span></span></div></footer></div></div><div class="post-tools right-toc"><div class="post-tools-container border-box"><ul class="post-tools-list border-box"><li class="tools-item flex-center toggle-show-toc"><i class="fas fa-list"></i></li><li class="tools-item flex-center full-screen"><i class="fa-solid fa-expand"></i></li></ul></div></div><div class="side-tools"><div class="side-tools-container border-box"><ul class="side-tools-list side-tools-show-handle border-box"><li class="tools-item tool-font-adjust-plus flex-center"><i class="fas fa-search-plus"></i></li><li class="tools-item tool-font-adjust-minus flex-center"><i class="fas fa-search-minus"></i></li><li class="tools-item tool-toggle-theme-mode flex-center"><i class="fas fa-moon"></i></li><li class="tools-item tool-scroll-to-bottom flex-center"><i class="fas fa-arrow-down"></i></li></ul><ul class="exposed-tools-list border-box"><li class="tools-item toggle-show-toc-tablet flex-center"><i class="fas fa-list"></i></li><li class="tools-item tool-toggle-show flex-center"><i class="fas fa-cog fa-spin"></i></li><li class="tools-item tool-scroll-to-top flex-center show-arrow"><i class="arrow fas fa-arrow-up"></i> <span class="percent"></span></li></ul></div></div><div class="zoom-in-image-mask"><img class="zoom-in-image"></div><div class="search-pop-overlay"><div class="popup search-popup"><div class="search-header"><span class="search-input-field-pre"><i class="fas fa-keyboard"></i></span><div class="search-input-container"><input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="搜索..." spellcheck="false" type="search" class="search-input"></div><span class="close-popup-btn"><i class="fas fa-times"></i></span></div><div id="search-result"><div id="no-result"><i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i></div></div></div></div><div class="tablet-post-toc-mask"><div class="tablet-post-toc"><div class="post-toc-wrap border-box"><div class="post-toc border-box"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#crypto"><span class="nav-text">Crypto</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#rasnd"><span class="nav-text">rasnd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fffffhash"><span class="nav-text">fffffhash</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lwewl"><span class="nav-text">*LWEWL</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#re"><span class="nav-text">Re</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ezcsky"><span class="nav-text">ezCsky</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dump"><span class="nav-text">dump</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#misc"><span class="nav-text">Misc</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#zeroshell%E7%B3%BB%E5%88%97"><span class="nav-text">zeroshell系列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#winft%E7%B3%BB%E5%88%97"><span class="nav-text">WinFT系列</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AF%AD"><span class="nav-text">结语</span></a></li></ol></div></div></div></div></main><script src="/js/utils.js"></script><script src="/js/header-shrink.js"></script><script src="/js/back2top.js"></script><script src="/js/toggle-theme.js"></script><script src="/js/code-block.js"></script><script src="/js/main.js"></script><script src="/js/libs/anime.min.js"></script><script src="/js/local-search.js"></script><script src="/js/lazyload.js"></script><div class="pjax"><script src="/js/post/post-helper.js"></script><script src="/js/post/toc.js"></script><script src="/js/post/copyright-info.js"></script><script src="/js/post/share.js"></script></div><script src="/js/libs/pjax.min.js"></script><script>window.addEventListener("DOMContentLoaded",()=>{window.pjax=new Pjax({selectors:["head title",".page-container",".pjax"],history:!0,debug:!1,cacheBust:!1,timeout:0,analytics:!1,currentUrlFullReload:!1,scrollRestoration:!1}),document.addEventListener("pjax:send",()=>{KEEP.utils.pjaxProgressBarStart()}),document.addEventListener("pjax:complete",()=>{KEEP.utils.pjaxProgressBarEnd(),window.pjax.executeScripts(document.querySelectorAll("script[data-pjax], .pjax script")),KEEP.initExecute()})})</script></body></html>

@@ -1,789 +1,113 @@
-
-
-<!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=dark>
-
-
-
-<head>
-  <meta name="google-site-verification" content="vfJ2GJW1_Q4AOrJXuD5IJvdntHtM2T5hXhBiq3pLXiw" />
-  <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
-  <link rel="icon" href="/img/fluid.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-  
-  <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="Lambert Swizzer">
-  <meta name="keywords" content="">
-  
-    <meta name="description" content="前几天开坑说要用gf2bv试验一下，就趁着这个机会稍微研究一下MT19937吧。">
-<meta property="og:type" content="article">
-<meta property="og:title" content="MT19937">
-<meta property="og:url" content="https://eupho.me/59a1b91b.html">
-<meta property="og:site_name" content="Euphome">
-<meta property="og:description" content="前几天开坑说要用gf2bv试验一下，就趁着这个机会稍微研究一下MT19937吧。">
-<meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://eupho.me/assets/image-21.png">
-<meta property="og:image" content="https://eupho.me/assets/image-22.png">
-<meta property="article:published_time" content="2025-03-21T08:43:14.000Z">
-<meta property="article:modified_time" content="2025-03-31T16:38:54.210Z">
-<meta property="article:author" content="Lambert Swizzer">
-<meta property="article:tag" content="Crypto">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://eupho.me/assets/image-21.png">
-  
-  
-  
-  <title>MT19937 - Euphome</title>
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
-
-
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
-
-
-<!-- 主题依赖的图标库，不要自行修改 -->
-<!-- Do not modify the link that theme dependent icons -->
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
-
-
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
-
-
-<link  rel="stylesheet" href="/css/main.css" />
-
-
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
-  
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
-  
-
-
-
-  
-<link rel="stylesheet" href="/css/mac.css">
-
-
-
-  <script id="fluid-configs">
-    var Fluid = window.Fluid || {};
-    Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"eupho.me","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":false,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
-
-    if (CONFIG.web_analytics.follow_dnt) {
-      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
-      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
-    }
-  </script>
-  <script  src="/js/utils.js" ></script>
-  <script  src="/js/color-schema.js" ></script>
-  
-
-
-  
-<meta name="generator" content="Hexo 6.3.0"></head>
-
-
-<body>
-  
-
-  <header>
-    
-
-<div class="header-inner" style="height: 70vh;">
-  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="/">
-      <strong>Euphome</strong>
-    </a>
-
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <div class="animated-icon"><span></span><span></span><span></span></div>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto text-center">
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/">
-                <i class="iconfont icon-home-fill"></i>
-                <span>首页</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/archives/">
-                <i class="iconfont icon-archive-fill"></i>
-                <span>归档</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/categories/">
-                <i class="iconfont icon-category-fill"></i>
-                <span>分类</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/tags/">
-                <i class="iconfont icon-tags-fill"></i>
-                <span>标签</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                <span>关于</span>
-              </a>
-            </li>
-          
-        
-        
-          <li class="nav-item" id="search-btn">
-            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              <i class="iconfont icon-search"></i>
-            </a>
-          </li>
-          
-        
-        
-          <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
-              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
-            </a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-</nav>
-
-  
-
-<div id="banner" class="banner" parallax=true
-     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
-  <div class="full-bg-img">
-    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-      <div class="banner-text text-center fade-in-up">
-        <div class="h2">
-          
-            <span id="subtitle" data-typed-text="MT19937"></span>
-          
-        </div>
-
-        
-          
-  <div class="mt-3">
-    
-    
-      <span class="post-meta">
-        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-03-21 16:43" pubdate>
-          2025年3月21日 下午
-        </time>
-      </span>
-    
-  </div>
-
-  <div class="mt-1">
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-chart"></i>
-        
-          8k 字
-        
-      </span>
-    
-
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-clock-fill"></i>
-        
-        
-        
-          14 分钟
-        
-      </span>
-    
-
-    
-    
-  </div>
-
-
-        
-      </div>
-
-      
-    </div>
-  </div>
-</div>
-
-</div>
-
-  </header>
-
-  <main>
-    
-      
-
-<div class="container-fluid nopadding-x">
-  <div class="row nomargin-x">
-    <div class="side-col d-none d-lg-block col-lg-2">
-      
-
-    </div>
-
-    <div class="col-lg-8 nopadding-x-md">
-      <div class="container nopadding-x-md" id="board-ctn">
-        <div id="board">
-          <article class="post-content mx-auto">
-            <!-- SEO header -->
-            <h1 style="display: none">MT19937</h1>
-            
-              <p class="note note-info">
-                
-                  
-                    本文最后更新于：2025年4月1日 凌晨
-                  
-                
-              </p>
-            
-            
-              <div class="markdown-body">
-                
-                <p>前几天<a
-href="https://eupho.me/828e6345.html">开坑</a>说要用gf2bv试验一下，就趁着这个机会稍微研究一下MT19937吧。</p>
-<span id="more"></span>
-<h2 id="avant-填坑">Avant-填坑</h2>
-<p><a
-target="_blank" rel="noopener" href="https://github.com/maple3142/gf2bv">gf2bv</a>其实是maple佬写出来求解GF(2)上线性方程组的。恰好MT19937在GF(2)上关于初始状态也是线性递推，所以拿来搞MT也不是不行。</p>
-<p>跟maple给的例子对拍了一下，这个板子主要要改的就是</p>
-<figure class="highlight python"><i class="iconfont icon-github-fill" type="button" data-toggle="collapse" data-target="#collapse-i8l34sm8xc7gr6"></i><span>python</span><div class="collapse show" id="collapse-i8l34sm8xc7gr6"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">for</span> o <span class="hljs-keyword">in</span> out:<br>        zeros.append(rng.getrandbits(bs) ^ <span class="hljs-built_in">int</span>(o))<br>        rng.getrandbits(<span class="hljs-number">32</span>)<br></code></pre></td></tr></table></div></figure>
-<p>这里，zeros.append()的时候需要注意和题目中获取randbits的方式一致。本题中是每两个getrandbits(32)获取一个，所以循环里也是这么写的。其他地方几乎不用动。</p>
-<blockquote>
-<p>exp</p>
-</blockquote>
-<figure class="highlight python"><i class="iconfont icon-github-fill" type="button" data-toggle="collapse" data-target="#collapse-kr6grnm8xc7gr6"></i><span>python</span><div class="collapse show" id="collapse-kr6grnm8xc7gr6"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> tqdm <span class="hljs-keyword">import</span> trange<br><span class="hljs-keyword">from</span> gf2bv <span class="hljs-keyword">import</span> LinearSystem<br><span class="hljs-keyword">from</span> gf2bv.crypto.mt <span class="hljs-keyword">import</span> MT19937<br><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">mt19937</span>(<span class="hljs-params">bs, out</span>):<br>    lin = LinearSystem([<span class="hljs-number">32</span>] * <span class="hljs-number">624</span>)<br>    mt = lin.gens()<br>    rng = MT19937(mt)<br>    zeros = []<br>    <span class="hljs-keyword">for</span> o <span class="hljs-keyword">in</span> out:<br>        zeros.append(rng.getrandbits(bs) ^ <span class="hljs-built_in">int</span>(o))<br>        rng.getrandbits(<span class="hljs-number">32</span>)<br>    zeros.append(mt[<span class="hljs-number">0</span>] ^ <span class="hljs-built_in">int</span>(<span class="hljs-number">0x80000000</span>))<br>    sol = lin.solve_one(zeros)<br>    rng = MT19937(sol)<br>    pyrand = rng.to_python_random()<br>    <span class="hljs-keyword">return</span> pyrand<br>conn = remote(<span class="hljs-string">&#x27;127.0.0.1&#x27;</span>, <span class="hljs-number">1337</span>)<br>out = []<br>nums = <span class="hljs-number">5000</span><br><span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> trange(nums):<br>    out.append(<span class="hljs-built_in">int</span>(conn.recvline()) &gt;&gt; <span class="hljs-number">24</span>)<br>    conn.sendline(<span class="hljs-string">b&#x27;&#x27;</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">len</span>(out))<br>RNG = mt19937(<span class="hljs-number">8</span>, out)<br>prev = [RNG.getrandbits(<span class="hljs-number">32</span>) <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(nums * <span class="hljs-number">2</span>)]<br>predict = []<br>check = []<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> trange(<span class="hljs-number">32</span>):<br>    predict.append(RNG.getrandbits(<span class="hljs-number">32</span>)&gt;&gt;<span class="hljs-number">16</span>)<br>    RNG.getrandbits(<span class="hljs-number">32</span>)<br>    check.append(<span class="hljs-built_in">int</span>(conn.recvline())&gt;&gt;<span class="hljs-number">16</span>)<br>    conn.sendline(<span class="hljs-string">b&#x27;&#x27;</span>)<br><br><span class="hljs-built_in">print</span>(predict==check)<br></code></pre></td></tr></table></div></figure>
-<figure>
-<img src="../assets/image-21.png" srcset="/img/loading.gif" lazyload alt="大佬写的工具确实是快" />
-<figcaption aria-hidden="true">大佬写的工具确实是快</figcaption>
-</figure>
-<p>本地生成数据测了一下，比之前手搓<del>抄的</del>脚本快了好多🥹...</p>
-<h2 id="正片">正片</h2>
-<p>Python的MT19937中，getrandbits()是按照32bit为单位产生的。也就是说：</p>
-<ul>
-<li>如果getrandbits(0)，会直接返回0，不会调用随机数生成</li>
-<li>如果getrandbits(32k)，那么会连续产生k个32bit的数并拼接起来</li>
-<li>如果getrandbits(t)，<span
-class="math inline">\(0&lt;t&lt;32\)</span>，那么会先产生一个32bit的数字，然后截取其高t位作为本次随机数</li>
-</ul>
-<p>在生成随机数前，MT19937会初始化一个state，state由624个32bit的数字组成。往后所有getrandbits产生的数字，都是关于这个初始state模2下线性的。这里的<strong>线性</strong>，意思是把初始state的二进制展开记作向量<span
-class="math inline">\(\vec{v}\)</span>，那么对此后的getrandbits()产生的任意位置的bit，都存在一个向量<span
-class="math inline">\(\vec{t}\)</span>使得<span
-class="math inline">\(\vec{t}*\vec{s}=bit\)</span>。</p>
-<p>所以实际上我们只要获取输出中任意不同位置的19968个bit，就能通过构造矩阵解方程的方法拿到初始状态(假定矩阵满秩)：</p>
-<p><span class="math display">\[\vec{s}\cdot T = \vec{b}\]</span></p>
-<p>这里的<span
-class="math inline">\(\vec{b}\)</span>题目中就能直接拿到。至于<span
-class="math inline">\(T\)</span>，也可以通过设<span
-class="math inline">\(\vec{s}\)</span>为只有一个分量为1的向量的方式，按黑盒调用的想法逐行取出，跟很久以前做过的<a
-href="https://eupho.me/1cbd8855.html#moonjump">破解Xorshiro256**的题目</a>是一样的想法。</p>
-<blockquote>
-<p>exp copied from <a
-target="_blank" rel="noopener" href="https://huangx607087.online/2021/07/10/Explore-MT19937/#0x03-%E7%BB%99%E5%87%BA%E4%BB%BB%E6%84%8F19937%E4%B8%AAbit-upd-2025-01-22">huangx607087</a></p>
-</blockquote>
-<figure class="highlight python"><i class="iconfont icon-github-fill" type="button" data-toggle="collapse" data-target="#collapse-4tt1hum8xc7gr6"></i><span>python</span><div class="collapse show" id="collapse-4tt1hum8xc7gr6"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><code class="hljs python">Dall=<span class="hljs-built_in">list</span>(<span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>,<span class="hljs-built_in">open</span>(<span class="hljs-string">&#x27;data3.txt&#x27;</span>,<span class="hljs-string">&#x27;r&#x27;</span>).readlines()))<br><span class="hljs-keyword">from</span> Crypto.Util.number <span class="hljs-keyword">import</span> *<br><span class="hljs-keyword">from</span> random <span class="hljs-keyword">import</span> *<br><span class="hljs-keyword">from</span> tqdm <span class="hljs-keyword">import</span> *<br>n=<span class="hljs-number">1250</span><br>D=Dall[:n]<br>rng=Random()<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">getRows</span>(<span class="hljs-params">rng</span>):<br>    <span class="hljs-comment">#这一部分根据题目实际编写，必须和题目实际比特获取顺序和方式完全一致，且确保比特数大于19937，并且请注意zfill。</span><br>    row=[]<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n):<br>        row+=<span class="hljs-built_in">list</span>(<span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, (<span class="hljs-built_in">bin</span>(rng.getrandbits(<span class="hljs-number">16</span>))[<span class="hljs-number">2</span>:].zfill(<span class="hljs-number">16</span>))))<br>    <span class="hljs-keyword">return</span> row<br>M=[]<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> tqdm_notebook(<span class="hljs-built_in">range</span>(<span class="hljs-number">19968</span>)):<span class="hljs-comment">#这一部分为固定套路，具体原因已经写在注释中了</span><br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    referennce:</span><br><span class="hljs-string">    糖醋小鸡块 2025/1/21 20:26:51</span><br><span class="hljs-string">    这部分代码相当于取了一组线性基</span><br><span class="hljs-string"></span><br><span class="hljs-string">    糖醋小鸡块 2025/1/21 20:26:56</span><br><span class="hljs-string">    因为mt19937是线性的</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    state = [<span class="hljs-number">0</span>]*<span class="hljs-number">624</span><br>    temp = <span class="hljs-string">&quot;0&quot;</span>*i + <span class="hljs-string">&quot;1&quot;</span>*<span class="hljs-number">1</span> + <span class="hljs-string">&quot;0&quot;</span>*(<span class="hljs-number">19968</span>-<span class="hljs-number">1</span>-i)<br>    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">624</span>):<br>        state[j] = <span class="hljs-built_in">int</span>(temp[<span class="hljs-number">32</span>*j:<span class="hljs-number">32</span>*j+<span class="hljs-number">32</span>],<span class="hljs-number">2</span>)<br>    rng.setstate((<span class="hljs-number">3</span>,<span class="hljs-built_in">tuple</span>(state+[<span class="hljs-number">624</span>]),<span class="hljs-literal">None</span>)) <span class="hljs-comment">#这个setstate也是固定格式，已于2025.1.21测试</span><br>    M.append(getRows(rng))<br>M=Matrix(GF(<span class="hljs-number">2</span>),M)<br>y=[]<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n):<br>    y+=<span class="hljs-built_in">list</span>(<span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, (<span class="hljs-built_in">bin</span>(D[i])[<span class="hljs-number">2</span>:].zfill(<span class="hljs-number">16</span>))))<br>y=vector(GF(<span class="hljs-number">2</span>),y)<br>s=M.solve_left(y)<br><span class="hljs-comment">#print(s)</span><br>G=[]<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">624</span>):<br>    C=<span class="hljs-number">0</span><br>    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">32</span>):<br>        C&lt;&lt;=<span class="hljs-number">1</span><br>        C|=<span class="hljs-built_in">int</span>(s[<span class="hljs-number">32</span>*i+j])<br>    G.append(C)<br><span class="hljs-keyword">import</span> random<br>RNG1 = random.Random()<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">624</span>):<br>    G[i]=<span class="hljs-built_in">int</span>(G[i])<br>RNG1.setstate((<span class="hljs-built_in">int</span>(<span class="hljs-number">3</span>),<span class="hljs-built_in">tuple</span>(G+[<span class="hljs-built_in">int</span>(<span class="hljs-number">624</span>)]),<span class="hljs-literal">None</span>))<br><br><span class="hljs-built_in">print</span>([RNG1.getrandbits(<span class="hljs-number">16</span>) <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">75</span>)])<br><span class="hljs-built_in">print</span>(D[:<span class="hljs-number">75</span>])<br></code></pre></td></tr></table></div></figure>
-<h2 id="番外">番外</h2>
-<h3 id="seed-recovery">Seed Recovery</h3>
-<p>有篇<a
-target="_blank" rel="noopener" href="https://stackered.com/blog/python-random-prediction/#seed-recovery-from-few-outputs">博文</a>详细地讲解了MT19937的工作原理。文中特别提到，如果Python的MT19937是32bit整数的seed，那么只需要一轮624个输出中特定位置的6个即可恢复seed。当然恢复出的seed有两种可能，实际使用时还得做一些额外的判断。</p>
-<h4 id="apoorvctf">2025 ApoorvCTF</h4>
-<blockquote>
-<p>task</p>
-</blockquote>
-<figure class="highlight python"><i class="iconfont icon-github-fill" type="button" data-toggle="collapse" data-target="#collapse-9a88jim8xc7gr6"></i><span>python</span><div class="collapse show" id="collapse-9a88jim8xc7gr6"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> Crypto.Util.number <span class="hljs-keyword">import</span> getPrime, bytes_to_long, long_to_bytes<br><span class="hljs-keyword">import</span> random<br><br>flag = <span class="hljs-string">b&quot;apoorvctf&#123;fake_flag&#125;&quot;</span><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">secret</span>(<span class="hljs-params">p</span>):<br>    prime_bytes = p.to_bytes(<span class="hljs-number">64</span>, byteorder=<span class="hljs-string">&#x27;big&#x27;</span>)  <br>    keys = [bytes_to_long(prime_bytes[i:i+<span class="hljs-number">4</span>]) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>, <span class="hljs-number">64</span>, <span class="hljs-number">4</span>)] <br>    enc_p = []<br>    <span class="hljs-keyword">for</span> key <span class="hljs-keyword">in</span> keys:<br>        tp = []<br>        random.seed(key)<br>        indexes = [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">227</span>, <span class="hljs-number">228</span>, <span class="hljs-number">229</span>]<br>        random_arr = [random.getrandbits(<span class="hljs-number">32</span>) <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">624</span>)] <br>        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> indexes:<br>            tp.append(random_arr[j])<br>        enc_p.append(tp) <br>    <span class="hljs-keyword">return</span> enc_p<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">encrypt</span>():<br>    p = getPrime(<span class="hljs-number">512</span>)<br>    q = getPrime(<span class="hljs-number">512</span>)<br>    n = p * q<br>    e = <span class="hljs-number">65537</span><br>    c = <span class="hljs-built_in">pow</span>(bytes_to_long(flag), e, n)<br>    trash = secret(p)  <br>    <span class="hljs-keyword">return</span> n, c, trash  <br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">decrypt</span>(<span class="hljs-params">n,p,c</span>):<br>    q = n//p<br>    <span class="hljs-keyword">if</span> p*q != n:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Invalid n&quot;</span>)<br>        <span class="hljs-keyword">return</span><br>    phi = (p-<span class="hljs-number">1</span>)*(q-<span class="hljs-number">1</span>)<br>    d = <span class="hljs-built_in">pow</span>(<span class="hljs-number">65537</span>,-<span class="hljs-number">1</span>,phi)<br>    <span class="hljs-keyword">return</span> long_to_bytes(<span class="hljs-built_in">pow</span>(c,d,n))<br><br>n, c, trash = encrypt() <br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;n:&quot;</span>, n)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;c:&quot;</span>, c)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;trash:&quot;</span>, trash)<br><span class="hljs-comment">#print(&quot;flag:&quot;, decrypt(n,p,c)) </span><br></code></pre></td></tr></table></div></figure>
-<p>这道题完全就是照搬上面那篇博文，直接抄就行。</p>
-<blockquote>
-<p>exp</p>
-</blockquote>
-<figure class="highlight python"><i class="iconfont icon-github-fill" type="button" data-toggle="collapse" data-target="#collapse-aepdjsm8xc7gr6"></i><span>python</span><div class="collapse show" id="collapse-aepdjsm8xc7gr6"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">recover_Kj_from_Ii</span>(<span class="hljs-params">Ii, Ii1, Ii2, i</span>):<br>    <span class="hljs-comment"># Ii =&gt; I[i]</span><br>    <span class="hljs-comment"># Ii1 =&gt; I[i-1]</span><br>    <span class="hljs-comment"># Ii2 =&gt; I[i-2]</span><br>    <span class="hljs-comment"># Ji =&gt; J[i]</span><br>    <span class="hljs-comment"># Ji1 =&gt; J[i-1]</span><br>    Ji = recover_Ji_from_Ii(Ii, Ii1, i)<br>    Ji1 = recover_Ji_from_Ii(Ii1, Ii2, i-<span class="hljs-number">1</span>)<br>    <span class="hljs-keyword">return</span> recover_kj_from_Ji(Ji, Ji1, i)<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">recover_Ji_from_Ii</span>(<span class="hljs-params">Ii, Ii1, i</span>):<br>    <span class="hljs-comment"># Ii =&gt; I[i]</span><br>    <span class="hljs-comment"># Ii1 =&gt; I[i-1]</span><br>    ji = (Ii + i) ^ ((Ii1 ^ (Ii1 &gt;&gt; <span class="hljs-number">30</span>)) * <span class="hljs-number">1566083941</span>)<br>    ji &amp;= <span class="hljs-number">0xffffffff</span><br>    <span class="hljs-comment"># return J[i]</span><br>    <span class="hljs-keyword">return</span> ji<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">init_genrand</span>(<span class="hljs-params">seed</span>):<br>        MT = [<span class="hljs-number">0</span>] * <span class="hljs-number">624</span><br>        MT[<span class="hljs-number">0</span>] = seed &amp; <span class="hljs-number">0xffffffff</span><br>        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, <span class="hljs-number">623</span>+<span class="hljs-number">1</span>): <span class="hljs-comment"># loop over each element</span><br>            MT[i] = ((<span class="hljs-number">0x6c078965</span> * (MT[i-<span class="hljs-number">1</span>] ^ (MT[i-<span class="hljs-number">1</span>] &gt;&gt; <span class="hljs-number">30</span>))) + i) &amp; <span class="hljs-number">0xffffffff</span><br>        <span class="hljs-keyword">return</span> MT<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">recover_kj_from_Ji</span>(<span class="hljs-params">ji, ji1, i</span>):<br>    <span class="hljs-comment"># ji =&gt; J[i]</span><br>    <span class="hljs-comment"># ji1 =&gt; J[i-1]</span><br>    const = init_genrand(<span class="hljs-number">19650218</span>)<br>    key = ji - (const[i] ^ ((ji1 ^ (ji1 &gt;&gt; <span class="hljs-number">30</span>))*<span class="hljs-number">1664525</span>))<br>    key &amp;= <span class="hljs-number">0xffffffff</span><br>    <span class="hljs-comment"># return K[j] + j</span><br>    <span class="hljs-keyword">return</span> key<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">unshiftRight</span>(<span class="hljs-params">x, shift</span>):<br>    res = x<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">32</span>):<br>        res = x ^ res &gt;&gt; shift<br>    <span class="hljs-keyword">return</span> res<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">unshiftLeft</span>(<span class="hljs-params">x, shift, mask</span>):<br>    res = x<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">32</span>):<br>        res = x ^ (res &lt;&lt; shift &amp; mask)<br>    <span class="hljs-keyword">return</span> res<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">untemper</span>(<span class="hljs-params">v</span>):<br>    v = unshiftRight(v, <span class="hljs-number">18</span>)<br>    v = unshiftLeft(v, <span class="hljs-number">15</span>, <span class="hljs-number">0xefc60000</span>)<br>    v = unshiftLeft(v, <span class="hljs-number">7</span>, <span class="hljs-number">0x9d2c5680</span>)<br>    v = unshiftRight(v, <span class="hljs-number">11</span>)<br>    <span class="hljs-keyword">return</span> v<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">invertlitep</span>(<span class="hljs-params">si, si227</span>):<br>    <span class="hljs-comment"># li[i] ^ li[i-227] == (((I[i] &amp; 0x80000000) | (I[i+1] &amp; 0x7FFFFFFF)) &gt;&gt; 1) ^ (0x9908b0df if I[i+1] &amp; 1 else 0)</span><br>    X = si ^ si227<br>    <span class="hljs-comment"># we know the LliB of I[i+1] because MliB of 0x9908b0df is set, we can see if the XOR has been applied</span><br>    mti1 = (X &amp; <span class="hljs-number">0x80000000</span>) &gt;&gt; <span class="hljs-number">31</span><br>    <span class="hljs-keyword">if</span> mti1:<br>        X ^= <span class="hljs-number">0x9908b0df</span><br>    <span class="hljs-comment"># undo shift right</span><br>    X &lt;&lt;= <span class="hljs-number">1</span><br>    <span class="hljs-comment"># now recover MliB of state I[i]</span><br>    mti = X &amp; <span class="hljs-number">0x80000000</span><br>    <span class="hljs-comment"># recover the rest of state I[i+1]</span><br>    mti1 += X &amp; <span class="hljs-number">0x7FFFFFFF</span><br>    <span class="hljs-keyword">return</span> mti, mti1<br><br><br><span class="hljs-keyword">import</span> random<br><span class="hljs-keyword">import</span> ast<br><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;out.txt&quot;</span>) <span class="hljs-keyword">as</span> f:<br>    n = ast.literal_eval(f.readline())<br>    c = ast.literal_eval(f.readline())<br>    trash = ast.literal_eval(f.readline())<br>    <span class="hljs-comment"># k = 1</span><br>    <span class="hljs-comment"># K = [i]</span><br>    <span class="hljs-keyword">for</span> li <span class="hljs-keyword">in</span> trash:<br>        S = [untemper(li[i]) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">6</span>)]<br><br>        I_227_, I_228 = invertlitep(S[<span class="hljs-number">3</span>], S[<span class="hljs-number">0</span>])<br>        I_228_, I_229 = invertlitep(S[<span class="hljs-number">4</span>], S[<span class="hljs-number">1</span>])<br>        I_229_, I_230 = invertlitep(S[<span class="hljs-number">5</span>], S[<span class="hljs-number">2</span>])<br><br>        I_228 += I_228_<br>        I_229 += I_229_<br><br>        <span class="hljs-comment"># two possibilities for I_230</span><br>        seed1 = recover_Kj_from_Ii(I_230, I_229, I_228, <span class="hljs-number">230</span>)<br>        seed2 = recover_Kj_from_Ii(I_230+<span class="hljs-number">0x80000000</span>, I_229, I_228, <span class="hljs-number">230</span>)<br>        <span class="hljs-comment"># only the MliB differs</span><br>        <span class="hljs-built_in">print</span>(seed1, seed2)<br><span class="hljs-keyword">from</span> Crypto.Util.number <span class="hljs-keyword">import</span> *<br>plist = [<span class="hljs-number">2233556749</span>,<span class="hljs-number">1332779457</span>,<span class="hljs-number">3663810718</span>,<span class="hljs-number">1146419848</span>,<span class="hljs-number">2960081222</span>,<span class="hljs-number">3483469796</span>,<span class="hljs-number">2128181600</span>,<span class="hljs-number">3346153247</span>,<span class="hljs-number">61541386</span>,<span class="hljs-number">1190096622</span>,<span class="hljs-number">362663341</span>,<span class="hljs-number">784549194</span>,<span class="hljs-number">3375914009</span>,<span class="hljs-number">2922819453</span>,<span class="hljs-number">2926167818</span>,<span class="hljs-number">2960726147</span>]<br>pp = <span class="hljs-string">b&quot;&quot;</span><br><span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> plist:<br>    <span class="hljs-keyword">assert</span> <span class="hljs-built_in">len</span>(long_to_bytes(x)) == <span class="hljs-number">4</span><br>    pp+=long_to_bytes(x)<br>isPrime(bytes_to_long(pp))<br><span class="hljs-built_in">print</span>(pp)<br>p = bytes_to_long(pp)<br>q = n//p<br>e=<span class="hljs-number">65537</span><br>d = inverse(e,(p-<span class="hljs-number">1</span>)*(q-<span class="hljs-number">1</span>))<br><span class="hljs-built_in">print</span>(long_to_bytes(<span class="hljs-built_in">pow</span>(c,d,n)))<br></code></pre></td></tr></table></div></figure>
-<h3 id="对异或封闭">对异或封闭</h3>
-<p>之前打本部的405杯的时候<a
-href="https://eupho.me/80b6c266.html#yamato">提过这个事情</a>，也就是多个MT19937的输出异或后等价于一个MT19937的输出。如果把所有MT19937的输出流看作一个集合，无非就是说这个集合的元素对二进制异或封闭而已，原因在那篇blog里也简要阐明了。其实在本篇的观点下更容易，因为异或就是GF(2)上的加法嘛，而线性映射<span
-class="math inline">\(f\)</span>显然满足<span
-class="math inline">\(f(x_1)+f(x_2)=f(x_1+x_2)\)</span></p>
-<p>做个实验:</p>
-<figure class="highlight python"><i class="iconfont icon-github-fill" type="button" data-toggle="collapse" data-target="#collapse-vq2sl8m8xc7gr6"></i><span>python</span><div class="collapse show" id="collapse-vq2sl8m8xc7gr6"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/sage</span><br><span class="hljs-keyword">from</span> Crypto.Util.number <span class="hljs-keyword">import</span> *<br><span class="hljs-keyword">from</span> random <span class="hljs-keyword">import</span> *<br><span class="hljs-keyword">from</span> tqdm <span class="hljs-keyword">import</span> *<br>D = []<br>n = <span class="hljs-number">624</span><br>stream1 = Random()<br>stream2 = Random()<br><span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> trange(<span class="hljs-number">624</span>):<br>    D.append(stream1.getrandbits(<span class="hljs-number">32</span>)^^stream2.getrandbits(<span class="hljs-number">32</span>))<br>rng=Random()<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">getRows</span>(<span class="hljs-params">rng</span>):<br>    row=[]<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n):<br>        row+=<span class="hljs-built_in">list</span>(<span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, (<span class="hljs-built_in">bin</span>(rng.getrandbits(<span class="hljs-number">32</span>))[<span class="hljs-number">2</span>:].zfill(<span class="hljs-number">32</span>))))<br>    <span class="hljs-keyword">return</span> row<br>M=[]<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> trange(<span class="hljs-number">19968</span>):<br>    state = [<span class="hljs-number">0</span>]*<span class="hljs-number">624</span><br>    temp = <span class="hljs-string">&quot;0&quot;</span>*i + <span class="hljs-string">&quot;1&quot;</span>*<span class="hljs-number">1</span> + <span class="hljs-string">&quot;0&quot;</span>*(<span class="hljs-number">19968</span>-<span class="hljs-number">1</span>-i)<br>    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">624</span>):<br>        state[j] = <span class="hljs-built_in">int</span>(temp[<span class="hljs-number">32</span>*j:<span class="hljs-number">32</span>*j+<span class="hljs-number">32</span>],<span class="hljs-number">2</span>)<br>    rng.setstate((<span class="hljs-number">3</span>,<span class="hljs-built_in">tuple</span>(state+[<span class="hljs-number">624</span>]),<span class="hljs-literal">None</span>))<br>    M.append(getRows(rng))<br>M=Matrix(GF(<span class="hljs-number">2</span>),M)<br>y=[]<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n):<br>    y+=<span class="hljs-built_in">list</span>(<span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, (<span class="hljs-built_in">bin</span>(D[i])[<span class="hljs-number">2</span>:].zfill(<span class="hljs-number">32</span>))))<br>y=vector(GF(<span class="hljs-number">2</span>),y)<br>s=M.solve_left(y)<br><span class="hljs-comment">#print(s)</span><br>G=[]<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">624</span>):<br>    C=<span class="hljs-number">0</span><br>    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">32</span>):<br>        C&lt;&lt;=<span class="hljs-number">1</span><br>        C|=<span class="hljs-built_in">int</span>(s[<span class="hljs-number">32</span>*i+j])<br>    G.append(C)<br><span class="hljs-keyword">import</span> random<br>RNG1 = random.Random()<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">624</span>):<br>    G[i]=<span class="hljs-built_in">int</span>(G[i])<br>RNG1.setstate((<span class="hljs-built_in">int</span>(<span class="hljs-number">3</span>),<span class="hljs-built_in">tuple</span>(G+[<span class="hljs-built_in">int</span>(<span class="hljs-number">624</span>)]),<span class="hljs-literal">None</span>))<br><br><span class="hljs-built_in">print</span>([RNG1.getrandbits(<span class="hljs-number">32</span>) <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">75</span>)])<br><span class="hljs-built_in">print</span>(D[:<span class="hljs-number">75</span>])<br></code></pre></td></tr></table></div></figure>
-<figure>
-<img src="../assets/image-22.png" srcset="/img/loading.gif" lazyload alt="确实是对的" />
-<figcaption aria-hidden="true">确实是对的</figcaption>
-</figure>
-<p>两个MT输出流即使其中一个有"偏移"(先生成一些输出之后两者再开始异或)也是同样成立的，可以理解为MT生成一次输出后内部状态经过了一次线性递推，然后在一个新的初始状态下两个输出流进行GF(2)上的加法运算。</p>
-<p>不过很奇怪的是，上面这个例子用maple的gf2bv就没办法求解出来，可能是zeros的写法需要进一步修正？</p>
-<h2 id="继续开坑">继续开坑</h2>
-<p>如果是多个不同bit数的MT19937输出流异或之后，有没有办法恢复初始状态呢？我觉得只取两者异或的部分作为一个MT的输出再去建立方程是可以求解的，不过就留待以后再实验吧。</p>
-
-                
-              </div>
-            
-            <hr/>
-            <div>
-              <div class="post-metas my-3">
-  
-    <div class="post-meta mr-3 d-flex align-items-center">
-      <i class="iconfont icon-category"></i>
-      
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E9%9A%8F%E7%AC%94/" class="category-chain-item">随笔</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/%E9%9A%8F%E7%AC%94/%E6%8A%80%E6%9C%AF/" class="category-chain-item">技术</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-    </div>
-  
-  
-    <div class="post-meta">
-      <i class="iconfont icon-tags"></i>
-      
-        <a href="/tags/Crypto/">#Crypto</a>
-      
-    </div>
-  
-</div>
-
-
-              
-  
-
-  <div class="license-box my-3">
-    <div class="license-title">
-      <div>MT19937</div>
-      <div>https://eupho.me/59a1b91b.html</div>
-    </div>
-    <div class="license-meta">
-      
-        <div class="license-meta-item">
-          <div>作者</div>
-          <div>Lambert Swizzer</div>
-        </div>
-      
-      
-        <div class="license-meta-item license-meta-date">
-          <div>发布于</div>
-          <div>2025年3月21日</div>
-        </div>
-      
-      
-      
-        <div class="license-meta-item">
-          <div>许可协议</div>
-          <div>
-            
-              
-              
-                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
-                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
-                    <i class="iconfont icon-by"></i>
-                  </span>
-                </a>
-              
-                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
-                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
-                    <i class="iconfont icon-nc"></i>
-                  </span>
-                </a>
-              
-                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
-                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
-                    <i class="iconfont icon-sa"></i>
-                  </span>
-                </a>
-              
-            
-          </div>
-        </div>
-      
-    </div>
-    <div class="license-icon iconfont"></div>
-  </div>
-
-
-
-              
-                <div class="post-prevnext my-3">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/f77f5df.html" title="2025 数字中国创新大赛 数字安全赛道">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">2025 数字中国创新大赛 数字安全赛道</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                      <a href="/828e6345.html" title="2025 TPCTF Writeup">
-                        <span class="hidden-mobile">2025 TPCTF Writeup</span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
-                    
-                  </article>
-                </div>
-              
-            </div>
-
-            
-  
-  
-    <article id="comments" lazyload>
-      
-  <script type="text/javascript">
-    Fluid.utils.loadComments('#comments', function() {
-      var light = 'github-light';
-      var dark = 'github-dark';
-      var schema = document.documentElement.getAttribute('data-user-color-scheme');
-      if (schema === 'dark') {
-        schema = dark;
-      } else {
-        schema = light;
-      }
-      window.UtterancesThemeLight = light;
-      window.UtterancesThemeDark = dark;
-      var s = document.createElement('script');
-      s.setAttribute('src', 'https://utteranc.es/client.js');
-      s.setAttribute('repo', 'Swizzzer/blogComments');
-      s.setAttribute('issue-term', 'pathname');
-      
-      s.setAttribute('label', 'utterances');
-      
-      s.setAttribute('theme', schema);
-      s.setAttribute('crossorigin', 'anonymous');
-      document.getElementById('comments').appendChild(s);
-    })
-  </script>
-  <noscript>Please enable JavaScript to view the comments</noscript>
-
-
-    </article>
-  
-
-
-          </article>
-        </div>
-      </div>
-    </div>
-
-    <div class="side-col d-none d-lg-block col-lg-2">
-      
-  <aside class="sidebar" style="margin-left: -1rem">
-    <div id="toc">
-  <p class="toc-header">
-    <i class="iconfont icon-list"></i>
-    <span>目录</span>
-  </p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
-
-
-
-  </aside>
-
-
-    </div>
-  </div>
-</div>
-
-
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-
-
-
-
-    
-
-    
-      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
-        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-      </a>
-    
-
-    
-      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
-        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
-        </div>
-        <div class="list-group" id="local-search-result"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-    
-
-    
-  </main>
-
-  <footer>
-    <div class="footer-inner">
-  
-    <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
-    </div>
-  
-  
-  
-  
-</div>
-
-  </footer>
-
-  <!-- Scripts -->
-  
-  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
-
-
-<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
-<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
-
-
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var subtitle = document.getElementById('subtitle');
-      if (!subtitle || !typing) {
-        return;
-      }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
-    })(window, document);
-  </script>
-
-
-
-
-  
-    <script  src="/js/img-lazyload.js" ></script>
-  
-
-
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
-    var toc = jQuery('#toc');
-    if (toc.length === 0 || !window.tocbot) { return; }
-    var boardCtn = jQuery('#board-ctn');
-    var boardTop = boardCtn.offset().top;
-
-    window.tocbot.init(Object.assign({
-      tocSelector     : '#toc-body',
-      contentSelector : '.markdown-body',
-      linkClass       : 'tocbot-link',
-      activeLinkClass : 'tocbot-active-link',
-      listClass       : 'tocbot-list',
-      isCollapsedClass: 'tocbot-is-collapsed',
-      collapsibleClass: 'tocbot-is-collapsible',
-      scrollSmooth    : true,
-      includeTitleTags: true,
-      headingsOffset  : -boardTop,
-    }, CONFIG.toc));
-    if (toc.find('.toc-list-item').length > 0) {
-      toc.css('visibility', 'visible');
-    }
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('tocbot' in window) {
-        tocbot.refresh();
-        var toc = jQuery('#toc');
-        if (toc.length === 0 || !tocbot) {
-          return;
-        }
-        if (toc.find('.toc-list-item').length > 0) {
-          toc.css('visibility', 'visible');
-        }
-      }
-    });
-  });
-</script>
-
-
-  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
-
-  <script>Fluid.plugins.codeWidget();</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
-    window.anchors.options = {
-      placement: CONFIG.anchorjs.placement,
-      visible  : CONFIG.anchorjs.visible
-    };
-    if (CONFIG.anchorjs.icon) {
-      window.anchors.options.icon = CONFIG.anchorjs.icon;
-    }
-    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-    var res = [];
-    for (var item of el) {
-      res.push('.markdown-body > ' + item.trim());
-    }
-    if (CONFIG.anchorjs.placement === 'left') {
-      window.anchors.options.class = 'anchorjs-link-left';
-    }
-    window.anchors.add(res.join(', '));
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('anchors' in window) {
-        anchors.removeAll();
-        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-        var res = [];
-        for (var item of el) {
-          res.push('.markdown-body > ' + item.trim());
-        }
-        if (CONFIG.anchorjs.placement === 'left') {
-          anchors.options.class = 'anchorjs-link-left';
-        }
-        anchors.add(res.join(', '));
-      }
-    });
-  });
-</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
-    Fluid.plugins.fancyBox();
-  });
-</script>
-
-
-  <script>Fluid.plugins.imageCaption();</script>
-
-  <script  src="/js/local-search.js" ></script>
-
-
-
-
-
-<!-- 主题的启动项，将它保持在最底部 -->
-<!-- the boot of the theme, keep it at the bottom -->
-<script  src="/js/boot.js" ></script>
-
-
-  
-
-  <noscript>
-    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
-  </noscript>
-</body>
-</html>
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="keywords" content="Hexo Theme Keep"><meta name="description" content="Hexo Theme Keep"><meta name="author" content="Swizzer"><title>MT19937 | Swizzer&#39;s euphonium</title><link rel="stylesheet" href="/css/style.css"><link rel="shortcut icon" href="/images/favicon.png"><link rel="stylesheet" href="/font/css/fontawesome.min.css"><link rel="stylesheet" href="/font/css/regular.min.css"><link rel="stylesheet" href="/font/css/solid.min.css"><link rel="stylesheet" href="/font/css/brands.min.css"><link rel="stylesheet" href="/css/slogan.css"><script class="keep-theme-configurations">const KEEP=window.KEEP||{};KEEP.hexo_config={hostname:"eupho.me",root:"/",language:"zh-CN",path:"search.json"},KEEP.theme_config={base_info:{primary_color:"#5dffe4",title:"Swizzer's euphonium",author:"Swizzer",avatar:"/img/avatar.png",logo:"/img/logo.png",favicon:"/images/favicon.png"},menu:{home:"/",archives:"/archives",tags:"/tags",categories:"/categories",about:"/about"},first_screen:{enable:!0,background_img:"/img/banner.jpg",background_img_dark:"/img/banner.jpg",description:"No, thank you!",hitokoto:!1},social_contact:{enable:!0,links:{github:"https://github.com/Swizzzer",bilibili:"https://space.bilibili.com/446708215",email:"kyoshaft@outlook.com"}},scroll:{progress_bar:!0,percent:!1,hide_header:!0},home:{announcement:null,category:!0,tag:!0,post_datetime:"updated"},post:{author_badge:{enable:!1,level_badge:!1,custom_badge:"Mio"},word_count:{wordcount:!0,min2read:!0},datetime_format:"YYYY-MM-DD HH:mm:ss",copyright_info:!0,share:!0,reward:{enable:!1,img_link:null,text:null}},code_block:{tools:{enable:!0,style:"default"},highlight_theme:"default"},toc:{enable:!0,number:!1,expand_all:!0,init_open:!0,layout:"right"},website_count:{busuanzi_count:{enable:!0,site_uv:!0,site_pv:!0,page_pv:!0}},local_search:{enable:!0,preload:!0},comment:{enable:!1,use:"gisqus",valine:{appid:null,appkey:null,server_urls:null,placeholder:null},gitalk:{github_id:null,github_admins:null,repository:null,client_id:null,client_secret:null,proxy:null},twikoo:{env_id:null,region:null,version:"1.6.36"},waline:{server_url:null,reaction:!1,version:"3.2.1"},giscus:{repo:"Swizzzer/blogComments",repo_id:"R_kgDOJWumvw",category:"Q&A",category_id:"DIC_kwDOJWumv84CopXz",reactions_enabled:!0},artalk:{server:null},disqus:{shortname:null}},rss:{enable:!1},lazyload:{enable:!0},cdn:{enable:!1,provider:"cdnjs"},pjax:{enable:!0},footer:{since:2022,word_count:!1,site_deploy:{enable:!1,provider:"github",url:null},record:{enable:!1,list:[{code:null,link:null}]}},inject:{enable:!0,css:[["/css/slogan.css"]],js:[null]},root:"",source_data:{},version:"4.2.5"},KEEP.language_ago={second:"%s 秒前",minute:"%s 分钟前",hour:"%s 小时前",day:"%s 天前",week:"%s 周前",month:"%s 个月前",year:"%s 年前"},KEEP.language_code_block={copy:"复制代码",copied:"已复制",fold:"折叠代码块",folded:"已折叠"},KEEP.language_copy_copyright={copy:"复制版权信息",copied:"已复制",title:"原文标题",author:"原文作者",link:"原文链接"}</script><meta name="generator" content="Hexo 6.3.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head><body><div class="progress-bar-container"><span class="scroll-progress-bar"></span> <span class="pjax-progress-bar"></span> <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i></div><main class="page-container border-box"><div class="page-main-content border-box"><div class="page-main-content-top"><header class="header-wrapper"><div class="border-box header-content"><div class="left flex-start border-box"><a class="logo-image border-box" href="/"><img src="/img/logo.png"> </a><a class="site-name border-box" href="/">Swizzer&#39;s euphonium</a></div><div class="right border-box"><div class="pc border-box"><ul class="menu-list border-box"><li class="menu-item flex-start border-box"><a class="menu-text-color border-box" href="/">首页</a></li><li class="menu-item flex-start border-box"><a class="menu-text-color border-box" href="/archives">归档</a></li><li class="menu-item flex-start border-box"><a class="menu-text-color border-box" href="/tags">标签</a></li><li class="menu-item flex-start border-box"><a class="menu-text-color border-box" href="/categories">分类</a></li><li class="menu-item flex-start border-box"><a class="menu-text-color border-box" href="/about">关于</a></li><li class="menu-item search search-popup-trigger"><i class="menu-text-color fas search fa-search"></i></li></ul></div><div class="mobile border-box flex-start"><div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div><div class="icon-item menu-bar"><div class="menu-bar-middle"></div></div></div></div></div><div class="header-drawer"><ul class="drawer-menu-list border-box"><li class="drawer-menu-item border-box not-sub-menu"><label class="drawer-menu-label border-box"><a class="drawer-menu-text-color left-side flex-start border-box" href="/">首页</a></label></li><li class="drawer-menu-item border-box not-sub-menu"><label class="drawer-menu-label border-box"><a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">归档</a></label></li><li class="drawer-menu-item border-box not-sub-menu"><label class="drawer-menu-label border-box"><a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">标签</a></label></li><li class="drawer-menu-item border-box not-sub-menu"><label class="drawer-menu-label border-box"><a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">分类</a></label></li><li class="drawer-menu-item border-box not-sub-menu"><label class="drawer-menu-label border-box"><a class="drawer-menu-text-color left-side flex-start border-box" href="/about">关于</a></label></li></ul></div><div class="window-mask"></div></header></div><div class="page-main-content-middle border-box"><div class="main-content border-box"><div class="fade-in-down-animation"><div class="post-page-container border-box"><div class="post-content-container border-box"><div class="post-content-bottom border-box"><div class="post-title">MT19937</div><div class="post-header border-box"><div class="avatar-box border-box"><img src="/img/avatar.png"></div><div class="info-box"><div class="author border-box"><span class="name">Swizzer</span></div><div class="meta-info border-box"><div class="post-meta-info-container border-box post"><div class="post-meta-info border-box"><span class="meta-info-item post-create-date"><i class="icon fa-solid fa-calendar-plus"></i>&nbsp; <span class="datetime">2025-03-21 16:43:14</span> </span><span class="meta-info-item post-update-date"><i class="icon fa-solid fa-file-pen"></i>&nbsp; <span class="datetime" data-updated="Tue Apr 01 2025 00:38:54 GMT+0800">2025-04-01 00:38:54</span> </span><span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;<ul class="post-category-ul"><li class="category-item"><a href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></li><li class="category-item">&nbsp;<i class="icon fas fa-angle-right"></i>&nbsp;<a href="/categories/%E9%9A%8F%E7%AC%94/%E6%8A%80%E6%9C%AF/">技术</a></li></ul></span><span class="post-tag meta-info-item border-box"><ul class="post-tag-ul"><li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Crypto/">Crypto</a></li></ul></span><span class="meta-info-item post-wordcount"><i class="icon fas fa-file-word"></i>&nbsp;<span>2.2k 字</span> </span><span class="meta-info-item post-min2read"><i class="icon fas fa-clock"></i>&nbsp;<span>10 分钟</span> </span><span class="meta-info-item post-pv"><i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span></span></div></div></div></div></div><div class="post-content keep-markdown-body"><p>前几天<a href="https://eupho.me/828e6345.html">开坑</a>说要用gf2bv试验一下，就趁着这个机会稍微研究一下MT19937吧。</p><span id="more"></span><h2 id="avant-填坑">Avant-填坑</h2><p><a class="link" target="_blank" rel="noopener" href="https://github.com/maple3142/gf2bv">gf2bv<i class="fas fa-external-link-alt"></i></a>其实是maple佬写出来求解GF(2)上线性方程组的。恰好MT19937在GF(2)上关于初始状态也是线性递推，所以拿来搞MT也不是不行。</p><p>跟maple给的例子对拍了一下，这个板子主要要改的就是</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> o <span class="keyword">in</span> out:</span><br><span class="line">        zeros.append(rng.getrandbits(bs) ^ <span class="built_in">int</span>(o))</span><br><span class="line">        rng.getrandbits(<span class="number">32</span>)</span><br></pre></td></tr></table></figure><p>这里，zeros.append()的时候需要注意和题目中获取randbits的方式一致。本题中是每两个getrandbits(32)获取一个，所以循环里也是这么写的。其他地方几乎不用动。</p><blockquote><p>exp</p></blockquote><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> trange</span><br><span class="line"><span class="keyword">from</span> gf2bv <span class="keyword">import</span> LinearSystem</span><br><span class="line"><span class="keyword">from</span> gf2bv.crypto.mt <span class="keyword">import</span> MT19937</span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">mt19937</span>(<span class="params">bs, out</span>):</span><br><span class="line">    lin = LinearSystem([<span class="number">32</span>] * <span class="number">624</span>)</span><br><span class="line">    mt = lin.gens()</span><br><span class="line">    rng = MT19937(mt)</span><br><span class="line">    zeros = []</span><br><span class="line">    <span class="keyword">for</span> o <span class="keyword">in</span> out:</span><br><span class="line">        zeros.append(rng.getrandbits(bs) ^ <span class="built_in">int</span>(o))</span><br><span class="line">        rng.getrandbits(<span class="number">32</span>)</span><br><span class="line">    zeros.append(mt[<span class="number">0</span>] ^ <span class="built_in">int</span>(<span class="number">0x80000000</span>))</span><br><span class="line">    sol = lin.solve_one(zeros)</span><br><span class="line">    rng = MT19937(sol)</span><br><span class="line">    pyrand = rng.to_python_random()</span><br><span class="line">    <span class="keyword">return</span> pyrand</span><br><span class="line">conn = remote(<span class="string">'127.0.0.1'</span>, <span class="number">1337</span>)</span><br><span class="line">out = []</span><br><span class="line">nums = <span class="number">5000</span></span><br><span class="line"><span class="keyword">for</span> _ <span class="keyword">in</span> trange(nums):</span><br><span class="line">    out.append(<span class="built_in">int</span>(conn.recvline()) &gt;&gt; <span class="number">24</span>)</span><br><span class="line">    conn.sendline(<span class="string">b''</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">len</span>(out))</span><br><span class="line">RNG = mt19937(<span class="number">8</span>, out)</span><br><span class="line">prev = [RNG.getrandbits(<span class="number">32</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(nums * <span class="number">2</span>)]</span><br><span class="line">predict = []</span><br><span class="line">check = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> trange(<span class="number">32</span>):</span><br><span class="line">    predict.append(RNG.getrandbits(<span class="number">32</span>)&gt;&gt;<span class="number">16</span>)</span><br><span class="line">    RNG.getrandbits(<span class="number">32</span>)</span><br><span class="line">    check.append(<span class="built_in">int</span>(conn.recvline())&gt;&gt;<span class="number">16</span>)</span><br><span class="line">    conn.sendline(<span class="string">b''</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(predict==check)</span><br></pre></td></tr></table></figure><figure><img lazyload="" alt="大佬写的工具确实是快" data-src="../assets/image-21.png"><figcaption aria-hidden="true">大佬写的工具确实是快</figcaption></figure><p>本地生成数据测了一下，比之前手搓<del>抄的</del>脚本快了好多🥹...</p><h2 id="正片">正片</h2><p>Python的MT19937中，getrandbits()是按照32bit为单位产生的。也就是说：</p><ul><li>如果getrandbits(0)，会直接返回0，不会调用随机数生成</li><li>如果getrandbits(32k)，那么会连续产生k个32bit的数并拼接起来</li><li>如果getrandbits(t)，<span class="math inline"><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align:-.09ex" xmlns="http://www.w3.org/2000/svg" width="10.245ex" height="1.597ex" role="img" focusable="false" viewBox="0 -666 4528.1 706"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mn"><path data-c="30" d="M96 585Q152 666 249 666Q297 666 345 640T423 548Q460 465 460 320Q460 165 417 83Q397 41 362 16T301 -15T250 -22Q224 -22 198 -16T137 16T82 83Q39 165 39 320Q39 494 96 585ZM321 597Q291 629 250 629Q208 629 178 597Q153 571 145 525T137 333Q137 175 145 125T181 46Q209 16 250 16Q290 16 318 46Q347 76 354 130T362 333Q362 478 354 524T321 597Z"></path></g><g data-mml-node="mo" transform="translate(777.8,0)"><path data-c="3C" d="M694 -11T694 -19T688 -33T678 -40Q671 -40 524 29T234 166L90 235Q83 240 83 250Q83 261 91 266Q664 540 678 540Q681 540 687 534T694 519T687 505Q686 504 417 376L151 250L417 124Q686 -4 687 -5Q694 -11 694 -19Z"></path></g><g data-mml-node="mi" transform="translate(1833.6,0)"><path data-c="1D461" d="M26 385Q19 392 19 395Q19 399 22 411T27 425Q29 430 36 430T87 431H140L159 511Q162 522 166 540T173 566T179 586T187 603T197 615T211 624T229 626Q247 625 254 615T261 596Q261 589 252 549T232 470L222 433Q222 431 272 431H323Q330 424 330 420Q330 398 317 385H210L174 240Q135 80 135 68Q135 26 162 26Q197 26 230 60T283 144Q285 150 288 151T303 153H307Q322 153 322 145Q322 142 319 133Q314 117 301 95T267 48T216 6T155 -11Q125 -11 98 4T59 56Q57 64 57 83V101L92 241Q127 382 128 383Q128 385 77 385H26Z"></path></g><g data-mml-node="mo" transform="translate(2472.3,0)"><path data-c="3C" d="M694 -11T694 -19T688 -33T678 -40Q671 -40 524 29T234 166L90 235Q83 240 83 250Q83 261 91 266Q664 540 678 540Q681 540 687 534T694 519T687 505Q686 504 417 376L151 250L417 124Q686 -4 687 -5Q694 -11 694 -19Z"></path></g><g data-mml-node="mn" transform="translate(3528.1,0)"><path data-c="33" d="M127 463Q100 463 85 480T69 524Q69 579 117 622T233 665Q268 665 277 664Q351 652 390 611T430 522Q430 470 396 421T302 350L299 348Q299 347 308 345T337 336T375 315Q457 262 457 175Q457 96 395 37T238 -22Q158 -22 100 21T42 130Q42 158 60 175T105 193Q133 193 151 175T169 130Q169 119 166 110T159 94T148 82T136 74T126 70T118 67L114 66Q165 21 238 21Q293 21 321 74Q338 107 338 175V195Q338 290 274 322Q259 328 213 329L171 330L168 332Q166 335 166 348Q166 366 174 366Q202 366 232 371Q266 376 294 413T322 525V533Q322 590 287 612Q265 626 240 626Q208 626 181 615T143 592T132 580H135Q138 579 143 578T153 573T165 566T175 555T183 540T186 520Q186 498 172 481T127 463Z"></path><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z" transform="translate(500,0)"></path></g></g></g></svg></mjx-container></span>，那么会先产生一个32bit的数字，然后截取其高t位作为本次随机数</li></ul><p>在生成随机数前，MT19937会初始化一个state，state由624个32bit的数字组成。往后所有getrandbits产生的数字，都是关于这个初始state模2下线性的。这里的<strong>线性</strong>，意思是把初始state的二进制展开记作向量<span class="math inline"><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align:-.025ex" xmlns="http://www.w3.org/2000/svg" width="1.097ex" height="1.939ex" role="img" focusable="false" viewBox="0 -846 485 857"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mover"><g data-mml-node="mi"><path data-c="1D463" d="M173 380Q173 405 154 405Q130 405 104 376T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Q21 294 29 316T53 368T97 419T160 441Q202 441 225 417T249 361Q249 344 246 335Q246 329 231 291T200 202T182 113Q182 86 187 69Q200 26 250 26Q287 26 319 60T369 139T398 222T409 277Q409 300 401 317T383 343T365 361T357 383Q357 405 376 424T417 443Q436 443 451 425T467 367Q467 340 455 284T418 159T347 40T241 -11Q177 -11 139 22Q102 54 102 117Q102 148 110 181T151 298Q173 362 173 380Z"></path></g><g data-mml-node="mo" transform="translate(270.3,32) translate(-250 0)"><path data-c="20D7" d="M377 694Q377 702 382 708T397 714Q404 714 409 709Q414 705 419 690Q429 653 460 633Q471 626 471 615Q471 606 468 603T454 594Q411 572 379 531Q377 529 374 525T369 519T364 517T357 516Q350 516 344 521T337 536Q337 555 384 595H213L42 596Q29 605 29 615Q29 622 42 635H401Q377 673 377 694Z"></path></g></g></g></g></g></svg></mjx-container></span>，那么对此后的getrandbits()产生的任意位置的bit，都存在一个向量<span class="math inline"><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align:-.025ex" xmlns="http://www.w3.org/2000/svg" width="0.817ex" height="2.353ex" role="img" focusable="false" viewBox="0 -1029 361 1040"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mover"><g data-mml-node="mi"><path data-c="1D461" d="M26 385Q19 392 19 395Q19 399 22 411T27 425Q29 430 36 430T87 431H140L159 511Q162 522 166 540T173 566T179 586T187 603T197 615T211 624T229 626Q247 625 254 615T261 596Q261 589 252 549T232 470L222 433Q222 431 272 431H323Q330 424 330 420Q330 398 317 385H210L174 240Q135 80 135 68Q135 26 162 26Q197 26 230 60T283 144Q285 150 288 151T303 153H307Q322 153 322 145Q322 142 319 133Q314 117 301 95T267 48T216 6T155 -11Q125 -11 98 4T59 56Q57 64 57 83V101L92 241Q127 382 128 383Q128 385 77 385H26Z"></path></g><g data-mml-node="mo" transform="translate(263.8,215) translate(-250 0)"><path data-c="20D7" d="M377 694Q377 702 382 708T397 714Q404 714 409 709Q414 705 419 690Q429 653 460 633Q471 626 471 615Q471 606 468 603T454 594Q411 572 379 531Q377 529 374 525T369 519T364 517T357 516Q350 516 344 521T337 536Q337 555 384 595H213L42 596Q29 605 29 615Q29 622 42 635H401Q377 673 377 694Z"></path></g></g></g></g></g></svg></mjx-container></span>使得<span class="math inline"><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align:-.186ex" xmlns="http://www.w3.org/2000/svg" width="9.6ex" height="2.514ex" role="img" focusable="false" viewBox="0 -1029 4243 1111"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mover"><g data-mml-node="mi"><path data-c="1D461" d="M26 385Q19 392 19 395Q19 399 22 411T27 425Q29 430 36 430T87 431H140L159 511Q162 522 166 540T173 566T179 586T187 603T197 615T211 624T229 626Q247 625 254 615T261 596Q261 589 252 549T232 470L222 433Q222 431 272 431H323Q330 424 330 420Q330 398 317 385H210L174 240Q135 80 135 68Q135 26 162 26Q197 26 230 60T283 144Q285 150 288 151T303 153H307Q322 153 322 145Q322 142 319 133Q314 117 301 95T267 48T216 6T155 -11Q125 -11 98 4T59 56Q57 64 57 83V101L92 241Q127 382 128 383Q128 385 77 385H26Z"></path></g><g data-mml-node="mo" transform="translate(263.8,215) translate(-250 0)"><path data-c="20D7" d="M377 694Q377 702 382 708T397 714Q404 714 409 709Q414 705 419 690Q429 653 460 633Q471 626 471 615Q471 606 468 603T454 594Q411 572 379 531Q377 529 374 525T369 519T364 517T357 516Q350 516 344 521T337 536Q337 555 384 595H213L42 596Q29 605 29 615Q29 622 42 635H401Q377 673 377 694Z"></path></g></g></g><g data-mml-node="mo" transform="translate(583.2,0)"><path data-c="2217" d="M229 286Q216 420 216 436Q216 454 240 464Q241 464 245 464T251 465Q263 464 273 456T283 436Q283 419 277 356T270 286L328 328Q384 369 389 372T399 375Q412 375 423 365T435 338Q435 325 425 315Q420 312 357 282T289 250L355 219L425 184Q434 175 434 161Q434 146 425 136T401 125Q393 125 383 131T328 171L270 213Q283 79 283 63Q283 53 276 44T250 35Q231 35 224 44T216 63Q216 80 222 143T229 213L171 171Q115 130 110 127Q106 124 100 124Q87 124 76 134T64 161Q64 166 64 169T67 175T72 181T81 188T94 195T113 204T138 215T170 230T210 250L74 315Q65 324 65 338Q65 353 74 363T98 374Q106 374 116 368T171 328L229 286Z"></path></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(1305.4,0)"><g data-mml-node="mover"><g data-mml-node="mi"><path data-c="1D460" d="M131 289Q131 321 147 354T203 415T300 442Q362 442 390 415T419 355Q419 323 402 308T364 292Q351 292 340 300T328 326Q328 342 337 354T354 372T367 378Q368 378 368 379Q368 382 361 388T336 399T297 405Q249 405 227 379T204 326Q204 301 223 291T278 274T330 259Q396 230 396 163Q396 135 385 107T352 51T289 7T195 -10Q118 -10 86 19T53 87Q53 126 74 143T118 160Q133 160 146 151T160 120Q160 94 142 76T111 58Q109 57 108 57T107 55Q108 52 115 47T146 34T201 27Q237 27 263 38T301 66T318 97T323 122Q323 150 302 164T254 181T195 196T148 231Q131 256 131 289Z"></path></g><g data-mml-node="mo" transform="translate(290.1,31) translate(-250 0)"><path data-c="20D7" d="M377 694Q377 702 382 708T397 714Q404 714 409 709Q414 705 419 690Q429 653 460 633Q471 626 471 615Q471 606 468 603T454 594Q411 572 379 531Q377 529 374 525T369 519T364 517T357 516Q350 516 344 521T337 536Q337 555 384 595H213L42 596Q29 605 29 615Q29 622 42 635H401Q377 673 377 694Z"></path></g></g></g><g data-mml-node="mo" transform="translate(2052.2,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="mi" transform="translate(3108,0)"><path data-c="1D44F" d="M73 647Q73 657 77 670T89 683Q90 683 161 688T234 694Q246 694 246 685T212 542Q204 508 195 472T180 418L176 399Q176 396 182 402Q231 442 283 442Q345 442 383 396T422 280Q422 169 343 79T173 -11Q123 -11 82 27T40 150V159Q40 180 48 217T97 414Q147 611 147 623T109 637Q104 637 101 637H96Q86 637 83 637T76 640T73 647ZM336 325V331Q336 405 275 405Q258 405 240 397T207 376T181 352T163 330L157 322L136 236Q114 150 114 114Q114 66 138 42Q154 26 178 26Q211 26 245 58Q270 81 285 114T318 219Q336 291 336 325Z"></path></g><g data-mml-node="mi" transform="translate(3537,0)"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g><g data-mml-node="mi" transform="translate(3882,0)"><path data-c="1D461" d="M26 385Q19 392 19 395Q19 399 22 411T27 425Q29 430 36 430T87 431H140L159 511Q162 522 166 540T173 566T179 586T187 603T197 615T211 624T229 626Q247 625 254 615T261 596Q261 589 252 549T232 470L222 433Q222 431 272 431H323Q330 424 330 420Q330 398 317 385H210L174 240Q135 80 135 68Q135 26 162 26Q197 26 230 60T283 144Q285 150 288 151T303 153H307Q322 153 322 145Q322 142 319 133Q314 117 301 95T267 48T216 6T155 -11Q125 -11 98 4T59 56Q57 64 57 83V101L92 241Q127 382 128 383Q128 385 77 385H26Z"></path></g></g></g></svg></mjx-container></span>。</p><p>所以实际上我们只要获取输出中任意不同位置的19968个bit，就能通过构造矩阵解方程的方法拿到初始状态(假定矩阵满秩)：</p><p><span class="math display"><mjx-container class="MathJax" jax="SVG" display="true"><svg style="vertical-align:-.186ex" xmlns="http://www.w3.org/2000/svg" width="8.276ex" height="2.667ex" role="img" focusable="false" viewBox="0 -1097 3658 1179"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mover"><g data-mml-node="mi"><path data-c="1D460" d="M131 289Q131 321 147 354T203 415T300 442Q362 442 390 415T419 355Q419 323 402 308T364 292Q351 292 340 300T328 326Q328 342 337 354T354 372T367 378Q368 378 368 379Q368 382 361 388T336 399T297 405Q249 405 227 379T204 326Q204 301 223 291T278 274T330 259Q396 230 396 163Q396 135 385 107T352 51T289 7T195 -10Q118 -10 86 19T53 87Q53 126 74 143T118 160Q133 160 146 151T160 120Q160 94 142 76T111 58Q109 57 108 57T107 55Q108 52 115 47T146 34T201 27Q237 27 263 38T301 66T318 97T323 122Q323 150 302 164T254 181T195 196T148 231Q131 256 131 289Z"></path></g><g data-mml-node="mo" transform="translate(290.1,31) translate(-250 0)"><path data-c="20D7" d="M377 694Q377 702 382 708T397 714Q404 714 409 709Q414 705 419 690Q429 653 460 633Q471 626 471 615Q471 606 468 603T454 594Q411 572 379 531Q377 529 374 525T369 519T364 517T357 516Q350 516 344 521T337 536Q337 555 384 595H213L42 596Q29 605 29 615Q29 622 42 635H401Q377 673 377 694Z"></path></g></g></g><g data-mml-node="mo" transform="translate(691.2,0)"><path data-c="22C5" d="M78 250Q78 274 95 292T138 310Q162 310 180 294T199 251Q199 226 182 208T139 190T96 207T78 250Z"></path></g><g data-mml-node="mi" transform="translate(1191.4,0)"><path data-c="1D447" d="M40 437Q21 437 21 445Q21 450 37 501T71 602L88 651Q93 669 101 677H569H659Q691 677 697 676T704 667Q704 661 687 553T668 444Q668 437 649 437Q640 437 637 437T631 442L629 445Q629 451 635 490T641 551Q641 586 628 604T573 629Q568 630 515 631Q469 631 457 630T439 622Q438 621 368 343T298 60Q298 48 386 46Q418 46 427 45T436 36Q436 31 433 22Q429 4 424 1L422 0Q419 0 415 0Q410 0 363 1T228 2Q99 2 64 0H49Q43 6 43 9T45 27Q49 40 55 46H83H94Q174 46 189 55Q190 56 191 56Q196 59 201 76T241 233Q258 301 269 344Q339 619 339 625Q339 630 310 630H279Q212 630 191 624Q146 614 121 583T67 467Q60 445 57 441T43 437H40Z"></path></g><g data-mml-node="mo" transform="translate(2173.2,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(3229,0)"><g data-mml-node="mover"><g data-mml-node="mi"><path data-c="1D44F" d="M73 647Q73 657 77 670T89 683Q90 683 161 688T234 694Q246 694 246 685T212 542Q204 508 195 472T180 418L176 399Q176 396 182 402Q231 442 283 442Q345 442 383 396T422 280Q422 169 343 79T173 -11Q123 -11 82 27T40 150V159Q40 180 48 217T97 414Q147 611 147 623T109 637Q104 637 101 637H96Q86 637 83 637T76 640T73 647ZM336 325V331Q336 405 275 405Q258 405 240 397T207 376T181 352T163 330L157 322L136 236Q114 150 114 114Q114 66 138 42Q154 26 178 26Q211 26 245 58Q270 81 285 114T318 219Q336 291 336 325Z"></path></g><g data-mml-node="mo" transform="translate(214.5,283) translate(-250 0)"><path data-c="20D7" d="M377 694Q377 702 382 708T397 714Q404 714 409 709Q414 705 419 690Q429 653 460 633Q471 626 471 615Q471 606 468 603T454 594Q411 572 379 531Q377 529 374 525T369 519T364 517T357 516Q350 516 344 521T337 536Q337 555 384 595H213L42 596Q29 605 29 615Q29 622 42 635H401Q377 673 377 694Z"></path></g></g></g></g></g></svg></mjx-container></span></p><p>这里的<span class="math inline"><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align:-.025ex" xmlns="http://www.w3.org/2000/svg" width="0.971ex" height="2.507ex" role="img" focusable="false" viewBox="0 -1097 429 1108"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mover"><g data-mml-node="mi"><path data-c="1D44F" d="M73 647Q73 657 77 670T89 683Q90 683 161 688T234 694Q246 694 246 685T212 542Q204 508 195 472T180 418L176 399Q176 396 182 402Q231 442 283 442Q345 442 383 396T422 280Q422 169 343 79T173 -11Q123 -11 82 27T40 150V159Q40 180 48 217T97 414Q147 611 147 623T109 637Q104 637 101 637H96Q86 637 83 637T76 640T73 647ZM336 325V331Q336 405 275 405Q258 405 240 397T207 376T181 352T163 330L157 322L136 236Q114 150 114 114Q114 66 138 42Q154 26 178 26Q211 26 245 58Q270 81 285 114T318 219Q336 291 336 325Z"></path></g><g data-mml-node="mo" transform="translate(214.5,283) translate(-250 0)"><path data-c="20D7" d="M377 694Q377 702 382 708T397 714Q404 714 409 709Q414 705 419 690Q429 653 460 633Q471 626 471 615Q471 606 468 603T454 594Q411 572 379 531Q377 529 374 525T369 519T364 517T357 516Q350 516 344 521T337 536Q337 555 384 595H213L42 596Q29 605 29 615Q29 622 42 635H401Q377 673 377 694Z"></path></g></g></g></g></g></svg></mjx-container></span>题目中就能直接拿到。至于<span class="math inline"><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align:0" xmlns="http://www.w3.org/2000/svg" width="1.593ex" height="1.532ex" role="img" focusable="false" viewBox="0 -677 704 677"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D447" d="M40 437Q21 437 21 445Q21 450 37 501T71 602L88 651Q93 669 101 677H569H659Q691 677 697 676T704 667Q704 661 687 553T668 444Q668 437 649 437Q640 437 637 437T631 442L629 445Q629 451 635 490T641 551Q641 586 628 604T573 629Q568 630 515 631Q469 631 457 630T439 622Q438 621 368 343T298 60Q298 48 386 46Q418 46 427 45T436 36Q436 31 433 22Q429 4 424 1L422 0Q419 0 415 0Q410 0 363 1T228 2Q99 2 64 0H49Q43 6 43 9T45 27Q49 40 55 46H83H94Q174 46 189 55Q190 56 191 56Q196 59 201 76T241 233Q258 301 269 344Q339 619 339 625Q339 630 310 630H279Q212 630 191 624Q146 614 121 583T67 467Q60 445 57 441T43 437H40Z"></path></g></g></g></svg></mjx-container></span>，也可以通过设<span class="math inline"><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align:-.023ex" xmlns="http://www.w3.org/2000/svg" width="1.061ex" height="1.934ex" role="img" focusable="false" viewBox="0 -845 469 855"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mover"><g data-mml-node="mi"><path data-c="1D460" d="M131 289Q131 321 147 354T203 415T300 442Q362 442 390 415T419 355Q419 323 402 308T364 292Q351 292 340 300T328 326Q328 342 337 354T354 372T367 378Q368 378 368 379Q368 382 361 388T336 399T297 405Q249 405 227 379T204 326Q204 301 223 291T278 274T330 259Q396 230 396 163Q396 135 385 107T352 51T289 7T195 -10Q118 -10 86 19T53 87Q53 126 74 143T118 160Q133 160 146 151T160 120Q160 94 142 76T111 58Q109 57 108 57T107 55Q108 52 115 47T146 34T201 27Q237 27 263 38T301 66T318 97T323 122Q323 150 302 164T254 181T195 196T148 231Q131 256 131 289Z"></path></g><g data-mml-node="mo" transform="translate(290.1,31) translate(-250 0)"><path data-c="20D7" d="M377 694Q377 702 382 708T397 714Q404 714 409 709Q414 705 419 690Q429 653 460 633Q471 626 471 615Q471 606 468 603T454 594Q411 572 379 531Q377 529 374 525T369 519T364 517T357 516Q350 516 344 521T337 536Q337 555 384 595H213L42 596Q29 605 29 615Q29 622 42 635H401Q377 673 377 694Z"></path></g></g></g></g></g></svg></mjx-container></span>为只有一个分量为1的向量的方式，按黑盒调用的想法逐行取出，跟很久以前做过的<a href="https://eupho.me/1cbd8855.html#moonjump">破解Xorshiro256**的题目</a>是一样的想法。</p><blockquote><p>exp copied from <a class="link" target="_blank" rel="noopener" href="https://huangx607087.online/2021/07/10/Explore-MT19937/#0x03-%E7%BB%99%E5%87%BA%E4%BB%BB%E6%84%8F19937%E4%B8%AAbit-upd-2025-01-22">huangx607087<i class="fas fa-external-link-alt"></i></a></p></blockquote><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">Dall=<span class="built_in">list</span>(<span class="built_in">map</span>(<span class="built_in">int</span>,<span class="built_in">open</span>(<span class="string">'data3.txt'</span>,<span class="string">'r'</span>).readlines()))</span><br><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> random <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> *</span><br><span class="line">n=<span class="number">1250</span></span><br><span class="line">D=Dall[:n]</span><br><span class="line">rng=Random()</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">getRows</span>(<span class="params">rng</span>):</span><br><span class="line">    <span class="comment">#这一部分根据题目实际编写，必须和题目实际比特获取顺序和方式完全一致，且确保比特数大于19937，并且请注意zfill。</span></span><br><span class="line">    row=[]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        row+=<span class="built_in">list</span>(<span class="built_in">map</span>(<span class="built_in">int</span>, (<span class="built_in">bin</span>(rng.getrandbits(<span class="number">16</span>))[<span class="number">2</span>:].zfill(<span class="number">16</span>))))</span><br><span class="line">    <span class="keyword">return</span> row</span><br><span class="line">M=[]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> tqdm_notebook(<span class="built_in">range</span>(<span class="number">19968</span>)):<span class="comment">#这一部分为固定套路，具体原因已经写在注释中了</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    referennce:</span></span><br><span class="line"><span class="string">    糖醋小鸡块 2025/1/21 20:26:51</span></span><br><span class="line"><span class="string">    这部分代码相当于取了一组线性基</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    糖醋小鸡块 2025/1/21 20:26:56</span></span><br><span class="line"><span class="string">    因为mt19937是线性的</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    state = [<span class="number">0</span>]*<span class="number">624</span></span><br><span class="line">    temp = <span class="string">"0"</span>*i + <span class="string">"1"</span>*<span class="number">1</span> + <span class="string">"0"</span>*(<span class="number">19968</span>-<span class="number">1</span>-i)</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">624</span>):</span><br><span class="line">        state[j] = <span class="built_in">int</span>(temp[<span class="number">32</span>*j:<span class="number">32</span>*j+<span class="number">32</span>],<span class="number">2</span>)</span><br><span class="line">    rng.setstate((<span class="number">3</span>,<span class="built_in">tuple</span>(state+[<span class="number">624</span>]),<span class="literal">None</span>)) <span class="comment">#这个setstate也是固定格式，已于2025.1.21测试</span></span><br><span class="line">    M.append(getRows(rng))</span><br><span class="line">M=Matrix(GF(<span class="number">2</span>),M)</span><br><span class="line">y=[]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">    y+=<span class="built_in">list</span>(<span class="built_in">map</span>(<span class="built_in">int</span>, (<span class="built_in">bin</span>(D[i])[<span class="number">2</span>:].zfill(<span class="number">16</span>))))</span><br><span class="line">y=vector(GF(<span class="number">2</span>),y)</span><br><span class="line">s=M.solve_left(y)</span><br><span class="line"><span class="comment">#print(s)</span></span><br><span class="line">G=[]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">624</span>):</span><br><span class="line">    C=<span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>):</span><br><span class="line">        C&lt;&lt;=<span class="number">1</span></span><br><span class="line">        C|=<span class="built_in">int</span>(s[<span class="number">32</span>*i+j])</span><br><span class="line">    G.append(C)</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line">RNG1 = random.Random()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">624</span>):</span><br><span class="line">    G[i]=<span class="built_in">int</span>(G[i])</span><br><span class="line">RNG1.setstate((<span class="built_in">int</span>(<span class="number">3</span>),<span class="built_in">tuple</span>(G+[<span class="built_in">int</span>(<span class="number">624</span>)]),<span class="literal">None</span>))</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>([RNG1.getrandbits(<span class="number">16</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">75</span>)])</span><br><span class="line"><span class="built_in">print</span>(D[:<span class="number">75</span>])</span><br></pre></td></tr></table></figure><h2 id="番外">番外</h2><h3 id="seed-recovery">Seed Recovery</h3><p>有篇<a class="link" target="_blank" rel="noopener" href="https://stackered.com/blog/python-random-prediction/#seed-recovery-from-few-outputs">博文<i class="fas fa-external-link-alt"></i></a>详细地讲解了MT19937的工作原理。文中特别提到，如果Python的MT19937是32bit整数的seed，那么只需要一轮624个输出中特定位置的6个即可恢复seed。当然恢复出的seed有两种可能，实际使用时还得做一些额外的判断。</p><h4 id="apoorvctf">2025 ApoorvCTF</h4><blockquote><p>task</p></blockquote><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> getPrime, bytes_to_long, long_to_bytes</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line">flag = <span class="string">b"apoorvctf{fake_flag}"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">secret</span>(<span class="params">p</span>):</span><br><span class="line">    prime_bytes = p.to_bytes(<span class="number">64</span>, byteorder=<span class="string">'big'</span>)  </span><br><span class="line">    keys = [bytes_to_long(prime_bytes[i:i+<span class="number">4</span>]) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="number">64</span>, <span class="number">4</span>)] </span><br><span class="line">    enc_p = []</span><br><span class="line">    <span class="keyword">for</span> key <span class="keyword">in</span> keys:</span><br><span class="line">        tp = []</span><br><span class="line">        random.seed(key)</span><br><span class="line">        indexes = [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">227</span>, <span class="number">228</span>, <span class="number">229</span>]</span><br><span class="line">        random_arr = [random.getrandbits(<span class="number">32</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">624</span>)] </span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> indexes:</span><br><span class="line">            tp.append(random_arr[j])</span><br><span class="line">        enc_p.append(tp) </span><br><span class="line">    <span class="keyword">return</span> enc_p</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">encrypt</span>():</span><br><span class="line">    p = getPrime(<span class="number">512</span>)</span><br><span class="line">    q = getPrime(<span class="number">512</span>)</span><br><span class="line">    n = p * q</span><br><span class="line">    e = <span class="number">65537</span></span><br><span class="line">    c = <span class="built_in">pow</span>(bytes_to_long(flag), e, n)</span><br><span class="line">    trash = secret(p)  </span><br><span class="line">    <span class="keyword">return</span> n, c, trash  </span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">decrypt</span>(<span class="params">n,p,c</span>):</span><br><span class="line">    q = n//p</span><br><span class="line">    <span class="keyword">if</span> p*q != n:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"Invalid n"</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    phi = (p-<span class="number">1</span>)*(q-<span class="number">1</span>)</span><br><span class="line">    d = <span class="built_in">pow</span>(<span class="number">65537</span>,-<span class="number">1</span>,phi)</span><br><span class="line">    <span class="keyword">return</span> long_to_bytes(<span class="built_in">pow</span>(c,d,n))</span><br><span class="line"></span><br><span class="line">n, c, trash = encrypt() </span><br><span class="line"><span class="built_in">print</span>(<span class="string">"n:"</span>, n)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">"c:"</span>, c)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">"trash:"</span>, trash)</span><br><span class="line"><span class="comment">#print("flag:", decrypt(n,p,c)) </span></span><br></pre></td></tr></table></figure><p>这道题完全就是照搬上面那篇博文，直接抄就行。</p><blockquote><p>exp</p></blockquote><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">recover_Kj_from_Ii</span>(<span class="params">Ii, Ii1, Ii2, i</span>):</span><br><span class="line">    <span class="comment"># Ii =&gt; I[i]</span></span><br><span class="line">    <span class="comment"># Ii1 =&gt; I[i-1]</span></span><br><span class="line">    <span class="comment"># Ii2 =&gt; I[i-2]</span></span><br><span class="line">    <span class="comment"># Ji =&gt; J[i]</span></span><br><span class="line">    <span class="comment"># Ji1 =&gt; J[i-1]</span></span><br><span class="line">    Ji = recover_Ji_from_Ii(Ii, Ii1, i)</span><br><span class="line">    Ji1 = recover_Ji_from_Ii(Ii1, Ii2, i-<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> recover_kj_from_Ji(Ji, Ji1, i)</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">recover_Ji_from_Ii</span>(<span class="params">Ii, Ii1, i</span>):</span><br><span class="line">    <span class="comment"># Ii =&gt; I[i]</span></span><br><span class="line">    <span class="comment"># Ii1 =&gt; I[i-1]</span></span><br><span class="line">    ji = (Ii + i) ^ ((Ii1 ^ (Ii1 &gt;&gt; <span class="number">30</span>)) * <span class="number">1566083941</span>)</span><br><span class="line">    ji &amp;= <span class="number">0xffffffff</span></span><br><span class="line">    <span class="comment"># return J[i]</span></span><br><span class="line">    <span class="keyword">return</span> ji</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">init_genrand</span>(<span class="params">seed</span>):</span><br><span class="line">        MT = [<span class="number">0</span>] * <span class="number">624</span></span><br><span class="line">        MT[<span class="number">0</span>] = seed &amp; <span class="number">0xffffffff</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">623</span>+<span class="number">1</span>): <span class="comment"># loop over each element</span></span><br><span class="line">            MT[i] = ((<span class="number">0x6c078965</span> * (MT[i-<span class="number">1</span>] ^ (MT[i-<span class="number">1</span>] &gt;&gt; <span class="number">30</span>))) + i) &amp; <span class="number">0xffffffff</span></span><br><span class="line">        <span class="keyword">return</span> MT</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">recover_kj_from_Ji</span>(<span class="params">ji, ji1, i</span>):</span><br><span class="line">    <span class="comment"># ji =&gt; J[i]</span></span><br><span class="line">    <span class="comment"># ji1 =&gt; J[i-1]</span></span><br><span class="line">    const = init_genrand(<span class="number">19650218</span>)</span><br><span class="line">    key = ji - (const[i] ^ ((ji1 ^ (ji1 &gt;&gt; <span class="number">30</span>))*<span class="number">1664525</span>))</span><br><span class="line">    key &amp;= <span class="number">0xffffffff</span></span><br><span class="line">    <span class="comment"># return K[j] + j</span></span><br><span class="line">    <span class="keyword">return</span> key</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unshiftRight</span>(<span class="params">x, shift</span>):</span><br><span class="line">    res = x</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>):</span><br><span class="line">        res = x ^ res &gt;&gt; shift</span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unshiftLeft</span>(<span class="params">x, shift, mask</span>):</span><br><span class="line">    res = x</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>):</span><br><span class="line">        res = x ^ (res &lt;&lt; shift &amp; mask)</span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">untemper</span>(<span class="params">v</span>):</span><br><span class="line">    v = unshiftRight(v, <span class="number">18</span>)</span><br><span class="line">    v = unshiftLeft(v, <span class="number">15</span>, <span class="number">0xefc60000</span>)</span><br><span class="line">    v = unshiftLeft(v, <span class="number">7</span>, <span class="number">0x9d2c5680</span>)</span><br><span class="line">    v = unshiftRight(v, <span class="number">11</span>)</span><br><span class="line">    <span class="keyword">return</span> v</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">invertlitep</span>(<span class="params">si, si227</span>):</span><br><span class="line">    <span class="comment"># li[i] ^ li[i-227] == (((I[i] &amp; 0x80000000) | (I[i+1] &amp; 0x7FFFFFFF)) &gt;&gt; 1) ^ (0x9908b0df if I[i+1] &amp; 1 else 0)</span></span><br><span class="line">    X = si ^ si227</span><br><span class="line">    <span class="comment"># we know the LliB of I[i+1] because MliB of 0x9908b0df is set, we can see if the XOR has been applied</span></span><br><span class="line">    mti1 = (X &amp; <span class="number">0x80000000</span>) &gt;&gt; <span class="number">31</span></span><br><span class="line">    <span class="keyword">if</span> mti1:</span><br><span class="line">        X ^= <span class="number">0x9908b0df</span></span><br><span class="line">    <span class="comment"># undo shift right</span></span><br><span class="line">    X &lt;&lt;= <span class="number">1</span></span><br><span class="line">    <span class="comment"># now recover MliB of state I[i]</span></span><br><span class="line">    mti = X &amp; <span class="number">0x80000000</span></span><br><span class="line">    <span class="comment"># recover the rest of state I[i+1]</span></span><br><span class="line">    mti1 += X &amp; <span class="number">0x7FFFFFFF</span></span><br><span class="line">    <span class="keyword">return</span> mti, mti1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> ast</span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">"out.txt"</span>) <span class="keyword">as</span> f:</span><br><span class="line">    n = ast.literal_eval(f.readline())</span><br><span class="line">    c = ast.literal_eval(f.readline())</span><br><span class="line">    trash = ast.literal_eval(f.readline())</span><br><span class="line">    <span class="comment"># k = 1</span></span><br><span class="line">    <span class="comment"># K = [i]</span></span><br><span class="line">    <span class="keyword">for</span> li <span class="keyword">in</span> trash:</span><br><span class="line">        S = [untemper(li[i]) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">6</span>)]</span><br><span class="line"></span><br><span class="line">        I_227_, I_228 = invertlitep(S[<span class="number">3</span>], S[<span class="number">0</span>])</span><br><span class="line">        I_228_, I_229 = invertlitep(S[<span class="number">4</span>], S[<span class="number">1</span>])</span><br><span class="line">        I_229_, I_230 = invertlitep(S[<span class="number">5</span>], S[<span class="number">2</span>])</span><br><span class="line"></span><br><span class="line">        I_228 += I_228_</span><br><span class="line">        I_229 += I_229_</span><br><span class="line"></span><br><span class="line">        <span class="comment"># two possibilities for I_230</span></span><br><span class="line">        seed1 = recover_Kj_from_Ii(I_230, I_229, I_228, <span class="number">230</span>)</span><br><span class="line">        seed2 = recover_Kj_from_Ii(I_230+<span class="number">0x80000000</span>, I_229, I_228, <span class="number">230</span>)</span><br><span class="line">        <span class="comment"># only the MliB differs</span></span><br><span class="line">        <span class="built_in">print</span>(seed1, seed2)</span><br><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> *</span><br><span class="line">plist = [<span class="number">2233556749</span>,<span class="number">1332779457</span>,<span class="number">3663810718</span>,<span class="number">1146419848</span>,<span class="number">2960081222</span>,<span class="number">3483469796</span>,<span class="number">2128181600</span>,<span class="number">3346153247</span>,<span class="number">61541386</span>,<span class="number">1190096622</span>,<span class="number">362663341</span>,<span class="number">784549194</span>,<span class="number">3375914009</span>,<span class="number">2922819453</span>,<span class="number">2926167818</span>,<span class="number">2960726147</span>]</span><br><span class="line">pp = <span class="string">b""</span></span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> plist:</span><br><span class="line">    <span class="keyword">assert</span> <span class="built_in">len</span>(long_to_bytes(x)) == <span class="number">4</span></span><br><span class="line">    pp+=long_to_bytes(x)</span><br><span class="line">isPrime(bytes_to_long(pp))</span><br><span class="line"><span class="built_in">print</span>(pp)</span><br><span class="line">p = bytes_to_long(pp)</span><br><span class="line">q = n//p</span><br><span class="line">e=<span class="number">65537</span></span><br><span class="line">d = inverse(e,(p-<span class="number">1</span>)*(q-<span class="number">1</span>))</span><br><span class="line"><span class="built_in">print</span>(long_to_bytes(<span class="built_in">pow</span>(c,d,n)))</span><br></pre></td></tr></table></figure><h3 id="对异或封闭">对异或封闭</h3><p>之前打本部的405杯的时候<a href="https://eupho.me/80b6c266.html#yamato">提过这个事情</a>，也就是多个MT19937的输出异或后等价于一个MT19937的输出。如果把所有MT19937的输出流看作一个集合，无非就是说这个集合的元素对二进制异或封闭而已，原因在那篇blog里也简要阐明了。其实在本篇的观点下更容易，因为异或就是GF(2)上的加法嘛，而线性映射<span class="math inline"><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align:-.464ex" xmlns="http://www.w3.org/2000/svg" width="1.244ex" height="2.059ex" role="img" focusable="false" viewBox="0 -705 550 910"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D453" d="M118 -162Q120 -162 124 -164T135 -167T147 -168Q160 -168 171 -155T187 -126Q197 -99 221 27T267 267T289 382V385H242Q195 385 192 387Q188 390 188 397L195 425Q197 430 203 430T250 431Q298 431 298 432Q298 434 307 482T319 540Q356 705 465 705Q502 703 526 683T550 630Q550 594 529 578T487 561Q443 561 443 603Q443 622 454 636T478 657L487 662Q471 668 457 668Q445 668 434 658T419 630Q412 601 403 552T387 469T380 433Q380 431 435 431Q480 431 487 430T498 424Q499 420 496 407T491 391Q489 386 482 386T428 385H372L349 263Q301 15 282 -47Q255 -132 212 -173Q175 -205 139 -205Q107 -205 81 -186T55 -132Q55 -95 76 -78T118 -61Q162 -61 162 -103Q162 -122 151 -136T127 -157L118 -162Z"></path></g></g></g></svg></mjx-container></span>显然满足<span class="math inline"><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align:-.566ex" xmlns="http://www.w3.org/2000/svg" width="26.689ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 11796.7 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D453" d="M118 -162Q120 -162 124 -164T135 -167T147 -168Q160 -168 171 -155T187 -126Q197 -99 221 27T267 267T289 382V385H242Q195 385 192 387Q188 390 188 397L195 425Q197 430 203 430T250 431Q298 431 298 432Q298 434 307 482T319 540Q356 705 465 705Q502 703 526 683T550 630Q550 594 529 578T487 561Q443 561 443 603Q443 622 454 636T478 657L487 662Q471 668 457 668Q445 668 434 658T419 630Q412 601 403 552T387 469T380 433Q380 431 435 431Q480 431 487 430T498 424Q499 420 496 407T491 391Q489 386 482 386T428 385H372L349 263Q301 15 282 -47Q255 -132 212 -173Q175 -205 139 -205Q107 -205 81 -186T55 -132Q55 -95 76 -78T118 -61Q162 -61 162 -103Q162 -122 151 -136T127 -157L118 -162Z"></path></g><g data-mml-node="mo" transform="translate(550,0)"><path data-c="28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path></g><g data-mml-node="msub" transform="translate(939,0)"><g data-mml-node="mi"><path data-c="1D465" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"></path></g><g data-mml-node="mn" transform="translate(605,-150) scale(0.707)"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></g></g><g data-mml-node="mo" transform="translate(1947.6,0)"><path data-c="29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></g><g data-mml-node="mo" transform="translate(2558.8,0)"><path data-c="2B" d="M56 237T56 250T70 270H369V420L370 570Q380 583 389 583Q402 583 409 568V270H707Q722 262 722 250T707 230H409V-68Q401 -82 391 -82H389H387Q375 -82 369 -68V230H70Q56 237 56 250Z"></path></g><g data-mml-node="mi" transform="translate(3559,0)"><path data-c="1D453" d="M118 -162Q120 -162 124 -164T135 -167T147 -168Q160 -168 171 -155T187 -126Q197 -99 221 27T267 267T289 382V385H242Q195 385 192 387Q188 390 188 397L195 425Q197 430 203 430T250 431Q298 431 298 432Q298 434 307 482T319 540Q356 705 465 705Q502 703 526 683T550 630Q550 594 529 578T487 561Q443 561 443 603Q443 622 454 636T478 657L487 662Q471 668 457 668Q445 668 434 658T419 630Q412 601 403 552T387 469T380 433Q380 431 435 431Q480 431 487 430T498 424Q499 420 496 407T491 391Q489 386 482 386T428 385H372L349 263Q301 15 282 -47Q255 -132 212 -173Q175 -205 139 -205Q107 -205 81 -186T55 -132Q55 -95 76 -78T118 -61Q162 -61 162 -103Q162 -122 151 -136T127 -157L118 -162Z"></path></g><g data-mml-node="mo" transform="translate(4109,0)"><path data-c="28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path></g><g data-mml-node="msub" transform="translate(4498,0)"><g data-mml-node="mi"><path data-c="1D465" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"></path></g><g data-mml-node="mn" transform="translate(605,-150) scale(0.707)"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></g></g><g data-mml-node="mo" transform="translate(5506.6,0)"><path data-c="29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></g><g data-mml-node="mo" transform="translate(6173.3,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="mi" transform="translate(7229.1,0)"><path data-c="1D453" d="M118 -162Q120 -162 124 -164T135 -167T147 -168Q160 -168 171 -155T187 -126Q197 -99 221 27T267 267T289 382V385H242Q195 385 192 387Q188 390 188 397L195 425Q197 430 203 430T250 431Q298 431 298 432Q298 434 307 482T319 540Q356 705 465 705Q502 703 526 683T550 630Q550 594 529 578T487 561Q443 561 443 603Q443 622 454 636T478 657L487 662Q471 668 457 668Q445 668 434 658T419 630Q412 601 403 552T387 469T380 433Q380 431 435 431Q480 431 487 430T498 424Q499 420 496 407T491 391Q489 386 482 386T428 385H372L349 263Q301 15 282 -47Q255 -132 212 -173Q175 -205 139 -205Q107 -205 81 -186T55 -132Q55 -95 76 -78T118 -61Q162 -61 162 -103Q162 -122 151 -136T127 -157L118 -162Z"></path></g><g data-mml-node="mo" transform="translate(7779.1,0)"><path data-c="28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path></g><g data-mml-node="msub" transform="translate(8168.1,0)"><g data-mml-node="mi"><path data-c="1D465" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"></path></g><g data-mml-node="mn" transform="translate(605,-150) scale(0.707)"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></g></g><g data-mml-node="mo" transform="translate(9398.9,0)"><path data-c="2B" d="M56 237T56 250T70 270H369V420L370 570Q380 583 389 583Q402 583 409 568V270H707Q722 262 722 250T707 230H409V-68Q401 -82 391 -82H389H387Q375 -82 369 -68V230H70Q56 237 56 250Z"></path></g><g data-mml-node="msub" transform="translate(10399.1,0)"><g data-mml-node="mi"><path data-c="1D465" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"></path></g><g data-mml-node="mn" transform="translate(605,-150) scale(0.707)"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></g></g><g data-mml-node="mo" transform="translate(11407.7,0)"><path data-c="29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></g></g></g></svg></mjx-container></span></p><p>做个实验:</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/sage</span></span><br><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> random <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> *</span><br><span class="line">D = []</span><br><span class="line">n = <span class="number">624</span></span><br><span class="line">stream1 = Random()</span><br><span class="line">stream2 = Random()</span><br><span class="line"><span class="keyword">for</span> _ <span class="keyword">in</span> trange(<span class="number">624</span>):</span><br><span class="line">    D.append(stream1.getrandbits(<span class="number">32</span>)^^stream2.getrandbits(<span class="number">32</span>))</span><br><span class="line">rng=Random()</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">getRows</span>(<span class="params">rng</span>):</span><br><span class="line">    row=[]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        row+=<span class="built_in">list</span>(<span class="built_in">map</span>(<span class="built_in">int</span>, (<span class="built_in">bin</span>(rng.getrandbits(<span class="number">32</span>))[<span class="number">2</span>:].zfill(<span class="number">32</span>))))</span><br><span class="line">    <span class="keyword">return</span> row</span><br><span class="line">M=[]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> trange(<span class="number">19968</span>):</span><br><span class="line">    state = [<span class="number">0</span>]*<span class="number">624</span></span><br><span class="line">    temp = <span class="string">"0"</span>*i + <span class="string">"1"</span>*<span class="number">1</span> + <span class="string">"0"</span>*(<span class="number">19968</span>-<span class="number">1</span>-i)</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">624</span>):</span><br><span class="line">        state[j] = <span class="built_in">int</span>(temp[<span class="number">32</span>*j:<span class="number">32</span>*j+<span class="number">32</span>],<span class="number">2</span>)</span><br><span class="line">    rng.setstate((<span class="number">3</span>,<span class="built_in">tuple</span>(state+[<span class="number">624</span>]),<span class="literal">None</span>))</span><br><span class="line">    M.append(getRows(rng))</span><br><span class="line">M=Matrix(GF(<span class="number">2</span>),M)</span><br><span class="line">y=[]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">    y+=<span class="built_in">list</span>(<span class="built_in">map</span>(<span class="built_in">int</span>, (<span class="built_in">bin</span>(D[i])[<span class="number">2</span>:].zfill(<span class="number">32</span>))))</span><br><span class="line">y=vector(GF(<span class="number">2</span>),y)</span><br><span class="line">s=M.solve_left(y)</span><br><span class="line"><span class="comment">#print(s)</span></span><br><span class="line">G=[]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">624</span>):</span><br><span class="line">    C=<span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>):</span><br><span class="line">        C&lt;&lt;=<span class="number">1</span></span><br><span class="line">        C|=<span class="built_in">int</span>(s[<span class="number">32</span>*i+j])</span><br><span class="line">    G.append(C)</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line">RNG1 = random.Random()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">624</span>):</span><br><span class="line">    G[i]=<span class="built_in">int</span>(G[i])</span><br><span class="line">RNG1.setstate((<span class="built_in">int</span>(<span class="number">3</span>),<span class="built_in">tuple</span>(G+[<span class="built_in">int</span>(<span class="number">624</span>)]),<span class="literal">None</span>))</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>([RNG1.getrandbits(<span class="number">32</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">75</span>)])</span><br><span class="line"><span class="built_in">print</span>(D[:<span class="number">75</span>])</span><br></pre></td></tr></table></figure><figure><img lazyload="" alt="确实是对的" data-src="../assets/image-22.png"><figcaption aria-hidden="true">确实是对的</figcaption></figure><p>两个MT输出流即使其中一个有"偏移"(先生成一些输出之后两者再开始异或)也是同样成立的，可以理解为MT生成一次输出后内部状态经过了一次线性递推，然后在一个新的初始状态下两个输出流进行GF(2)上的加法运算。</p><p>不过很奇怪的是，上面这个例子用maple的gf2bv就没办法求解出来，可能是zeros的写法需要进一步修正？</p><h2 id="继续开坑">继续开坑</h2><p>如果是多个不同bit数的MT19937输出流异或之后，有没有办法恢复初始状态呢？我觉得只取两者异或的部分作为一个MT的输出再去建立方程是可以求解的，不过就留待以后再实验吧。</p></div><div class="post-copyright-info-container border-box"><div class="copyright-info-content border-box"><div class="copyright-info-top border-box"><div class="copyright-post-title border-box text-ellipsis">MT19937</div><div class="copyright-post-link border-box text-ellipsis">59a1b91b.html</div></div><div class="copyright-info-bottom border-box"><div class="copyright-post-author bottom-item"><div class="type">作者</div><div class="content">Swizzer</div></div><div class="post-time bottom-item"><div class="type">发布于</div><div class="content">2025-03-21 16:43</div></div><div class="post-license bottom-item"><div class="type">许可</div><div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank"><i class="fa-brands fa-creative-commons"></i> <i class="fa-brands fa-creative-commons-by"></i> <i class="fa-brands fa-creative-commons-nc"></i> <i class="fa-brands fa-creative-commons-sa"></i></a></div></div></div><i class="copyright-bg fa-solid fa-copyright"></i></div><div class="copy-copyright-info flex-center tooltip" data-tooltip-content="复制版权信息" data-tooltip-offset-y="-2px"><i class="fa-solid fa-copy"></i></div></div><div class="post-bottom-tags-and-share border-box"><div><ul class="post-tags-box border-box"><li class="tag-item border-box"><i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Crypto/">Crypto</a></li></ul></div><div><div class="post-share-container border-box"><ul class="share-list-wrap border-box"><li class="qq share-item border-box flex-center tooltip" data-tooltip-content="分享到 QQ"><i class="fa-brands fa-qq"></i></li><li class="wechat share-item border-box flex-center tooltip tooltip-img" data-tooltip-content="分享到微信" data-tooltip-img-tip="微信扫一扫" data-tooltip-img-style="background-color: #fff; top: -10px; padding: 0.6rem 0.6rem 0.1rem 0.6rem;"><i class="fa-brands fa-weixin"></i></li><li class="weibo share-item border-box flex-center tooltip" data-tooltip-content="分享到微博"><i class="fa-brands fa-weibo"></i></li></ul></div></div></div><div class="post-nav border-box"><div class="prev-post"><a class="prev" rel="prev" href="/f77f5df.html" title="2025 数字中国创新大赛 数字安全赛道"><span class="left arrow-icon flex-center"><i class="fas fa-chevron-left"></i> </span><span class="title flex-center"><span class="post-nav-title-item text-ellipsis">2025 数字中国创新大赛 数字安全赛道</span> <span class="post-nav-item">上一篇</span></span></a></div><div class="next-post"><a class="next" rel="next" href="/828e6345.html" title="2025 TPCTF Writeup"><span class="title flex-center"><span class="post-nav-title-item text-ellipsis">2025 TPCTF Writeup</span> <span class="post-nav-item">下一篇</span> </span><span class="right arrow-icon flex-center"><i class="fas fa-chevron-right"></i></span></a></div></div></div></div><div class="pc-post-toc right-toc"><div class="post-toc-wrap border-box"><div class="post-toc border-box"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#avant-%E5%A1%AB%E5%9D%91"><span class="nav-text">Avant-填坑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A3%E7%89%87"><span class="nav-text">正片</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%95%AA%E5%A4%96"><span class="nav-text">番外</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#seed-recovery"><span class="nav-text">Seed Recovery</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#apoorvctf"><span class="nav-text">2025 ApoorvCTF</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E5%BC%82%E6%88%96%E5%B0%81%E9%97%AD"><span class="nav-text">对异或封闭</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%A7%E7%BB%AD%E5%BC%80%E5%9D%91"><span class="nav-text">继续开坑</span></a></li></ol></div></div></div></div></div></div></div><div class="page-main-content-bottom border-box"><footer class="footer border-box"><div class="copyright-info info-item">&copy;&nbsp;<span>2022</span>&nbsp;-&nbsp;2025 &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Swizzer</a></div><div class="theme-info info-item">由&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;驱动&nbsp;&&nbsp;主题&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a></div><div class="count-info info-item"><span class="count-item border-box uv"><span class="item-type border-box">访客数</span> <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span> </span><span class="count-item border-box pv"><span class="item-type border-box">访问量</span> <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span></span></div></footer></div></div><div class="post-tools right-toc"><div class="post-tools-container border-box"><ul class="post-tools-list border-box"><li class="tools-item flex-center toggle-show-toc"><i class="fas fa-list"></i></li><li class="tools-item flex-center full-screen"><i class="fa-solid fa-expand"></i></li></ul></div></div><div class="side-tools"><div class="side-tools-container border-box"><ul class="side-tools-list side-tools-show-handle border-box"><li class="tools-item tool-font-adjust-plus flex-center"><i class="fas fa-search-plus"></i></li><li class="tools-item tool-font-adjust-minus flex-center"><i class="fas fa-search-minus"></i></li><li class="tools-item tool-toggle-theme-mode flex-center"><i class="fas fa-moon"></i></li><li class="tools-item tool-scroll-to-bottom flex-center"><i class="fas fa-arrow-down"></i></li></ul><ul class="exposed-tools-list border-box"><li class="tools-item toggle-show-toc-tablet flex-center"><i class="fas fa-list"></i></li><li class="tools-item tool-toggle-show flex-center"><i class="fas fa-cog fa-spin"></i></li><li class="tools-item tool-scroll-to-top flex-center show-arrow"><i class="arrow fas fa-arrow-up"></i> <span class="percent"></span></li></ul></div></div><div class="zoom-in-image-mask"><img class="zoom-in-image"></div><div class="search-pop-overlay"><div class="popup search-popup"><div class="search-header"><span class="search-input-field-pre"><i class="fas fa-keyboard"></i></span><div class="search-input-container"><input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="搜索..." spellcheck="false" type="search" class="search-input"></div><span class="close-popup-btn"><i class="fas fa-times"></i></span></div><div id="search-result"><div id="no-result"><i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i></div></div></div></div><div class="tablet-post-toc-mask"><div class="tablet-post-toc"><div class="post-toc-wrap border-box"><div class="post-toc border-box"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#avant-%E5%A1%AB%E5%9D%91"><span class="nav-text">Avant-填坑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A3%E7%89%87"><span class="nav-text">正片</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%95%AA%E5%A4%96"><span class="nav-text">番外</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#seed-recovery"><span class="nav-text">Seed Recovery</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#apoorvctf"><span class="nav-text">2025 ApoorvCTF</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E5%BC%82%E6%88%96%E5%B0%81%E9%97%AD"><span class="nav-text">对异或封闭</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%A7%E7%BB%AD%E5%BC%80%E5%9D%91"><span class="nav-text">继续开坑</span></a></li></ol></div></div></div></div></main><script src="/js/utils.js"></script><script src="/js/header-shrink.js"></script><script src="/js/back2top.js"></script><script src="/js/toggle-theme.js"></script><script src="/js/code-block.js"></script><script src="/js/main.js"></script><script src="/js/libs/anime.min.js"></script><script src="/js/local-search.js"></script><script src="/js/lazyload.js"></script><div class="pjax"><script src="/js/post/post-helper.js"></script><script src="/js/post/toc.js"></script><script src="/js/post/copyright-info.js"></script><script src="/js/post/share.js"></script></div><script src="/js/libs/pjax.min.js"></script><script>window.addEventListener("DOMContentLoaded",()=>{window.pjax=new Pjax({selectors:["head title",".page-container",".pjax"],history:!0,debug:!1,cacheBust:!1,timeout:0,analytics:!1,currentUrlFullReload:!1,scrollRestoration:!1}),document.addEventListener("pjax:send",()=>{KEEP.utils.pjaxProgressBarStart()}),document.addEventListener("pjax:complete",()=>{KEEP.utils.pjaxProgressBarEnd(),window.pjax.executeScripts(document.querySelectorAll("script[data-pjax], .pjax script")),KEEP.initExecute()})})</script></body></html>
