@@ -21,7 +21,7 @@
   
     <meta name="description" content="听说TP&#x3D;Thu+Pku，但是题目质量有点名不副实...">
 <meta property="og:type" content="article">
-<meta property="og:title" content="2025-TPCTF-Writeup">
+<meta property="og:title" content="2025 TPCTF Writeup">
 <meta property="og:url" content="https://eupho.me/828e6345.html">
 <meta property="og:site_name" content="Euphome">
 <meta property="og:description" content="听说TP&#x3D;Thu+Pku，但是题目质量有点名不副实...">
@@ -29,7 +29,7 @@
 <meta property="og:image" content="https://eupho.me/assets/image-19.png">
 <meta property="og:image" content="https://eupho.me/assets/image-20.png">
 <meta property="article:published_time" content="2025-03-11T09:37:54.000Z">
-<meta property="article:modified_time" content="2025-03-11T10:11:50.154Z">
+<meta property="article:modified_time" content="2025-03-31T16:21:02.475Z">
 <meta property="article:author" content="Lambert Swizzer">
 <meta property="article:tag" content="CTF">
 <meta property="article:tag" content="Crypto">
@@ -39,7 +39,7 @@
   
   
   
-  <title>2025-TPCTF-Writeup - Euphome</title>
+  <title>2025 TPCTF Writeup - Euphome</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -209,7 +209,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="2025-TPCTF-Writeup"></span>
+            <span id="subtitle" data-typed-text="2025 TPCTF Writeup"></span>
           
         </div>
 
@@ -281,12 +281,12 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">2025-TPCTF-Writeup</h1>
+            <h1 style="display: none">2025 TPCTF Writeup</h1>
             
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2025年3月11日 晚上
+                    本文最后更新于：2025年4月1日 凌晨
                   
                 
               </p>
@@ -301,7 +301,7 @@
 <blockquote>
 <p>chall.py</p>
 </blockquote>
-<figure class="highlight python"><i class="iconfont icon-github-fill" type="button" data-toggle="collapse" data-target="#collapse-aogj4ym8vygdzg"></i><span>python</span><div class="collapse show" id="collapse-aogj4ym8vygdzg"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># FROM python:3</span><br><span class="hljs-keyword">import</span> random<br><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;flag.txt&quot;</span>,<span class="hljs-string">&quot;rb&quot;</span>) <span class="hljs-keyword">as</span> f:<br>    flag=f.read()<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">2</span>**<span class="hljs-number">64</span>):<br>    <span class="hljs-built_in">print</span>(random.getrandbits(<span class="hljs-number">32</span>)+flag[random.getrandbits(<span class="hljs-number">32</span>)%<span class="hljs-built_in">len</span>(flag)])<br>    <span class="hljs-built_in">input</span>()<br></code></pre></td></tr></table></div></figure>
+<figure class="highlight python"><i class="iconfont icon-github-fill" type="button" data-toggle="collapse" data-target="#collapse-7rv1afm8xa0jrh"></i><span>python</span><div class="collapse show" id="collapse-7rv1afm8xa0jrh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># FROM python:3</span><br><span class="hljs-keyword">import</span> random<br><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;flag.txt&quot;</span>,<span class="hljs-string">&quot;rb&quot;</span>) <span class="hljs-keyword">as</span> f:<br>    flag=f.read()<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">2</span>**<span class="hljs-number">64</span>):<br>    <span class="hljs-built_in">print</span>(random.getrandbits(<span class="hljs-number">32</span>)+flag[random.getrandbits(<span class="hljs-number">32</span>)%<span class="hljs-built_in">len</span>(flag)])<br>    <span class="hljs-built_in">input</span>()<br></code></pre></td></tr></table></div></figure>
 <p>一眼MT19937,拿到足够的bit恢复初始状态就行。抄<a
 target="_blank" rel="noopener" href="https://huangx607087.online/2021/07/10/Explore-MT19937/">huangx607087师傅之前的exp</a>直接就出了。我这边是每轮交互取高8位，交互5000轮左右可以构造出一个满秩矩阵。后面的求解过程，在M4
 Pro上大概需要3min，使用内存11G左右。</p>
@@ -322,7 +322,7 @@ not？反正很笨就是了)，那就直接一把梭吧。</p>
 <blockquote>
 <p>exp.py</p>
 </blockquote>
-<figure class="highlight python"><i class="iconfont icon-github-fill" type="button" data-toggle="collapse" data-target="#collapse-oq0thym8vygdzg"></i><span>python</span><div class="collapse show" id="collapse-oq0thym8vygdzg"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *<br><span class="hljs-keyword">from</span> tqdm <span class="hljs-keyword">import</span> trange<br>conn = remote(<span class="hljs-string">&#x27;1.95.128.179&#x27;</span>, <span class="hljs-string">&#x27;3316&#x27;</span>)<br>log.level=<span class="hljs-string">&#x27;debug&#x27;</span><br>conn.recvuntil(<span class="hljs-string">b&quot;Press Enter to start...&quot;</span>)<br>conn.sendline()<br><span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> trange(<span class="hljs-number">100</span>):<br>    conn.recvuntil(<span class="hljs-string">b&quot;Current stone count:\n&quot;</span>)<br>    res = []<br>    <span class="hljs-keyword">for</span> <span class="hljs-built_in">round</span> <span class="hljs-keyword">in</span> trange(<span class="hljs-number">7</span>):<br>        res.append(<span class="hljs-built_in">int</span>((conn.recvline().strip().split(<span class="hljs-string">b&quot; &quot;</span>)[<span class="hljs-number">2</span>]).decode()))<br>    <span class="hljs-built_in">print</span>(res)<br>    ans = <span class="hljs-built_in">str</span>(res[<span class="hljs-number">0</span>])+<span class="hljs-string">&quot; 0 0 &quot;</span>+<span class="hljs-built_in">str</span>(res[<span class="hljs-number">3</span>])+<span class="hljs-string">&quot; &quot;</span>+<span class="hljs-built_in">str</span>(res[<span class="hljs-number">4</span>])+<span class="hljs-string">&quot; &quot;</span>+<span class="hljs-built_in">str</span>(res[<span class="hljs-number">5</span>])+<span class="hljs-string">&quot; &quot;</span>+<span class="hljs-built_in">str</span>(res[<span class="hljs-number">6</span>])<br>    conn.sendline(ans.encode())<br>    conn.recvuntil(<span class="hljs-string">b&quot;Current player: AI&quot;</span>)<br>    conn.recvuntil(<span class="hljs-string">b&quot;Current stone count:\n&quot;</span>)<br>    res = []<br>    <span class="hljs-keyword">for</span> <span class="hljs-built_in">round</span> <span class="hljs-keyword">in</span> trange(<span class="hljs-number">7</span>):<br>        res.append(<span class="hljs-built_in">int</span>((conn.recvline().strip().split(<span class="hljs-string">b&quot; &quot;</span>)[<span class="hljs-number">2</span>]).decode()))<br><br>    <span class="hljs-built_in">print</span>(res)<br>    ans = <span class="hljs-string">&quot;0 &quot;</span>+<span class="hljs-built_in">str</span>(res[<span class="hljs-number">1</span>])+<span class="hljs-string">&quot; &quot;</span>+<span class="hljs-built_in">str</span>(res[<span class="hljs-number">2</span>])+<span class="hljs-string">&quot; &quot;</span>+<span class="hljs-string">&quot;0 0 0 0&quot;</span><br>    conn.sendline(ans.encode())<br>    conn.recvuntil(<span class="hljs-string">b&quot;Current player: AI&quot;</span>)<br><br>conn.interactive()<br></code></pre></td></tr></table></div></figure>
+<figure class="highlight python"><i class="iconfont icon-github-fill" type="button" data-toggle="collapse" data-target="#collapse-ga12qsm8xa0jrh"></i><span>python</span><div class="collapse show" id="collapse-ga12qsm8xa0jrh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *<br><span class="hljs-keyword">from</span> tqdm <span class="hljs-keyword">import</span> trange<br>conn = remote(<span class="hljs-string">&#x27;1.95.128.179&#x27;</span>, <span class="hljs-string">&#x27;3316&#x27;</span>)<br>log.level=<span class="hljs-string">&#x27;debug&#x27;</span><br>conn.recvuntil(<span class="hljs-string">b&quot;Press Enter to start...&quot;</span>)<br>conn.sendline()<br><span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> trange(<span class="hljs-number">100</span>):<br>    conn.recvuntil(<span class="hljs-string">b&quot;Current stone count:\n&quot;</span>)<br>    res = []<br>    <span class="hljs-keyword">for</span> <span class="hljs-built_in">round</span> <span class="hljs-keyword">in</span> trange(<span class="hljs-number">7</span>):<br>        res.append(<span class="hljs-built_in">int</span>((conn.recvline().strip().split(<span class="hljs-string">b&quot; &quot;</span>)[<span class="hljs-number">2</span>]).decode()))<br>    <span class="hljs-built_in">print</span>(res)<br>    ans = <span class="hljs-built_in">str</span>(res[<span class="hljs-number">0</span>])+<span class="hljs-string">&quot; 0 0 &quot;</span>+<span class="hljs-built_in">str</span>(res[<span class="hljs-number">3</span>])+<span class="hljs-string">&quot; &quot;</span>+<span class="hljs-built_in">str</span>(res[<span class="hljs-number">4</span>])+<span class="hljs-string">&quot; &quot;</span>+<span class="hljs-built_in">str</span>(res[<span class="hljs-number">5</span>])+<span class="hljs-string">&quot; &quot;</span>+<span class="hljs-built_in">str</span>(res[<span class="hljs-number">6</span>])<br>    conn.sendline(ans.encode())<br>    conn.recvuntil(<span class="hljs-string">b&quot;Current player: AI&quot;</span>)<br>    conn.recvuntil(<span class="hljs-string">b&quot;Current stone count:\n&quot;</span>)<br>    res = []<br>    <span class="hljs-keyword">for</span> <span class="hljs-built_in">round</span> <span class="hljs-keyword">in</span> trange(<span class="hljs-number">7</span>):<br>        res.append(<span class="hljs-built_in">int</span>((conn.recvline().strip().split(<span class="hljs-string">b&quot; &quot;</span>)[<span class="hljs-number">2</span>]).decode()))<br><br>    <span class="hljs-built_in">print</span>(res)<br>    ans = <span class="hljs-string">&quot;0 &quot;</span>+<span class="hljs-built_in">str</span>(res[<span class="hljs-number">1</span>])+<span class="hljs-string">&quot; &quot;</span>+<span class="hljs-built_in">str</span>(res[<span class="hljs-number">2</span>])+<span class="hljs-string">&quot; &quot;</span>+<span class="hljs-string">&quot;0 0 0 0&quot;</span><br>    conn.sendline(ans.encode())<br>    conn.recvuntil(<span class="hljs-string">b&quot;Current player: AI&quot;</span>)<br><br>conn.interactive()<br></code></pre></td></tr></table></div></figure>
 <h2 id="portable">portable</h2>
 <p>原程序用的是<a
 target="_blank" rel="noopener" href="https://github.com/jart/cosmopolitan">这个项目</a>编译而成，但是知道这点也没什么用:P</p>
@@ -386,7 +386,7 @@ terminal对字体支持的问题。</p>
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>2025-TPCTF-Writeup</div>
+      <div>2025 TPCTF Writeup</div>
       <div>https://eupho.me/828e6345.html</div>
     </div>
     <div class="license-meta">
@@ -453,8 +453,8 @@ terminal对字体支持的问题。</p>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/9ad61849.html" title="2025-ApoorvCTF-Writeup">
-                        <span class="hidden-mobile">2025-ApoorvCTF-Writeup</span>
+                      <a href="/9ad61849.html" title="2025 ApoorvCTF Writeup">
+                        <span class="hidden-mobile">2025 ApoorvCTF Writeup</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
