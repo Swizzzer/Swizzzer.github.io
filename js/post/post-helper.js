@@ -1,1 +1,370 @@
-async function initPostHelper(){let p="encrypt";KEEP.utils.postHelper={postPageContainerDom:document.querySelector(".post-page-container"),toggleShowTocBtn:document.querySelector(".toggle-show-toc"),toggleShowTocTabletBtn:document.querySelector(".toggle-show-toc-tablet"),mainContentDom:document.querySelector(".main-content"),postToolsDom:document.querySelector(".post-tools"),isShowToc:!1,initToggleToc(){this.toggleShowTocBtn&&this.toggleShowTocBtn.addEventListener("click",()=>{this.postPageContainerDom.classList.contains(p)||(this.isShowToc=!this.isShowToc,KEEP.themeInfo.styleStatus.isShowToc=this.isShowToc,KEEP.setStyleStatus(),this.handleToggleToc(this.isShowToc))}),this.toggleShowTocTabletBtn&&this.toggleShowTocTabletBtn.addEventListener("click",()=>{if(!this.postPageContainerDom.classList.contains(p)){let e=document.querySelector(".tablet-post-toc-mask"),t=e.querySelector(".tablet-post-toc");document.body.style.overflow="hidden",e.style.background="rgba(0, 0, 0, 0.25)",e.style.visibility="visible",t.style.transform="translateX(0)",e.addEventListener("click",()=>{document.body.style.overflow="",e.style.background="rgba(0, 0, 0, 0)",e.style.visibility="hidden",t.style.transform="translateX(-100%)"})}})},handleToggleToc(e){e?(this.postPageContainerDom.classList.add("show-toc"),document.body.classList.add("has-toc")):(this.postPageContainerDom.classList.remove("show-toc"),document.body.classList.remove("has-toc")),setTimeout(()=>{this.setPostToolsLayout()},100)},hasToc(e){this.toggleShowTocBtn&&(this.toggleShowTocBtn.style.display="flex",this.isShowToc=e,this.handleToggleToc(e))},setPostToolsLayout(e){e=e||this.mainContentDom.getBoundingClientRect().width.toFixed(0);let t=5;window.innerWidth<=800&&(t=3);var o="left"===KEEP.theme_config.toc?.layout?"right":"left";this.postToolsDom.style.opacity="1",this.postToolsDom.style[o]=`calc((100vw - ${e}px) / 2 - ${t}rem)`},initSetPostToolsLeft(){setTimeout(()=>{this.setPostToolsLayout()},150),window.addEventListener("resize",()=>{this.setPostToolsLayout()})},goToComments(){let t=document.querySelector("#comments-anchor");[document.querySelector(".post-tools .go-to-comments"),document.querySelector(".exposed-tools-list .go-to-comments-tablet")].forEach(e=>{KEEP.utils.title2Top4HTag(e,t,300)})},watchPostCommentsCount(){let t=this.postToolsDom.querySelector(".post-comments-count");if(!t)return;let o=new MutationObserver(function(e){e.forEach(e=>{"childList"===e.type&&0<(e=Number(e.target.innerHTML))&&(t.style.display="flex",99<e)&&(t.innerHTML="99+",o.disconnect())})});o.observe(t,{attributes:!0,childList:!0})},setArticleAgingDays(){var e,t,o,s,n=document.querySelector(".post-content .post-aging-tips");n&&(e=n.querySelector(".days"),o=Date.now(),t=864e5*(n.dataset?.agingDays||30),s=((o=o-new Date(n.dataset.updateDate).getTime())/864e5).toFixed(0),t<=o)&&(e.innerHTML=s,n.style.display="block")},resetPostUpdateDate(){var e=document.querySelector(".post-meta-info-container .post-update-date .datetime"),t=new Date(e.dataset.updated).getTime(),o=KEEP.theme_config.post?.datetime_format||KEEP.themeInfo.defaultDatetimeFormat;e.innerHTML=KEEP.utils.formatDatetime(o,t)},enableFullScreen(){var o=document.querySelector(".post-tools-container .full-screen");if(o){let e=o.querySelector("i"),t=()=>document.fullscreenElement||document.mozFullScreenElement||document.webkitFullscreenElement;var s=()=>{t()?(e.classList.remove("fa-expand"),e.classList.add("fa-compress")):(e.classList.remove("fa-compress"),e.classList.add("fa-expand"))};o.addEventListener("click",function(){t()?document.exitFullscreen?document.exitFullscreen():document.mozCancelFullScreen?document.mozCancelFullScreen():document.webkitExitFullscreen&&document.webkitExitFullscreen():document.documentElement.requestFullscreen?document.documentElement.requestFullscreen():document.documentElement.mozRequestFullScreen?document.documentElement.mozRequestFullScreen():document.documentElement.webkitRequestFullScreen&&document.documentElement.webkitRequestFullScreen()}),document.addEventListener("fullscreenchange",s),document.addEventListener("mozfullscreenchange",s),document.addEventListener("webkitfullscreenchange",s)}},hexToBuffer(e){return new Uint8Array(e.match(/[\da-f]{2}/gi).map(e=>parseInt(e,16))).buffer},async decrypt(e,t){var o={name:"AES-CBC",iv:this.hexToBuffer(e.iv)},t=await crypto.subtle.importKey("raw",this.hexToBuffer(t),o,!1,["decrypt"]),o=await crypto.subtle.decrypt(o,t,this.hexToBuffer(e.encryptedData));return(new TextDecoder).decode(o)},encryptTocHandle(t){setTimeout(()=>{var e=document.querySelector(".pc-post-toc");e&&(this.handleToggleToc(t),t?e?.removeAttribute("style"):e.style.display="none")})},async postEncryptHandle(){let r=document.querySelector(".post-content"),d=r.querySelector(".post-encrypt-box"),u=document.querySelector(".post-tools-list .post-lock"),e=KEEP.themeInfo.encryptKey+"#"+location.pathname,m="decrypt";if(d){this.encryptTocHandle(!1);let{secret:n,ep:l,content:i,iv:a}=d.dataset,c=(d.removeAttribute("data-secret"),d.removeAttribute("data-iv"),d.removeAttribute("data-ep"),d.removeAttribute("data-content"),d.querySelector(".password-input")),t=async(e=!1)=>{var t=c.value,o=await this.decrypt({iv:a,encryptedData:l},n),s=async()=>{var e=await this.decrypt({iv:a,encryptedData:i},n);d.style.display="none",r.removeChild(d),this.postPageContainerDom.classList.remove(p),this.encryptTocHandle(!0),r.querySelector(".post").innerHTML=e,setTimeout(()=>{KEEP.initLazyLoad(),KEEP.initCodeBlock(),KEEP.initTOC(),KEEP.utils.zoomInImage(),KEEP.utils.insertTooltipContent(),KEEP.utils.tabsActiveHandle(),KEEP.utils.wrapTableWithBox(),KEEP.utils.aAnchorJump()}),u.classList.add(m),u.classList.add("tooltip"),sessionStorage.setItem(KEEP.themeInfo.encryptKey+"#"+location.pathname,"1")};e||t===o?await s():c.classList.add("error")};sessionStorage.getItem(e)&&await t(!0),c.addEventListener("keydown",async e=>{""===c.value&&c.classList.remove("error"),13===e.keyCode&&(await t(),e.preventDefault())}),c.addEventListener("keyup",async e=>{""===c.value&&c.classList.remove("error")}),u.addEventListener("click",()=>{u.classList.contains(m)&&(u.classList.remove(m),sessionStorage.removeItem(e),location.reload())})}}},KEEP.utils.postHelper.initSetPostToolsLeft(),KEEP.utils.postHelper.setArticleAgingDays(),KEEP.utils.postHelper.resetPostUpdateDate(),KEEP.utils.postHelper.enableFullScreen(),KEEP.utils.postHelper.postPageContainerDom.classList.contains(p)&&await KEEP.utils.postHelper.postEncryptHandle(),!0===KEEP.theme_config.toc?.enable&&KEEP.utils.postHelper.initToggleToc(),!0===KEEP.theme_config.comment?.enable&&(KEEP.utils.postHelper.goToComments(),KEEP.utils.postHelper.watchPostCommentsCount())}!0===KEEP.theme_config.pjax?.enable&&KEEP.utils?initPostHelper():window.addEventListener("DOMContentLoaded",initPostHelper);
+/* global KEEP */
+
+async function initPostHelper() {
+  const encryptClassName = 'encrypt'
+
+  KEEP.utils.postHelper = {
+    postPageContainerDom: document.querySelector('.post-page-container'),
+    toggleShowTocBtn: document.querySelector('.toggle-show-toc'),
+    toggleShowTocTabletBtn: document.querySelector('.toggle-show-toc-tablet'),
+    mainContentDom: document.querySelector('.main-content'),
+    postToolsDom: document.querySelector('.post-tools'),
+    isShowToc: false,
+
+    initToggleToc() {
+      this.toggleShowTocBtn &&
+        this.toggleShowTocBtn.addEventListener('click', () => {
+          if (this.postPageContainerDom.classList.contains(encryptClassName)) {
+            return
+          }
+          this.isShowToc = !this.isShowToc
+          KEEP.themeInfo.styleStatus.isShowToc = this.isShowToc
+          KEEP.setStyleStatus()
+          this.handleToggleToc(this.isShowToc)
+        })
+
+      this.toggleShowTocTabletBtn &&
+        this.toggleShowTocTabletBtn.addEventListener('click', () => {
+          if (this.postPageContainerDom.classList.contains(encryptClassName)) {
+            return
+          }
+
+          const tabletTocMask = document.querySelector('.tablet-post-toc-mask')
+          const tabletToc = tabletTocMask.querySelector('.tablet-post-toc')
+
+          document.body.style.overflow = `hidden`
+          tabletTocMask.style.background = `rgba(0, 0, 0, 0.25)`
+          tabletTocMask.style.visibility = `visible`
+          tabletToc.style.transform = `translateX(0)`
+
+          tabletTocMask.addEventListener('click', () => {
+            document.body.style.overflow = ''
+            tabletTocMask.style.background = `rgba(0, 0, 0, 0)`
+            tabletTocMask.style.visibility = `hidden`
+            tabletToc.style.transform = `translateX(-100%)`
+          })
+        })
+    },
+
+    handleToggleToc(isOpen) {
+      if (isOpen) {
+        this.postPageContainerDom.classList.add('show-toc')
+        document.body.classList.add('has-toc')
+      } else {
+        this.postPageContainerDom.classList.remove('show-toc')
+        document.body.classList.remove('has-toc')
+      }
+
+      setTimeout(() => {
+        this.setPostToolsLayout()
+      }, 100)
+    },
+
+    hasToc(isOpen) {
+      if (this.toggleShowTocBtn) {
+        this.toggleShowTocBtn.style.display = 'flex'
+        this.isShowToc = isOpen
+        this.handleToggleToc(isOpen)
+      }
+    },
+
+    setPostToolsLayout(mcw) {
+      const mainContainerWidth = mcw
+        ? mcw
+        : this.mainContentDom.getBoundingClientRect().width.toFixed(0)
+      let offsetX = 5
+
+      if (window.innerWidth <= 800) {
+        offsetX = 3
+      }
+
+      const layout = KEEP.theme_config.toc?.layout === 'left' ? 'right' : 'left'
+      this.postToolsDom.style.opacity = `1`
+      this.postToolsDom.style[
+        layout
+      ] = `calc((100vw - ${mainContainerWidth}px) / 2 - ${offsetX}rem)`
+    },
+
+    initSetPostToolsLeft() {
+      setTimeout(() => {
+        this.setPostToolsLayout()
+      }, 150)
+
+      window.addEventListener('resize', () => {
+        this.setPostToolsLayout()
+      })
+    },
+
+    // go comment anchor
+    goToComments() {
+      const commentsAnchor = document.querySelector('#comments-anchor')
+      const goToCommentsBtnList = [
+        document.querySelector('.post-tools .go-to-comments'),
+        document.querySelector('.exposed-tools-list .go-to-comments-tablet')
+      ]
+
+      goToCommentsBtnList.forEach((btn) => {
+        KEEP.utils.title2Top4HTag(btn, commentsAnchor, 300)
+      })
+    },
+
+    // watch comments count
+    watchPostCommentsCount() {
+      const commentsCountDom = this.postToolsDom.querySelector('.post-comments-count')
+      if (!commentsCountDom) return
+      const config = { attributes: true, childList: true }
+
+      const callback = function (mutationsList) {
+        mutationsList.forEach((item) => {
+          if (item.type === 'childList') {
+            const count = Number(item.target.innerHTML)
+            if (count > 0) {
+              commentsCountDom.style.display = 'flex'
+              if (count > 99) {
+                commentsCountDom.innerHTML = '99+'
+                observer.disconnect()
+              }
+            }
+          }
+        })
+      }
+
+      const observer = new MutationObserver(callback)
+      observer.observe(commentsCountDom, config)
+    },
+
+    // set post aging tips
+    setArticleAgingDays() {
+      const agingTipsDom = document.querySelector('.post-content .post-aging-tips')
+      if (agingTipsDom) {
+        const daysDom = agingTipsDom.querySelector('.days')
+        const nowTimestamp = Date.now()
+        const tmpTimeLength = 24 * 60 * 60 * 1000
+        const agingDaysTimestamp = (agingTipsDom.dataset?.agingDays || 30) * tmpTimeLength
+        const postUpdateTimestamp = new Date(agingTipsDom.dataset.updateDate).getTime()
+        const timeDifference = nowTimestamp - postUpdateTimestamp
+        const timeDifferenceDays = (timeDifference / tmpTimeLength).toFixed(0)
+        if (timeDifference >= agingDaysTimestamp) {
+          daysDom.innerHTML = timeDifferenceDays
+          agingTipsDom.style.display = 'block'
+        }
+      }
+    },
+
+    // reset post update datetime
+    resetPostUpdateDate() {
+      const updateDateDom = document.querySelector(
+        '.post-meta-info-container .post-update-date .datetime'
+      )
+      const updated = new Date(updateDateDom.dataset.updated).getTime()
+      const format = KEEP.theme_config.post?.datetime_format || KEEP.themeInfo.defaultDatetimeFormat
+      updateDateDom.innerHTML = KEEP.utils.formatDatetime(format, updated)
+    },
+
+    // enable full screen
+    enableFullScreen() {
+      const fsb = document.querySelector('.post-tools-container .full-screen')
+      if (fsb) {
+        const icon = fsb.querySelector('i')
+
+        const isFullScreen = () => {
+          return (
+            document.fullscreenElement ||
+            document.mozFullScreenElement ||
+            document.webkitFullscreenElement
+          )
+        }
+
+        const toggleFullScreen = () => {
+          if (!isFullScreen()) {
+            if (document.documentElement.requestFullscreen) {
+              document.documentElement.requestFullscreen()
+            } else if (document.documentElement.mozRequestFullScreen) {
+              document.documentElement.mozRequestFullScreen()
+            } else if (document.documentElement.webkitRequestFullScreen) {
+              document.documentElement.webkitRequestFullScreen()
+            }
+          } else {
+            if (document.exitFullscreen) {
+              document.exitFullscreen()
+            } else if (document.mozCancelFullScreen) {
+              document.mozCancelFullScreen()
+            } else if (document.webkitExitFullscreen) {
+              document.webkitExitFullscreen()
+            }
+          }
+        }
+
+        const handleFullscreenChange = () => {
+          if (isFullScreen()) {
+            icon.classList.remove('fa-expand')
+            icon.classList.add('fa-compress')
+          } else {
+            icon.classList.remove('fa-compress')
+            icon.classList.add('fa-expand')
+          }
+        }
+
+        fsb.addEventListener('click', function () {
+          toggleFullScreen()
+        })
+
+        document.addEventListener('fullscreenchange', handleFullscreenChange)
+        document.addEventListener('mozfullscreenchange', handleFullscreenChange)
+        document.addEventListener('webkitfullscreenchange', handleFullscreenChange)
+      }
+    },
+
+    hexToBuffer(hex) {
+      const typedArray = new Uint8Array(hex.match(/[\da-f]{2}/gi).map((h) => parseInt(h, 16)))
+      return typedArray.buffer
+    },
+
+    async decrypt(encrypted, key) {
+      const algorithm = { name: 'AES-CBC', iv: this.hexToBuffer(encrypted.iv) }
+      const cryptoKey = await crypto.subtle.importKey(
+        'raw',
+        this.hexToBuffer(key),
+        algorithm,
+        false,
+        ['decrypt']
+      )
+      const decrypted = await crypto.subtle.decrypt(
+        algorithm,
+        cryptoKey,
+        this.hexToBuffer(encrypted.encryptedData)
+      )
+      const decoder = new TextDecoder()
+      return decoder.decode(decrypted)
+    },
+
+    // encrypt toc handle
+    encryptTocHandle(show) {
+      setTimeout(() => {
+        const tocDom = document.querySelector('.pc-post-toc')
+        if (tocDom) {
+          this.handleToggleToc(show)
+          if (show) {
+            tocDom?.removeAttribute('style')
+          } else {
+            tocDom.style.display = 'none'
+          }
+        }
+      })
+    },
+
+    // post encrypt handle
+    async postEncryptHandle() {
+      const postContentDom = document.querySelector('.post-content')
+      const encryptBoxDom = postContentDom.querySelector('.post-encrypt-box')
+      const lockIconDom = document.querySelector('.post-tools-list .post-lock')
+      const sessionKey = `${KEEP.themeInfo.encryptKey}#${location.pathname}`
+      const lockClassName = `decrypt`
+
+      if (encryptBoxDom) {
+        this.encryptTocHandle(false)
+        const { secret, ep, content, iv } = encryptBoxDom.dataset
+
+        encryptBoxDom.removeAttribute('data-secret')
+        encryptBoxDom.removeAttribute('data-iv')
+        encryptBoxDom.removeAttribute('data-ep')
+        encryptBoxDom.removeAttribute('data-content')
+
+        const pwdInput = encryptBoxDom.querySelector('.password-input')
+
+        const doDecrypt = async (isDecrypted = false) => {
+          const pwdVal = pwdInput.value
+          const dp = await this.decrypt({ iv, encryptedData: ep }, secret)
+
+          const ddc = async () => {
+            const dc = await this.decrypt({ iv, encryptedData: content }, secret)
+            encryptBoxDom.style.display = 'none'
+            postContentDom.removeChild(encryptBoxDom)
+            this.postPageContainerDom.classList.remove(encryptClassName)
+            this.encryptTocHandle(true)
+            postContentDom.querySelector('.post').innerHTML = dc
+            setTimeout(() => {
+              KEEP.initLazyLoad()
+              KEEP.initCodeBlock()
+              KEEP.initTOC()
+              KEEP.utils.zoomInImage()
+              KEEP.utils.insertTooltipContent()
+              KEEP.utils.tabsActiveHandle()
+              KEEP.utils.wrapTableWithBox()
+              KEEP.utils.aAnchorJump()
+            })
+            lockIconDom.classList.add(lockClassName)
+            lockIconDom.classList.add('tooltip')
+            sessionStorage.setItem(`${KEEP.themeInfo.encryptKey}#${location.pathname}`, '1')
+          }
+
+          if (isDecrypted) {
+            await ddc()
+            return
+          }
+
+          if (pwdVal === dp) {
+            await ddc()
+          } else {
+            pwdInput.classList.add('error')
+          }
+        }
+
+        const decrypted = sessionStorage.getItem(sessionKey)
+
+        if (decrypted) {
+          await doDecrypt(true)
+        }
+
+        pwdInput.addEventListener('keydown', async (e) => {
+          if (pwdInput.value === '') {
+            pwdInput.classList.remove('error')
+          }
+
+          if (e.keyCode === 13) {
+            await doDecrypt()
+            e.preventDefault()
+          }
+        })
+
+        pwdInput.addEventListener('keyup', async (e) => {
+          if (pwdInput.value === '') {
+            pwdInput.classList.remove('error')
+          }
+        })
+
+        lockIconDom.addEventListener('click', () => {
+          if (lockIconDom.classList.contains(lockClassName)) {
+            lockIconDom.classList.remove(lockClassName)
+            sessionStorage.removeItem(sessionKey)
+            location.reload()
+          }
+        })
+      }
+    }
+  }
+
+  KEEP.utils.postHelper.initSetPostToolsLeft()
+  KEEP.utils.postHelper.setArticleAgingDays()
+  KEEP.utils.postHelper.resetPostUpdateDate()
+  KEEP.utils.postHelper.enableFullScreen()
+
+  if (KEEP.utils.postHelper.postPageContainerDom.classList.contains(encryptClassName)) {
+    await KEEP.utils.postHelper.postEncryptHandle()
+  }
+
+  if (KEEP.theme_config.toc?.enable === true) {
+    KEEP.utils.postHelper.initToggleToc()
+  }
+
+  if (KEEP.theme_config.comment?.enable === true) {
+    KEEP.utils.postHelper.goToComments()
+    KEEP.utils.postHelper.watchPostCommentsCount()
+  }
+}
+
+if (KEEP.theme_config.pjax?.enable === true && KEEP.utils) {
+  initPostHelper()
+} else {
+  window.addEventListener('DOMContentLoaded', initPostHelper)
+}

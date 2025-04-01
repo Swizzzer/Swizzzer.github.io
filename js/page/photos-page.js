@@ -1,1 +1,23 @@
-function photosPageHandle(){(()=>{var e=document.querySelector(".photo-album-box"),o=e.querySelectorAll("img");e.style.columnCount="3";let t=new Array(3).fill(0);o.forEach(e=>{var o=t.indexOf(Math.min(...t));e.style.column=o+1,t[o]+=e.height})})()}!0===KEEP.theme_config?.pjax?.enable&&KEEP.utils?photosPageHandle():window.addEventListener("DOMContentLoaded",photosPageHandle);
+/* global KEEP */
+
+function photosPageHandle() {
+  const layoutImages = () => {
+    const gallery = document.querySelector('.photo-album-box')
+    const images = gallery.querySelectorAll('img')
+    const columns = 3
+    gallery.style.columnCount = `${columns}`
+    const columnHeights = new Array(columns).fill(0)
+    images.forEach((img) => {
+      const shortestColumn = columnHeights.indexOf(Math.min(...columnHeights))
+      img.style.column = shortestColumn + 1
+      columnHeights[shortestColumn] += img.height
+    })
+  }
+  layoutImages()
+}
+
+if (KEEP.theme_config?.pjax?.enable === true && KEEP.utils) {
+  photosPageHandle()
+} else {
+  window.addEventListener('DOMContentLoaded', photosPageHandle)
+}

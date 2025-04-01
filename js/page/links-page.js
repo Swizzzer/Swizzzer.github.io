@@ -1,1 +1,52 @@
-function linksPageHandle(){var e=document.querySelector(".friends-link-list");if(e){var l=e.querySelectorAll(".link-type-title"),n=e.querySelectorAll(".friends-link-item").length;let s=2;80<=n?s=4:60<=n&&(s=3),e.style.gridTemplateColumns=`repeat(${s}, 1fr)`,l.forEach(e=>{e.style.gridColumn="span "+s;let l=!1,n=[],t=e.nextElementSibling;for(;t&&t.classList.contains("friends-link-item");)n.push(t),t=t.nextElementSibling;let i=e.querySelector(".fold");i.addEventListener("click",()=>{l=!l,i.classList.remove("fa-chevron-"+(l?"down":"left")),i.classList.add("fa-chevron-"+(l?"left":"down")),n.forEach(e=>e.style.display=l?"none":"block")})})}}!0===KEEP.theme_config?.pjax?.enable&&KEEP.utils?linksPageHandle():window.addEventListener("DOMContentLoaded",linksPageHandle);
+/* global KEEP */
+
+function linksPageHandle() {
+  const friendsLinkBoxDom = document.querySelector('.friends-link-list')
+
+  if (!friendsLinkBoxDom) {
+    return
+  }
+
+  const linkTypeDoms = friendsLinkBoxDom.querySelectorAll('.link-type-title')
+  const linkItemDoms = friendsLinkBoxDom.querySelectorAll('.friends-link-item')
+  const linksCount = linkItemDoms.length
+  let columns = 2
+
+  if (linksCount >= 80) {
+    columns = 4
+  } else if (linksCount >= 60) {
+    columns = 3
+  }
+
+  friendsLinkBoxDom.style.gridTemplateColumns = `repeat(${columns}, 1fr)`
+  linkTypeDoms.forEach((ltd) => {
+    ltd.style.gridColumn = `span ${columns}`
+
+    let folded = false
+    const siblings = []
+    let nextSibling = ltd.nextElementSibling
+
+    while (nextSibling) {
+      if (nextSibling.classList.contains('friends-link-item')) {
+        siblings.push(nextSibling)
+        nextSibling = nextSibling.nextElementSibling
+      } else {
+        break
+      }
+    }
+
+    const foldDom = ltd.querySelector('.fold')
+    foldDom.addEventListener('click', () => {
+      folded = !folded
+      foldDom.classList.remove(`fa-chevron-${folded ? 'down' : 'left'}`)
+      foldDom.classList.add(`fa-chevron-${folded ? 'left' : 'down'}`)
+      siblings.forEach((link) => (link.style.display = folded ? 'none' : 'block'))
+    })
+  })
+}
+
+if (KEEP.theme_config?.pjax?.enable === true && KEEP.utils) {
+  linksPageHandle()
+} else {
+  window.addEventListener('DOMContentLoaded', linksPageHandle)
+}

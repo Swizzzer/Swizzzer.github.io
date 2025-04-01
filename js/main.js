@@ -1,3 +1,82 @@
-window.addEventListener("DOMContentLoaded",()=>{let{version:e,local_search:t,lazyload:o}=KEEP.theme_config;KEEP.themeInfo={theme:"Keep v"+e,author:"XPoet",repository:"https://github.com/XPoet/hexo-theme-keep",localStorageKey:"KEEP-THEME-STATUS",encryptKey:"KEEP-ENCRYPT",styleStatus:{isDark:!1,fontSizeLevel:0,isShowToc:!0},defaultDatetimeFormat:"YYYY-MM-DD HH:mm:ss"},KEEP.printThemeInfo=()=>{console.log(`
- %c ${KEEP.themeInfo.theme} %c ${KEEP.themeInfo.repository} 
-`,"color: #fadfa3; background: #333; padding: 6px 0;","padding: 6px 0;")},KEEP.printThemeInfo(),KEEP.setFooterVersion=()=>{var e=document.querySelector(".footer .keep-version");e&&(e.innerHTML=KEEP.themeInfo.theme)},KEEP.setStyleStatus=()=>{localStorage.setItem(KEEP.themeInfo.localStorageKey,JSON.stringify(KEEP.themeInfo.styleStatus))},KEEP.getStyleStatus=()=>{var e=localStorage.getItem(KEEP.themeInfo.localStorageKey);if(e){for(var t in e=JSON.parse(e),KEEP.themeInfo.styleStatus)KEEP.themeInfo.styleStatus[t]=e[t];return e}return null},KEEP.initPrototype=()=>{HTMLElement.prototype.wrap=function(e){this.parentNode.insertBefore(e,this),this.parentNode.removeChild(this),e.appendChild(this)}},KEEP.initPrototype(),KEEP.initExecute=()=>{KEEP.initUtils(),KEEP.initHeaderShrink(),KEEP.initModeToggle(),KEEP.initBack2Top(),KEEP.initCodeBlock(),KEEP.setFooterVersion(),!0===o?.enable&&KEEP.initLazyLoad(),!0===t?.enable&&KEEP.initLocalSearch()},KEEP.initExecute()});
+/* global KEEP */
+
+window.addEventListener('DOMContentLoaded', () => {
+  const { version, local_search, lazyload } = KEEP.theme_config
+
+  KEEP.themeInfo = {
+    theme: `Keep v${version}`,
+    author: 'XPoet',
+    repository: 'https://github.com/XPoet/hexo-theme-keep',
+    localStorageKey: 'KEEP-THEME-STATUS',
+    encryptKey: 'KEEP-ENCRYPT',
+    styleStatus: {
+      isDark: false,
+      fontSizeLevel: 0,
+      isShowToc: true
+    },
+    defaultDatetimeFormat: 'YYYY-MM-DD HH:mm:ss'
+  }
+
+  // print theme base info
+  KEEP.printThemeInfo = () => {
+    console.log(
+      `\n %c ${KEEP.themeInfo.theme} %c ${KEEP.themeInfo.repository} \n`,
+      `color: #fadfa3; background: #333; padding: 6px 0;`,
+      `padding: 6px 0;`
+    )
+  }
+  KEEP.printThemeInfo()
+
+  // set version number of footer
+  KEEP.setFooterVersion = () => {
+    const vd = document.querySelector('.footer .keep-version')
+    vd && (vd.innerHTML = KEEP.themeInfo.theme)
+  }
+
+  // set styleStatus to localStorage
+  KEEP.setStyleStatus = () => {
+    localStorage.setItem(KEEP.themeInfo.localStorageKey, JSON.stringify(KEEP.themeInfo.styleStatus))
+  }
+
+  // get styleStatus from localStorage
+  KEEP.getStyleStatus = () => {
+    let temp = localStorage.getItem(KEEP.themeInfo.localStorageKey)
+    if (temp) {
+      temp = JSON.parse(temp)
+      for (let key in KEEP.themeInfo.styleStatus) {
+        KEEP.themeInfo.styleStatus[key] = temp[key]
+      }
+      return temp
+    } else {
+      return null
+    }
+  }
+
+  // init prototype function
+  KEEP.initPrototype = () => {
+    HTMLElement.prototype.wrap = function (wrapper) {
+      this.parentNode.insertBefore(wrapper, this)
+      this.parentNode.removeChild(this)
+      wrapper.appendChild(this)
+    }
+  }
+  KEEP.initPrototype()
+
+  KEEP.initExecute = () => {
+    KEEP.initUtils()
+    KEEP.initHeaderShrink()
+    KEEP.initModeToggle()
+    KEEP.initBack2Top()
+    KEEP.initCodeBlock()
+    KEEP.setFooterVersion()
+
+    if (lazyload?.enable === true) {
+      KEEP.initLazyLoad()
+    }
+
+    if (local_search?.enable === true) {
+      KEEP.initLocalSearch()
+    }
+  }
+  KEEP.initExecute()
+})

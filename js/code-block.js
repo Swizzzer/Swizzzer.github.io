@@ -1,4 +1,152 @@
-KEEP.initCodeBlock=()=>{!0===KEEP.theme_config?.code_block?.tools?.enable&&(KEEP.utils.initCodeBlockTools=()=>{var e=(KEEP.theme_config?.code_block||{}).style,t=(KEEP.theme_config?.code_block?.tools||{}).style;let s="mac"===(e||t||"default"),a=s?"fas fa-chevron-left":"fas fa-chevron-right",{copy:c,copied:r,fold:d,folded:p}=KEEP.language_code_block,f=`<span class="tool fold tooltip" data-tooltip-content="${d}" data-tooltip-offset-y="-2px"><i class="fas fa-chevron-down"></i></span>`;document.querySelectorAll("figure.highlight").forEach(n=>{let e=n.classList.length?n.classList[1].toUpperCase():"";"PLAINTEXT"===e&&(e="");var t=document.createElement("div"),o=(t.classList.add("highlight-container"),s&&t.classList.add("mac"),n.wrap(t),e?'<span class="code-lang">'+e+"</span>":"");t.insertAdjacentHTML("afterbegin",`<div class="code-tools-box">
-        ${s?f+o:"<span>"+f+o+"</span>"}
-        <span class="tool copy tooltip" data-tooltip-content="${c}" data-tooltip-offset-y="-2px"><i class="fas fa-copy"></i></span>
-      </div>`);let i=n.parentNode.querySelector(".code-tools-box");t=i.querySelector(".copy"),o=i.querySelector(".fold");t.addEventListener("click",e=>{var e=e.currentTarget,t=[...n.querySelectorAll(".code .line")].map(e=>e.innerText).join("\n"),o=document.createElement("textarea"),l=(o.style.top=window.scrollY+"px",o.style.position="absolute",o.style.opacity="0",o.readOnly=!0,o.value=t,document.body.append(o),document.getSelection()),s=0<l.rangeCount&&l.getRangeAt(0),t=(o.select(),o.setSelectionRange(0,t.length),o.readOnly=!1,document.execCommand("copy")),a=e.querySelector("i"),c=i.querySelector(".copy .tooltip-content");t?(a.className="fas fa-check",c&&(c.innerHTML=r)):a.className="fas fa-times",o.blur(),e.blur(),s&&(l.removeAllRanges(),l.addRange(s)),document.body.removeChild(o)}),t.addEventListener("mouseleave",t=>{setTimeout(()=>{t.target.querySelector("i").className="fas fa-copy";var e=i.querySelector(".copy .tooltip-content");e&&(e.innerHTML=c)},500)});let l=!1;o.addEventListener("click",e=>{var e=e.currentTarget.querySelector("i"),t=i.querySelector(".fold .tooltip-content");(l=!l)?(e.className=a,n.classList.add("folded"),i.classList.add("folded"),t&&(t.innerHTML=p)):(e.className="fas fa-chevron-down",n.classList.remove("folded"),i.classList.remove("folded"),t&&(t.innerHTML=d))})})},KEEP.utils.initCodeBlockTools());var e=document.querySelector(".post-content");e&&!e.classList.contains("code-block-unshrink")&&(KEEP.utils.shrinkCodeBlock=()=>{document.querySelectorAll("figure.highlight").forEach(e=>{(t=>{let o=t.getBoundingClientRect().height;if(50<o-200){t.style.position="relative",t.style.overflow="hidden",t.style.height="200px";let e=document.createElement("div");e.setAttribute("class","shrink-line flex-center"),e.style.height="30px",e.style.top="170px",e.addEventListener("click",()=>{t.style.removeProperty("overflow"),t.style.overflowY="hidden",t.style.overflowX="auto",t.style.height=o+"px",e.style.display="none"}),t.appendChild(e)}})(e)})},KEEP.utils.shrinkCodeBlock())};
+/* global KEEP */
+
+KEEP.initCodeBlock = () => {
+  if (KEEP.theme_config?.code_block?.tools?.enable === true) {
+    KEEP.utils.initCodeBlockTools = () => {
+      const { style: codeBlockStyle } = KEEP.theme_config?.code_block || {}
+      const { style: codeBlockToolsStyle } = KEEP.theme_config?.code_block?.tools || {}
+
+      const isMac = (codeBlockStyle || codeBlockToolsStyle || 'default') === 'mac'
+      const foldedIconClassName = isMac ? 'fas fa-chevron-left' : 'fas fa-chevron-right'
+      const {
+        copy: copyLang,
+        copied: copiedLang,
+        fold: foldLang,
+        folded: foldedLang
+      } = KEEP.language_code_block
+      const foldDom = `<span class="tool fold tooltip" data-tooltip-content="${foldLang}" data-tooltip-offset-y="-2px"><i class="fas fa-chevron-down"></i></span>`
+
+      document.querySelectorAll('figure.highlight').forEach((element) => {
+        // code language
+        let codeLang = element.classList.length ? element.classList[1].toUpperCase() : ''
+        if (codeLang === 'PLAINTEXT') {
+          codeLang = ''
+        }
+        const highlightContainer = document.createElement('div')
+        highlightContainer.classList.add('highlight-container')
+        if (isMac) {
+          highlightContainer.classList.add('mac')
+        }
+        element.wrap(highlightContainer)
+
+        const codeLangDom = `${codeLang ? '<span class="code-lang">' + codeLang + '</span>' : ''}`
+
+        // code tools
+        highlightContainer.insertAdjacentHTML(
+          'afterbegin',
+          `<div class="code-tools-box">
+        ${isMac ? foldDom + codeLangDom : '<span>' + foldDom + codeLangDom + '</span>'}
+        <span class="tool copy tooltip" data-tooltip-content="${copyLang}" data-tooltip-offset-y="-2px"><i class="fas fa-copy"></i></span>
+      </div>`
+        )
+        const codeToolsBox = element.parentNode.querySelector('.code-tools-box')
+        const copyDom = codeToolsBox.querySelector('.copy')
+        const targetFoldDom = codeToolsBox.querySelector('.fold')
+
+        // copy code
+        copyDom.addEventListener('click', (event) => {
+          const target = event.currentTarget
+          const code = [...element.querySelectorAll('.code .line')]
+            .map((line) => line.innerText)
+            .join('\n')
+          const tta = document.createElement('textarea')
+          tta.style.top = window.scrollY + 'px'
+          tta.style.position = 'absolute'
+          tta.style.opacity = '0'
+          tta.readOnly = true
+          tta.value = code
+          document.body.append(tta)
+          const selection = document.getSelection()
+          const selected = selection.rangeCount > 0 ? selection.getRangeAt(0) : false
+          tta.select()
+          tta.setSelectionRange(0, code.length)
+          tta.readOnly = false
+          const result = document.execCommand('copy')
+
+          const copyIconDom = target.querySelector('i')
+          const copyTooltipDom = codeToolsBox.querySelector('.copy .tooltip-content')
+
+          if (result) {
+            copyIconDom.className = 'fas fa-check'
+            copyTooltipDom && (copyTooltipDom.innerHTML = copiedLang)
+          } else {
+            copyIconDom.className = 'fas fa-times'
+          }
+
+          tta.blur()
+          target.blur()
+          if (selected) {
+            selection.removeAllRanges()
+            selection.addRange(selected)
+          }
+          document.body.removeChild(tta)
+        })
+
+        copyDom.addEventListener('mouseleave', (event) => {
+          setTimeout(() => {
+            event.target.querySelector('i').className = 'fas fa-copy'
+            const copyTooltipDom = codeToolsBox.querySelector('.copy .tooltip-content')
+            copyTooltipDom && (copyTooltipDom.innerHTML = copyLang)
+          }, 500)
+        })
+
+        // fold code block
+        let isFold = false
+        targetFoldDom.addEventListener('click', (event) => {
+          const target = event.currentTarget
+          const icon = target.querySelector('i')
+          const foldTooltipDom = codeToolsBox.querySelector('.fold .tooltip-content')
+          isFold = !isFold
+          if (isFold) {
+            icon.className = foldedIconClassName
+            element.classList.add('folded')
+            codeToolsBox.classList.add('folded')
+            foldTooltipDom && (foldTooltipDom.innerHTML = foldedLang)
+          } else {
+            icon.className = 'fas fa-chevron-down'
+            element.classList.remove('folded')
+            codeToolsBox.classList.remove('folded')
+            foldTooltipDom && (foldTooltipDom.innerHTML = foldLang)
+          }
+        })
+      })
+    }
+    KEEP.utils.initCodeBlockTools()
+  }
+
+  const postContentDom = document.querySelector('.post-content')
+  if (postContentDom && !postContentDom.classList.contains('code-block-unshrink')) {
+    KEEP.utils.shrinkCodeBlock = () => {
+      const shrinkHandle = (codeBox) => {
+        const limitHeight = 200
+        const tipNodeH = 30
+        const codeBoxHeight = codeBox.getBoundingClientRect().height
+        if (codeBoxHeight - limitHeight > 50) {
+          codeBox.style.position = 'relative'
+          codeBox.style.overflow = 'hidden'
+          codeBox.style.height = `${limitHeight}px`
+          const shrinkLineDom = document.createElement('div')
+          shrinkLineDom.setAttribute('class', 'shrink-line flex-center')
+          shrinkLineDom.style.height = `${tipNodeH}px`
+          shrinkLineDom.style.top = `${limitHeight - tipNodeH}px`
+
+          // expand all codes
+          shrinkLineDom.addEventListener('click', () => {
+            codeBox.style.removeProperty('overflow')
+            codeBox.style.overflowY = 'hidden'
+            codeBox.style.overflowX = 'auto'
+            codeBox.style.height = `${codeBoxHeight}px`
+            shrinkLineDom.style.display = 'none'
+          })
+
+          codeBox.appendChild(shrinkLineDom)
+        }
+      }
+
+      document.querySelectorAll('figure.highlight').forEach((element) => {
+        shrinkHandle(element)
+      })
+    }
+    KEEP.utils.shrinkCodeBlock()
+  }
+}

@@ -1,1 +1,49 @@
-KEEP.initLazyLoad=()=>{if(!0===KEEP?.theme_config?.lazyload?.enable){let t=document.querySelectorAll("img"),o=Date.now(),l=!0;function e(t){o=Date.now(),l=Array.from(t).some(t=>t.hasAttribute("lazyload"));let e=window.innerHeight+document.documentElement.scrollTop||document.body.scrollTop;t.forEach(l=>{if(l.hasAttribute("lazyload")&&!l.hasAttribute("loading")){var t=window.scrollY+l.getBoundingClientRect().top;if(e>t){l.setAttribute("loading",!0);let o=setTimeout(()=>{var t=new Image;let e=l.getAttribute("data-src");t.src=e,t.onload=()=>{l.src=e,l.removeAttribute("lazyload"),l.removeAttribute("loading"),clearTimeout(o)}},500)}}})}e(t),window.onscroll=()=>{50<Date.now()-o&&l&&t.length&&e(t)}}};
+/* global KEEP */
+
+KEEP.initLazyLoad = () => {
+  if (KEEP?.theme_config?.lazyload?.enable !== true) {
+    return
+  }
+
+  const imgs = document.querySelectorAll('img')
+  let now = Date.now()
+  let needLoad = true
+
+  function lazyload(imgs) {
+    now = Date.now()
+    needLoad = Array.from(imgs).some((i) => i.hasAttribute('lazyload'))
+    const viewOffsetTop =
+      window.innerHeight + document.documentElement.scrollTop || document.body.scrollTop
+
+    imgs.forEach((img) => {
+      if (img.hasAttribute('lazyload') && !img.hasAttribute('loading')) {
+        const imgOffsetTop = window.scrollY + img.getBoundingClientRect().top
+
+        if (viewOffsetTop > imgOffsetTop) {
+          img.setAttribute('loading', true)
+          const loadImageTimeout = setTimeout(() => {
+            const tempImg = new Image()
+            const src = img.getAttribute('data-src')
+            tempImg.src = src
+            tempImg.onload = () => {
+              img.src = src
+              img.removeAttribute('lazyload')
+              img.removeAttribute('loading')
+              clearTimeout(loadImageTimeout)
+            }
+          }, 500)
+        }
+      }
+    })
+  }
+
+  lazyload(imgs)
+
+  window.onscroll = () => {
+    if (Date.now() - now > 50 && needLoad) {
+      if (imgs.length) {
+        lazyload(imgs)
+      }
+    }
+  }
+}

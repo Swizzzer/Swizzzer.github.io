@@ -1,1 +1,46 @@
-function initPostShareHelper(){KEEP.utils.postShareHelper={postShareHandle(){let t=window.location.href,r=window.document.title;var e=document.querySelector(".post-share-container .share-list-wrap"),o=e.querySelector(".wechat");o&&o.setAttribute("data-tooltip-img-url","https://api.qrserver.com/v1/create-qr-code?data="+t),e.querySelectorAll(".share-item").forEach(e=>{e.addEventListener("click",()=>{e.classList.contains("qq")&&window.open("https://connect.qq.com/widget/shareqq/index.html?url="+t),e.classList.contains("weibo")&&window.open(`https://service.weibo.com/share/share.php?url=${t}&title=`+r)})})}},!0===KEEP.theme_config.post?.share&&KEEP.utils.postShareHelper.postShareHandle()}!0===KEEP.theme_config.pjax?.enable&&KEEP.utils?initPostShareHelper():window.addEventListener("DOMContentLoaded",initPostShareHelper);
+/* global KEEP */
+
+function initPostShareHelper() {
+  KEEP.utils.postShareHelper = {
+    postShareHandle() {
+      const pageUrl = window.location.href
+      const pageTitle = window.document.title
+
+      const shareContainer = document.querySelector('.post-share-container .share-list-wrap')
+
+      // WeChat share
+      const wechatShare = shareContainer.querySelector('.wechat')
+      wechatShare &&
+        wechatShare.setAttribute(
+          'data-tooltip-img-url',
+          `https://api.qrserver.com/v1/create-qr-code?data=${pageUrl}`
+        )
+
+      shareContainer.querySelectorAll('.share-item').forEach((item) => {
+        item.addEventListener('click', () => {
+          // QQ share
+          if (item.classList.contains('qq')) {
+            window.open(`https://connect.qq.com/widget/shareqq/index.html?url=${pageUrl}`)
+          }
+
+          // WeiBo share
+          if (item.classList.contains('weibo')) {
+            window.open(
+              `https://service.weibo.com/share/share.php?url=${pageUrl}&title=${pageTitle}`
+            )
+          }
+        })
+      })
+    }
+  }
+
+  if (KEEP.theme_config.post?.share === true) {
+    KEEP.utils.postShareHelper.postShareHandle()
+  }
+}
+
+if (KEEP.theme_config.pjax?.enable === true && KEEP.utils) {
+  initPostShareHelper()
+} else {
+  window.addEventListener('DOMContentLoaded', initPostShareHelper)
+}

@@ -1,1 +1,7 @@
-:root{--first-screen-font-color-light:rgb(255, 255, 255);--first-screen-font-color-dark:rgb(255, 255, 255)}
+:root {
+    /* 设置首屏的文字颜色（白昼模式） */
+   --first-screen-font-color-light: rgb(255, 255, 255);
+
+   /* 设置首屏的文字颜色（暗黑模式） */
+   --first-screen-font-color-dark: rgb(255, 255, 255);
+}

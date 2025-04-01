@@ -1,1 +1,121 @@
-KEEP.initTOC=()=>{var e=document.querySelector(".page-container"),t=document.querySelector(".post-page-container");let o=document.querySelector(".pc-post-toc"),c=document.querySelector(".tablet-post-toc");KEEP.utils.hasToc?(KEEP.utils.tocHelper={pcTocNavSections:[],tabletTocNavSections:[],getActiveIndex(o){if(Array.isArray(o)){var{isHideHeader:c,headerWrapperDom:i}=KEEP.utils;let t=c?0:i.getBoundingClientRect().height,e=o.findIndex(e=>e&&0<e.getBoundingClientRect().top-(20+t));return-1===e?e=o.length-1:0<e&&e--,e}},activeNav(){this.activateNavByIndex(o,this.getActiveIndex(this.pcTocNavSections)),this.activateNavByIndex(c,this.getActiveIndex(this.tabletTocNavSections))},registerTocNav(){var e=e=>[...e.querySelectorAll(".post-toc li a.nav-link")].map(e=>{var t=document.getElementById(decodeURI(e.getAttribute("href")).replace("#",""));return KEEP.utils.title2Top4HTag(e,t,500),t});this.pcTocNavSections=e(o),this.tabletTocNavSections=e(c)},activateNavByIndex(t,o){o=t.querySelectorAll(".post-toc li a.nav-link")[o];if(o&&!o.classList.contains("active-current")){t.querySelectorAll(".post-toc .active").forEach(e=>{e.classList.remove("active","active-current")}),o.classList.add("active","active-current");let e=o.parentNode;for(;!e.matches(".post-toc");)e.matches("li")&&e.classList.add("active"),e=e.parentNode;t=t.querySelector(".post-toc-wrap");window.anime({targets:t,duration:200,easing:"linear",scrollTop:t.scrollTop-t.offsetHeight/2+o.getBoundingClientRect().top-t.getBoundingClientRect().top})}},handleShowWhenHasToc(){var e=()=>{var e=KEEP.getStyleStatus(),t="isShowToc";e&&e.hasOwnProperty(t)?KEEP.utils.postHelper.hasToc(e[t]):KEEP.utils.postHelper.hasToc(!0)},t="init_open";!KEEP.theme_config.toc.hasOwnProperty(t)||KEEP.theme_config.toc[t]?e():KEEP.utils.postHelper.hasToc(!1)}},KEEP.utils.tocHelper.handleShowWhenHasToc(),KEEP.utils.tocHelper.registerTocNav()):(o&&t.removeChild(o),c&&e.removeChild(document.querySelector(".tablet-post-toc-mask")))},!0===KEEP.theme_config?.pjax?.enable&&KEEP.utils?KEEP.initTOC():window.addEventListener("DOMContentLoaded",KEEP.initTOC);
+/* global KEEP */
+
+KEEP.initTOC = () => {
+  const pageContainer = document.querySelector('.page-container')
+  const postPageContainer = document.querySelector('.post-page-container')
+  const pcTocContainer = document.querySelector('.pc-post-toc')
+  const tabletTocContainer = document.querySelector('.tablet-post-toc')
+
+  if (KEEP.utils.hasToc) {
+    KEEP.utils.tocHelper = {
+      pcTocNavSections: [],
+
+      tabletTocNavSections: [],
+
+      // get active index
+      getActiveIndex(navSections) {
+        if (!Array.isArray(navSections)) return
+        const offsetY = 20
+        const { isHideHeader, headerWrapperDom } = KEEP.utils
+        const headerH = isHideHeader ? 0 : headerWrapperDom.getBoundingClientRect().height
+        let index = navSections.findIndex((element) => {
+          return element && element.getBoundingClientRect().top - (offsetY + headerH) > 0
+        })
+
+        if (index === -1) {
+          index = navSections.length - 1
+        } else if (index > 0) {
+          index--
+        }
+        return index
+      },
+
+      // active nav
+      activeNav() {
+        // pc
+        this.activateNavByIndex(pcTocContainer, this.getActiveIndex(this.pcTocNavSections))
+
+        // tablet
+        this.activateNavByIndex(tabletTocContainer, this.getActiveIndex(this.tabletTocNavSections))
+      },
+
+      // register TOC Nav
+      registerTocNav() {
+        const register = (tocContainer) => {
+          return [...tocContainer.querySelectorAll('.post-toc li a.nav-link')].map((element) => {
+            const target = document.getElementById(
+              decodeURI(element.getAttribute('href')).replace('#', '')
+            )
+            KEEP.utils.title2Top4HTag(element, target, 500)
+            return target
+          })
+        }
+        // pc
+        this.pcTocNavSections = register(pcTocContainer)
+
+        // tablet
+        this.tabletTocNavSections = register(tabletTocContainer)
+      },
+
+      activateNavByIndex(tocContainer, index) {
+        const target = tocContainer.querySelectorAll('.post-toc li a.nav-link')[index]
+        if (!target || target.classList.contains('active-current')) return
+
+        tocContainer.querySelectorAll('.post-toc .active').forEach((element) => {
+          element.classList.remove('active', 'active-current')
+        })
+        target.classList.add('active', 'active-current')
+        let parent = target.parentNode
+        while (!parent.matches('.post-toc')) {
+          if (parent.matches('li')) parent.classList.add('active')
+          parent = parent.parentNode
+        }
+        // Scrolling to center active TOC element if TOC content is taller than viewport.
+        const tocElement = tocContainer.querySelector('.post-toc-wrap')
+        window.anime({
+          targets: tocElement,
+          duration: 200,
+          easing: 'linear',
+          scrollTop:
+            tocElement.scrollTop -
+            tocElement.offsetHeight / 2 +
+            target.getBoundingClientRect().top -
+            tocElement.getBoundingClientRect().top
+        })
+      },
+
+      handleShowWhenHasToc() {
+        const openHandle = () => {
+          const styleStatus = KEEP.getStyleStatus()
+          const key = 'isShowToc'
+          if (styleStatus && styleStatus.hasOwnProperty(key)) {
+            KEEP.utils.postHelper.hasToc(styleStatus[key])
+          } else {
+            KEEP.utils.postHelper.hasToc(true)
+          }
+        }
+
+        const initOpenKey = 'init_open'
+
+        if (KEEP.theme_config.toc.hasOwnProperty(initOpenKey)) {
+          KEEP.theme_config.toc[initOpenKey] ? openHandle() : KEEP.utils.postHelper.hasToc(false)
+        } else {
+          openHandle()
+        }
+      }
+    }
+    KEEP.utils.tocHelper.handleShowWhenHasToc()
+    KEEP.utils.tocHelper.registerTocNav()
+  } else {
+    pcTocContainer && postPageContainer.removeChild(pcTocContainer)
+    if (tabletTocContainer) {
+      pageContainer.removeChild(document.querySelector('.tablet-post-toc-mask'))
+    }
+  }
+}
+
+if (KEEP.theme_config?.pjax?.enable === true && KEEP.utils) {
+  KEEP.initTOC()
+} else {
+  window.addEventListener('DOMContentLoaded', KEEP.initTOC)
+}
