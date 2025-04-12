@@ -334,20 +334,6 @@
   </url>
   
   <url>
-    <loc>https://eupho.me/tags/%E8%A7%A3%E8%B0%9C/</loc>
-    <lastmod>2025-04-12</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://eupho.me/tags/Game/</loc>
-    <lastmod>2025-04-12</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://eupho.me/tags/Computation/</loc>
     <lastmod>2025-04-12</lastmod>
     <changefreq>weekly</changefreq>
@@ -356,6 +342,20 @@
   
   <url>
     <loc>https://eupho.me/tags/%E5%8A%A8%E7%94%BB%E8%AF%84%E8%AE%BA/</loc>
+    <lastmod>2025-04-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://eupho.me/tags/%E8%A7%A3%E8%B0%9C/</loc>
+    <lastmod>2025-04-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://eupho.me/tags/Game/</loc>
     <lastmod>2025-04-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
