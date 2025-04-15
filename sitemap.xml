@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://eupho.me/399aad7.html</loc>
+    
+    <lastmod>2025-04-15</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://eupho.me/ec96c261.html</loc>
     
     <lastmod>2025-04-15</lastmod>
@@ -330,6 +339,13 @@
   
   <url>
     <loc>https://eupho.me/tags/Reverse/</loc>
+    <lastmod>2025-04-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://eupho.me/tags/%E6%B5%81%E5%AF%86%E7%A0%81/</loc>
     <lastmod>2025-04-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
