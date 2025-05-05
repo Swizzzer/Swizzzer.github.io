@@ -9,7 +9,7 @@
     
     <title>
         
-            Compile gmp-ecm on macOS |
+            校赛平台运维杂记 |
         
         Swizzer&#39;s euphonium
     </title>
@@ -268,7 +268,7 @@
             <div class="post-content-bottom border-box">
                 
                     <div class="post-title">
-                        Compile gmp-ecm on macOS
+                        校赛平台运维杂记
                     </div>
                 
 
@@ -294,13 +294,13 @@
         
             <span class="meta-info-item post-create-date">
                 <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
-                <span class="datetime">2024-11-01 18:05:36</span>
+                <span class="datetime">2025-05-05 15:43:02</span>
             </span>
 
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Fri Nov 01 2024 18:05:36 GMT+0800">2024-11-01 18:05:36</span>
+                    <span class="datetime" data-updated="Mon May 05 2025 16:51:31 GMT+0800">2025-05-05 16:51:31</span>
                 </span>
             
         
@@ -320,16 +320,25 @@
         
 
         
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%97%A5%E5%B8%B8/">日常</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
 
         
         
             <span class="meta-info-item post-wordcount">
-                <i class="icon fas fa-file-word"></i>&nbsp;<span>228 字</span>
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>1.5k 字</span>
             </span>
         
         
             <span class="meta-info-item post-min2read">
-                <i class="icon fas fa-clock"></i>&nbsp;<span>1 分钟</span>
+                <i class="icon fas fa-clock"></i>&nbsp;<span>5 分钟</span>
             </span>
         
         
@@ -351,28 +360,64 @@
                     
 
                     
-                         <p><a class="link" 
- target="_blank" rel="noopener" href="https://gitlab.inria.fr/zimmerma/ecm" >gmp-ecm<i class="fas fa-external-link-alt"></i></a>是一个实现了p-1,p+1等质数分解算法的工具,比起我自己手搓的脚本有着更高的效率,因此我决定编译它来使用.然而,repo里给的安装步骤少了些重要的前置步骤,这里记录下完整的编译安装过程.</p>
+                         <p>回顾一下我的一些铸币操作。</p>
 <span id="more"></span>
-<h2 id="macos上的包管理工具">0. macOS上的包管理工具</h2>
-<p>虽然nix广受好评,但是心智负担实在是太重.人生苦短,我用<a class="link" 
- target="_blank" rel="noopener" href="https://brew.sh" >Homebrew<i class="fas fa-external-link-alt"></i></a></p>
-<h2 id="安装依赖">1. 安装依赖</h2>
+<h2 id="缘起">缘起</h2>
+<p>HITsz使用的是<a class="link" 
+ target="_blank" rel="noopener" href="https://github.com/GZTimeWalker/GZCTF" >GZCTF<i class="fas fa-external-link-alt"></i></a>平台，之前采用最简单的docker单机部署的方式，跑在一台极其老旧的server上(e5-2680
+v4的CPU+128GB RAM+1T
+HDD)。这套配置对于校内赛来说其实多多少少够用，但是运行了一年之后，HDD的读写性能成为了显著的拖累——后台出题时build
+docker image的速度和选手做题时开启docker
+container的速度都非常慢，甚至一个简单的alpine linux
+container都需要5s才能开起来😮💨几个出题老登都表示受不了这种垃圾的体验，所以我决定着手迁移。</p>
+<h2 id="选机">选机</h2>
+<p>苦于刚刚起步，我们社团实在是没有太多资源。i春秋很久之前赞助的一批服务器还不知道在哪里吃灰，而CTF课程也尚在进行中，迁移速度是第一要务。所以我选择先把校赛平台捣鼓到手头现有的机器上（我的homelab）——一台R5
+5600+64GB RAM+2T SSD+4T
+HDD的机子。CPU核心数比起e5几乎砍了2/3，不过经过谨慎的压测，对于校内50人左右的比赛绰绰有余，CPU使用率最高不超过2%。就算未来结课赛时面向全校，规模扩大到200人左右，这个冗余也是相当富裕的。</p>
+<h2 id="迁移平台数据">迁移平台数据</h2>
+<p>这一步是最简单的，把<code>docker-compose.yml</code>里配置的data目录打包个tar传到新机器上就能无感迁移所有平台数据(用户、队伍、题面、题目本地附件等等)。平台上的题目并不多，所有数据加起来大概200MB左右，这一步没有什么困难。</p>
+<h2 id="迁移题目镜像">迁移题目镜像</h2>
+<p>出于反作弊需求，平台上大部分Crypto，1/4的Misc和Re，所有Web和Pwn题目，都是动态容器类型的。而docker
+images迁移就比较麻烦了，迁移时我想过以下几种可能：</p>
 <ul>
-<li>gmp lib:<code>brew install gmp</code></li>
-<li>libtool(如果不安装这个,configure脚本会有一行报错):<code>brew install libtool</code></li>
-<li>autoconf,用于生成configure脚本:<code>brew install autoconf</code></li>
+<li>自建docker registry，把images都pull上去</li>
+<li>直接dd打磁盘镜像，把裸数据从老机器上拖到新机器上</li>
+<li>docker image save保存images</li>
 </ul>
-<h2 id="编译安装">2. 编译安装</h2>
-<ul>
-<li>拖下来:<code>git clone https://gitlab.inria.fr/zimmerma/ecm.git</code></li>
-<li>进入:<code>cd ecm</code></li>
-<li>生成配置文件:<code>autoreconf -vi</code></li>
-<li>指定编译选项,记得指定gmp的路径:<code>./configure --with-gmp=&lt;gmp-dir&gt; --enable-openmp</code></li>
-<li>编译:<code>make</code></li>
-<li>以防万一check下先:<code>make check</code></li>
-<li>安装:<code>sudo make DESTDIR="/" install</code></li>
-</ul>
+<p>第一种选择很快就被我pass掉了，因为旧机器上跑的各种东西都老得要死(Linux
+kernel停留在4.5版本，docker更是不知何年月的造物)，走https的registry会在docker
+login时报错，不走https走http也会在某一步(我忘了)莫名其妙报错😆</p>
+<p>随后我选择了第三种做法，而这是一个非常错误的决定——我们的images实在是太多太大，批量save半小时后，整个系统都被文件I/O阻塞了🥲</p>
+<p>当我意识到这个问题时已经有两三位同学反馈校赛平台开不了题目容器了。果断Ctrl+C断掉，检查了一下磁盘占用，250G的磁盘已经用掉了98.4%。你可能会问，前面不是说1T吗？这就得不得不吐槽我校运维工程师的智慧——分区划了1T，逻辑卷只给了250G🤗</p>
+<blockquote>
+<p>所以说运维之前永远记得亲自做一遍基线检查，不要相信其他人的任何说法</p>
+</blockquote>
+<p>调整逻辑卷大小后重新docker image
+save，执行1h后仍未完成。同时，校赛平台也遇到了更严重的问题——不只是开不了题目容器，平台甚至都访问不了了。随后不久，我的ssh连接也断了，并且无法重连...</p>
+<p>走到这一步只能说我实在是高估了古董CPU的算力，也算是重大运维事故了。冷静几分钟后，我决定先搭起来一个最小可用的环境，至少，先保证课上所用题目是可访问的。至于之前几次比赛的留档和常态化训练题目，都可以先放一放。</p>
+<p>好在课上只有Crypto和Pwn合计二十多道题目用到了动态容器，得益于题目仓库结构，用bash脚本很容易自动化地从头构建所有docker
+images——只不过平台后端的题目信息都得重新手敲一遍了。</p>
+<p>抢救大约20min，课上用的题目全部恢复。</p>
+<h2 id="手欠引起的惨案">手欠引起的惨案</h2>
+<p>虽然homelab足足有6T的空间，但我还是抱着葛朗台的心理能省则省。所以某天深夜当我看到Timeshift快照占用了100G+时，我鬼使神差地删了所有快照，然后去到了<code>/run/timeshift</code>下面来了个<code>sudo rm -rf ./*</code></p>
+<p>然后根目录下面的文件就遭殃了（</p>
+<p>但是根目录文件为什么遭殃？我猜是因为Timeshift把根目录挂载到了这里</p>
+<blockquote>
+<p>所以说大半夜真不能随便搞高危操作😇</p>
+</blockquote>
+<p>总之15s后我意识到了不对劲，但为时已晚，Ctrl+C，kernel
+panic，之后homelab就彻彻底底地死了💀</p>
+<p>不过好在半夜4点没人做题，所以进入LiveCD重装一下内核和受波及的几十个包就恢复了</p>
+<h2 id="林林总总">林林总总</h2>
+<p>趁着迁移顺便也升级了GZCTF的版本，新版本界面还是好看不少的，还能自定义logo，好评~</p>
+<p>迁移之后发现我校局域网内的所有有线设备其实都没有隔离，10.249.0.0/16中任意IP的任意端口都能访问到，比起西电需要WebSocket转发幸福不少🥰</p>
+<blockquote>
+<p>所以为什么之前的校赛平台要去网络中心特地申请一个端口映射？</p>
+</blockquote>
+<p>之前不少题目的Dockerfile写得非常烂污，迁移之后顺手做了些裁剪，单就Crypto方向而言，占用空间压缩到了原来的1/10。过几天压力一下其他方向也优化自己的Dockerfile，不能再随便把奇奇怪怪的东西塞进我的homelab了😡</p>
+<p>结课赛如果面向全校的话，反作弊是重中之重。听说ret2shell(回归终端)的反作弊上限更高一些，也许会考虑问<a
+target="_blank" rel="noopener" href="https://github.com/Reverier-Xu"><span class="citation"
+data-cites="Reverier-Xu">@Reverier-Xu</span></a>要一份来部署试试看？</p>
 
                     
                 </div>
@@ -383,11 +428,11 @@
     <div class="copyright-info-content border-box">
         <div class="copyright-info-top border-box">
             <div class="copyright-post-title border-box text-ellipsis">
-                Compile gmp-ecm on macOS
+                校赛平台运维杂记
             </div>
 
             <div class="copyright-post-link border-box text-ellipsis">
-                6cbf80c.html
+                84e3dc4f.html
             </div>
         </div>
 
@@ -403,7 +448,7 @@
                 <div class="type">
                     发布于
                 </div>
-                <div class="content">2024-11-01 18:05</div>
+                <div class="content">2025-05-05 15:43</div>
             </div>
 
 
@@ -435,6 +480,14 @@
 
                 <div class="post-bottom-tags-and-share border-box">
                     <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%97%A5%E5%B8%B8/">日常</a>
+                                    </li>
+                                
+                            </ul>
                         
                     </div>
                     <div>
@@ -470,31 +523,15 @@
                 
                     <div class="post-nav border-box">
                         
-                            <div class="prev-post">
-                                <a class="prev"
-                                   rel="prev"
-                                   href="/b156821.html"
-                                   title="切换到Linux工作环境"
-                                >
-                                    <span class="left arrow-icon flex-center">
-                                        <i class="fas fa-chevron-left"></i>
-                                    </span>
-                                    <span class="title flex-center">
-                                        <span class="post-nav-title-item text-ellipsis">切换到Linux工作环境</span>
-                                        <span class="post-nav-item">上一篇</span>
-                                    </span>
-                                </a>
-                            </div>
-                        
                         
                             <div class="next-post">
                                 <a class="next"
                                    rel="next"
-                                   href="/80b6c266.html"
-                                   title="2024 Lilac 405杯 Crypto Writeup"
+                                   href="/399aad7.html"
+                                   title="LFSR Note2-一些代数攻击"
                                 >
                                     <span class="title flex-center">
-                                        <span class="post-nav-title-item text-ellipsis">2024 Lilac 405杯 Crypto Writeup</span>
+                                        <span class="post-nav-title-item text-ellipsis">LFSR Note2-一些代数攻击</span>
                                         <span class="post-nav-item">下一篇</span>
                                     </span>
                                     <span class="right arrow-icon flex-center">
@@ -522,7 +559,7 @@
             <div class="pc-post-toc right-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#macos%E4%B8%8A%E7%9A%84%E5%8C%85%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7"><span class="nav-text">0. macOS上的包管理工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96"><span class="nav-text">1. 安装依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85"><span class="nav-text">2. 编译安装</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%98%E8%B5%B7"><span class="nav-text">缘起</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%89%E6%9C%BA"><span class="nav-text">选机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%81%E7%A7%BB%E5%B9%B3%E5%8F%B0%E6%95%B0%E6%8D%AE"><span class="nav-text">迁移平台数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%81%E7%A7%BB%E9%A2%98%E7%9B%AE%E9%95%9C%E5%83%8F"><span class="nav-text">迁移题目镜像</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%8B%E6%AC%A0%E5%BC%95%E8%B5%B7%E7%9A%84%E6%83%A8%E6%A1%88"><span class="nav-text">手欠引起的惨案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%97%E6%9E%97%E6%80%BB%E6%80%BB"><span class="nav-text">林林总总</span></a></li></ol>
     </div>
 </div>
 
@@ -700,7 +737,7 @@
             <div class="tablet-post-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#macos%E4%B8%8A%E7%9A%84%E5%8C%85%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7"><span class="nav-text">0. macOS上的包管理工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96"><span class="nav-text">1. 安装依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85"><span class="nav-text">2. 编译安装</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%98%E8%B5%B7"><span class="nav-text">缘起</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%89%E6%9C%BA"><span class="nav-text">选机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%81%E7%A7%BB%E5%B9%B3%E5%8F%B0%E6%95%B0%E6%8D%AE"><span class="nav-text">迁移平台数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%81%E7%A7%BB%E9%A2%98%E7%9B%AE%E9%95%9C%E5%83%8F"><span class="nav-text">迁移题目镜像</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%8B%E6%AC%A0%E5%BC%95%E8%B5%B7%E7%9A%84%E6%83%A8%E6%A1%88"><span class="nav-text">手欠引起的惨案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%97%E6%9E%97%E6%80%BB%E6%80%BB"><span class="nav-text">林林总总</span></a></li></ol>
     </div>
 </div>
 
