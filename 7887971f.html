@@ -9,7 +9,7 @@
     
     <title>
         
-            切换到Linux工作环境 |
+            flatter里的潜在bug |
         
         Swizzer&#39;s euphonium
     </title>
@@ -268,7 +268,7 @@
             <div class="post-content-bottom border-box">
                 
                     <div class="post-title">
-                        切换到Linux工作环境
+                        flatter里的潜在bug
                     </div>
                 
 
@@ -294,13 +294,13 @@
         
             <span class="meta-info-item post-create-date">
                 <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
-                <span class="datetime">2024-11-15 02:24:41</span>
+                <span class="datetime">2025-05-07 16:36:04</span>
             </span>
 
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Wed May 07 2025 17:32:16 GMT+0800">2025-05-07 17:32:16</span>
+                    <span class="datetime" data-updated="Wed May 07 2025 17:31:32 GMT+0800">2025-05-07 17:31:32</span>
                 </span>
             
         
@@ -323,9 +323,6 @@
                             <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a></li>
                         
                     
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Linux/">Linux</a></li>
-                        
-                    
                 </ul>
             </span>
         
@@ -333,12 +330,12 @@
         
         
             <span class="meta-info-item post-wordcount">
-                <i class="icon fas fa-file-word"></i>&nbsp;<span>811 字</span>
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>1.6k 字</span>
             </span>
         
         
             <span class="meta-info-item post-min2read">
-                <i class="icon fas fa-clock"></i>&nbsp;<span>3 分钟</span>
+                <i class="icon fas fa-clock"></i>&nbsp;<span>7 分钟</span>
             </span>
         
         
@@ -360,54 +357,89 @@
                     
 
                     
-                         <figure>
+                         <p>前几天看了TGCTF的一道RSA，顺带发现了flatter的某些bug😢</p>
+<span id="more"></span>
+<p>题目是基于512bit素数p,q的RSA，给出其中的低256位，要求分解n求解明文。明显是打CopperSmith，只不过界压得非常紧。当然，原题写的比较Misc，p和q在生成时额外给了些低位的信息。</p>
+<blockquote>
+<p>不过其实根本不需要那些信息就能做XD</p>
+</blockquote>
+<p>思路就是朴实无华地爆破p的MSB，这样在CopperSmith时使用的格就会小一点，再把CopperSmith里的LLL换成flatter加速一下，就有机会在可接受时间内求解了。(当然，事后我才知道这个想法在WACON
+CTF 2023里已经出现过了)</p>
+<blockquote>
+<p>exp</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> sage.<span class="built_in">all</span> <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> re <span class="keyword">import</span> findall</span><br><span class="line"><span class="keyword">from</span> subprocess <span class="keyword">import</span> check_output, CalledProcessError</span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line">n = ...</span><br><span class="line">c = ...</span><br><span class="line">p_lb = ...</span><br><span class="line">PR = PolynomialRing(Zmod(n), <span class="string">&quot;x&quot;</span>)</span><br><span class="line">x = PR.gen()</span><br><span class="line">f = x*<span class="number">2</span>**<span class="number">256</span> + p_lb</span><br><span class="line">f = f.monic()</span><br><span class="line">count = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">flatter</span>(<span class="params">M</span>):</span><br><span class="line">    <span class="keyword">global</span> count</span><br><span class="line">    <span class="comment"># compile https://github.com/keeganryan/flatter and put it in $PATH</span></span><br><span class="line">    z = <span class="string">&quot;[[&quot;</span> + <span class="string">&quot;]\n[&quot;</span>.join(<span class="string">&quot; &quot;</span>.join(<span class="built_in">map</span>(<span class="built_in">str</span>, row)) <span class="keyword">for</span> row <span class="keyword">in</span> M) + <span class="string">&quot;]]&quot;</span></span><br><span class="line">    ret = check_output([<span class="string">&quot;flatter&quot;</span>], <span class="built_in">input</span>=z.encode())</span><br><span class="line">    <span class="keyword">return</span> matrix(M.nrows(), M.ncols(), <span class="built_in">map</span>(<span class="built_in">int</span>, findall(<span class="string">b&quot;-?\\d+&quot;</span>, ret)))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">small_roots</span>(<span class="params">self, X=<span class="literal">None</span>, beta=<span class="number">1.0</span>, epsilon=<span class="literal">None</span>, **kwds</span>):</span><br><span class="line">    <span class="keyword">from</span> sage.misc.verbose <span class="keyword">import</span> verbose</span><br><span class="line">    <span class="keyword">from</span> sage.matrix.constructor <span class="keyword">import</span> Matrix</span><br><span class="line">    <span class="keyword">from</span> sage.rings.real_mpfr <span class="keyword">import</span> RR</span><br><span class="line"></span><br><span class="line">    N = self.parent().characteristic()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> self.is_monic():</span><br><span class="line">        <span class="keyword">raise</span> ArithmeticError(<span class="string">&quot;Polynomial must be monic.&quot;</span>)</span><br><span class="line"></span><br><span class="line">    beta = RR(beta)</span><br><span class="line">    <span class="keyword">if</span> beta &lt;= <span class="number">0.0</span> <span class="keyword">or</span> beta &gt; <span class="number">1.0</span>:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">&quot;0.0 &lt; beta &lt;= 1.0 not satisfied.&quot;</span>)</span><br><span class="line"></span><br><span class="line">    f = self.change_ring(ZZ)</span><br><span class="line"></span><br><span class="line">    P, (x,) = f.parent().objgens()</span><br><span class="line"></span><br><span class="line">    delta = f.degree()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> epsilon <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        epsilon = beta / <span class="number">8</span></span><br><span class="line">    verbose(<span class="string">&quot;epsilon = %f&quot;</span> % epsilon, level=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    m = <span class="built_in">max</span>(beta**<span class="number">2</span> / (delta * epsilon), <span class="number">7</span> * beta / delta).ceil()</span><br><span class="line">    verbose(<span class="string">&quot;m = %d&quot;</span> % m, level=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    t = <span class="built_in">int</span>((delta * m * (<span class="number">1</span> / beta - <span class="number">1</span>)).floor())</span><br><span class="line">    verbose(<span class="string">&quot;t = %d&quot;</span> % t, level=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> X <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        X = (<span class="number">0.5</span> * N ** (beta**<span class="number">2</span> / delta - epsilon)).ceil()</span><br><span class="line">    verbose(<span class="string">&quot;X = %s&quot;</span> % X, level=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># we could do this much faster, but this is a cheap step</span></span><br><span class="line">    <span class="comment"># compared to LLL</span></span><br><span class="line">    g = [x**j * N ** (m - i) * f**i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(m) <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(delta)]</span><br><span class="line">    g.extend([x**i * f**m <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(t)])  <span class="comment"># h</span></span><br><span class="line"></span><br><span class="line">    B = Matrix(ZZ, <span class="built_in">len</span>(g), delta * m + <span class="built_in">max</span>(delta, t))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(B.nrows()):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(g[i].degree() + <span class="number">1</span>):</span><br><span class="line">            B[i, j] = g[i][j] * X**j</span><br><span class="line"></span><br><span class="line">    B = flatter(B)</span><br><span class="line">    <span class="comment"># B = B.LLL(**kwds)</span></span><br><span class="line"></span><br><span class="line">    f = <span class="built_in">sum</span>([ZZ(B[<span class="number">0</span>, i] // X**i) * x**i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(B.ncols())])</span><br><span class="line">    R = f.roots()</span><br><span class="line"></span><br><span class="line">    ZmodN = self.base_ring()</span><br><span class="line">    roots = <span class="built_in">set</span>([ZmodN(r) <span class="keyword">for</span> r, m <span class="keyword">in</span> R <span class="keyword">if</span> <span class="built_in">abs</span>(r) &lt;= X])</span><br><span class="line">    Nbeta = N**beta</span><br><span class="line">    <span class="keyword">return</span> [root <span class="keyword">for</span> root <span class="keyword">in</span> roots <span class="keyword">if</span> N.gcd(ZZ(self(root))) &gt;= Nbeta]</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">copp_factor</span>(<span class="params">leak=<span class="number">6</span></span>):</span><br><span class="line">    <span class="keyword">for</span> hb <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span> &lt;&lt; leak):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;copp&quot;</span>, hb, <span class="built_in">int</span>(time.time()))</span><br><span class="line">        shift = <span class="number">512</span> - leak</span><br><span class="line">        P = Zmod(n)[<span class="string">&quot;x&quot;</span>]</span><br><span class="line">        x = P.gen()</span><br><span class="line">        f = p_lb + (hb &lt;&lt; shift) + x*<span class="number">2</span>**<span class="number">256</span></span><br><span class="line">        f = f.monic()</span><br><span class="line">        X = <span class="number">2</span> ** (<span class="number">256</span> - leak)</span><br><span class="line">        beta = <span class="number">0.499</span></span><br><span class="line">        eps = <span class="number">0.01</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            rs = small_roots(f, X=X, beta=beta, epsilon=eps)</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(rs):</span><br><span class="line">                <span class="keyword">return</span> p_lb + (hb &lt;&lt; shift) + <span class="built_in">int</span>(rs[<span class="number">0</span>])*<span class="number">2</span>**<span class="number">256</span></span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;flatter blowed up...&quot;</span>)</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"><span class="built_in">print</span>(copp_factor())</span><br></pre></td></tr></table></figure>
+<p>一切看起来都很美好，但是这段代码在Mac上跑的时候就会出问题🤧</p>
+<figure>
 <img  
                        lazyload
                        alt="image"
-                       data-src="../assets/screen_shot_.png"
-                        alt="I use Arch btw :)" 
+                       data-src="../assets/7a7c470c3b161e943333fdbd40042af4.png"
+                       
+alt="blow up~" 
                  >
-<figcaption aria-hidden="true">I use Arch btw :)</figcaption>
+<figcaption aria-hidden="true">blow up~</figcaption>
 </figure>
-<span id="more"></span>
-<p>之前虽然是双持设备Windows+macOS,但工作环境几乎全在macOS侧。这次因为打算卖掉旧的Macbook备战新款M4
-Pro Macbook,所以打算把工作流迁移到另一台设备.</p>
-<h2 id="系统准备">系统准备</h2>
-<p>切换到Windows显然是不可接受的,毕竟身为一个密码人,有太多环境是Unix系独占的,而且我和WSL
-2之前有过一段不愉快的经历(指给校赛出的一道逆向题在WSL
-2上运行时会莫名其妙地跑飞)。
-所以,先在Windows设备上装个双系统.手头的这台Redmibook
-14提供了一个额外的M.2
-2242硬盘位,我加装了一块1T的SSD专门用于安装Linux</p>
-<p>在众多Linux发行版中,Arch,Fedora和Nix提供的Sagemath包比较新,所以首先考虑这几个。作为一个乐于折腾的人,果然还是要选择Arch
-Linux!</p>
-<p>安装过程没什么可说的,跟着<a class="link" 
- target="_blank" rel="noopener" href="https://arch.icekylin.online/guide/rookie/basic-install.html" >指南<i class="fas fa-external-link-alt"></i></a>走就好,遇到问题了也有详尽的ArchWiki可供查阅.</p>
-<p>不过我在安装时没有严格遵循以上网站的分区策略XD(毕竟它没有完全利用上Btrfs的优势),而是把整个磁盘划一个分区,然后<code>/</code>,<code>/home</code>,<code>/swap</code>,<code>/var/cache</code>和<code>/var/log</code>目录各自用btrfs建立一个
-subvolume,安装时一个个单独挂载到<code>/mnt</code>.这样做的好处是可以不同subvolume制定不同的策略,比如,<code>/swap</code>可以关闭CoW,<code>/home</code>可以开启压缩</p>
-<h2 id="软件安装">软件安装</h2>
-<h3 id="gui和小工具">GUI和小工具</h3>
-<p>KDE,Gnome之类的早该入土了😡还得是Hyprland自己从头配置才美观轻巧!</p>
-<p>先整个paru用来安装AUR包,然后一把梭:</p>
-<p><code>paru -S kitty waybar otf-font-awesome network-manager-applet brightnessctl pw-volume hyprshot tlp tlp-rdw tlpui tofi hyprpaper swayidle swaylock-effects-git wlogout mako cliphist pipewire pipewire-pulse wireplumber pavucontrol xorg xorg-xwayland xdg-desktop-portal-hyprland xdg-desktop-portal-gtk polkit-kde-agent qt5-wayland qt6-wayland qt5ct qt6ct nwg-look udiskie greetd greetd-tuigreet chezmoi fcitx5-im fcitx5-chewing fcitx5-qt fcitx5-gtk fcitx5-chinese-addons fcitx5-rime rime-ice</code></p>
-<p>然后是<a class="link" 
- target="_blank" rel="noopener" href="https://github.com/Swizzzer/my-dotfiles" >我的软件配置<i class="fas fa-external-link-alt"></i></a></p>
-<p>greetd默认的登录界面太朴素了,这里稍微把它修改得简约而不简单:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># /etc/greetd/config.toml</span><br><span class="line">[default_session]</span><br><span class="line">command = &quot;tuigreet --time --asterisks --remember --cmd Hyprland&quot;</span><br></pre></td></tr></table></figure>
-<h3 id="sagemath">Sagemath!</h3>
-<p>非常简单,直接<code>paru -S sagemath python-pycryptodome python-pwntools</code></p>
-<h3 id="misc人的自我修养">Misc人的自我修养</h3>
-<p><code>paru -S zsteg jdk qsstv</code></p>
-<p>其实还整了个Wine打算运行exe,想着可能运行个IDA搞搞简单的逆向,但是转念一想反正都双系统了为什么还要再套层转译白费力气呢XD</p>
-<h3 id="crypto人的自我修养">Crypto人的自我修养</h3>
-<p><code>paru -S m4ri gmp-ecm flatter-git cado-nfs-git</code></p>
-<p>相较于macOS需要手动编译，AUR它给的实在是太多了.jpg——flatter,cado-nfs和gmp-ecm都可以直接从AUR安装,而之前这几个工具我分别需要在实体机和两个独立的docker里分别运行QAQ</p>
-<p>唯一的遗憾是Ultra 5 125H的性能有点弱鸡,比起卖掉的M3 Max Macbook
-(即使是M3 Max套一层Rosetta 2运行x86ArchLinux docker
-image之上的Sagemath,在大部分赛题上的性能表现也比Ultra 5
-125H强45%左右...) 就已经落后不少,如果未来购入M4
-Pro的话差距只会更大...</p>
-<p>所以,未来估计还会把工作环境切回Macbook吧.</p>
+<p>当然最终不影响解出原题，不过flatter跑飞这件事还是有点奇怪。报错也是最经典的segfault，怎么办呢？</p>
+<h2 id="着手复现">着手复现</h2>
+<p>运行以上exp就会知道这玩意儿不能很稳定地复现，每次都有概率在不同的轮次炸掉。换个环境看看呢？如果是在Linux上，就不会有任何问题：</p>
+<figure>
+<img  
+                       lazyload
+                       alt="image"
+                       data-src="../assets/image-25.png"
+                        alt="Arch伟大，无需多言" 
+                 >
+<figcaption aria-hidden="true">Arch伟大，无需多言</figcaption>
+</figure>
+<p>如果在Mac上跑个x86_64的Linux
+docker，里面再跑flatter，同样也没有任何问题。</p>
+<p>选择炸掉的某一轮打印出来相应的矩阵，手动输入flatter看看：</p>
+<figure>
+<img  
+                       lazyload
+                       alt="image"
+                       data-src="../assets/e38df5e3a7ce1bb502034526af0ec2e5.png"
+                       
+alt="很是不幸" 
+                 >
+<figcaption aria-hidden="true">很是不幸</figcaption>
+</figure>
+<p>甚至立马就炸了🤣多执行几次会发现炸掉的概率在1/10左右</p>
+<p>总之，姑且是有个最小可复现的输入了。</p>
+<h2 id="尝试解决">尝试解决</h2>
+<h3 id="sleep1">sleep(1)😆</h3>
+<p>我的第一直觉是，这玩意儿大概率跟系统进程/线程调度有关系，并且八成是多线程的锅。最简单的降低并发的办法就是每次调用flatter之后sleep一下。一轮flatter大概要十几秒，我选择每轮调用后sleep(1)。不幸的是，这样还是会随机地炸掉。</p>
+<h3 id="ascan">AScan😊</h3>
+<p>至少我们得搞清segfault的时候发生了什么。编译flatter时加入<code>-fsanitize=address -g</code>选项：</p>
+<figure>
+<img  
+                       lazyload
+                       alt="image"
+                       data-src="../assets/74f2299fe3266e1203a8e36a55962f53.png"
+                       
+alt="log一下" 
+                 >
+<figcaption aria-hidden="true">log一下</figcaption>
+</figure>
+<p>八九不离十就是线程并发的问题了。在<a
+target="_blank" rel="noopener" href="https://lov2.netlify.app"><span class="citation"
+data-cites="lov3">@lov3</span></a>师傅的帮助下，去源码里找到了对应的多线程实现，简单加了个互斥锁：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">diff --git a/src/problems/lattice_reduction/fplll_impl.cpp b/src/problems/lattice_reduction/fplll_impl.cpp</span><br><span class="line">index 237379b..aaa6e9c 100644</span><br><span class="line">--- a/src/problems/lattice_reduction/fplll_impl.cpp</span><br><span class="line">+++ b/src/problems/lattice_reduction/fplll_impl.cpp</span><br><span class="line">@@ -6,7 +6,7 @@ namespace flatter &#123;</span><br><span class="line"> namespace LatticeReductionImpl &#123;</span><br><span class="line"> </span><br><span class="line"> const std::string FPLLL::impl_name() &#123;return &quot;FPLLL&quot;;&#125;</span><br><span class="line">-</span><br><span class="line">+static std::mutex fplll_execution_mutex;</span><br><span class="line"> FPLLL::FPLLL(const LatticeReductionParams&amp; p, const ComputationContext&amp; cc) :</span><br><span class="line">     Base(p, cc)</span><br><span class="line"> &#123;</span><br><span class="line">@@ -65,7 +65,7 @@ void FPLLL::solve() &#123;</span><br><span class="line">     fplll::ZZ_mat&lt;mpz_t&gt; fplll_U;</span><br><span class="line">     fplll_U.gen_identity(n);</span><br><span class="line"> </span><br><span class="line">-</span><br><span class="line">+    std::lock_guard&lt;std::mutex&gt; lock(fplll_execution_mutex);</span><br><span class="line">     // Because of a bug in FPLLL, our code segfaults if parallelized enumeration</span><br><span class="line">     // is concurrently performed on more than one lattice. The following line</span><br><span class="line">     // disables parallelized enumeration.</span><br></pre></td></tr></table></figure>
+<p>重新编译运行，问题解决。</p>
+<h2 id="成因">成因?</h2>
+<p>总之先提了个<a class="link" 
+ target="_blank" rel="noopener" href="https://github.com/keeganryan/flatter/issues/25" >issue<i class="fas fa-external-link-alt"></i></a>，待续...</p>
+<p>lov3师傅猜测是fplll库并非线程安全的，但是我总觉得不止于此。毕竟，这个问题只在我的Mac上出现，而在我手头的Linux设备上都是正常的。除了操作系统的区别，还有一个最重要的区别是，Macbook的CPU是大小核设计，而我现有的Linux设备都是全大核的(如果是Mac上跑的Linux
+docker，其模拟出来的CPU在用户态程序眼里似乎也是全核相同的)。当然还有x86_64和ARM的架构区别，不过这就更难调试了。</p>
+<p>如果是fplll/flatter自身的问题而非操作系统调度的问题，如何解释该问题是Mac独占的呢？进一步来说，应该搞一个x86
+macOS以严格控制变量测试...</p>
+<p>以及，log里记录的thread 12
+crashed，这个线程是否就是跑在小核上的呢？</p>
+<h2 id="后日谈">后日谈</h2>
+<p>至少现在我在Mac上还是用着简单的加锁版flatter(虽然这玩意儿很大程度上影响了flatter的性能)。</p>
+<p>顺便，在一番测试后发现，flatter的并行线程数没必要开的很大——在R5
+5600x上用<code>export OMP_NUM_THREADS=8</code>控制在8线程，flatter的速度和12线程满载几乎完全一致；而在大小核设计的M芯片上，限制线程数则更为必要。M芯片的大小核设计，会导致flatter全核满载的速度受到小核拖累，反倒不如限制线程数保证全都跑在大核上来得更快。</p>
 
                     
                 </div>
@@ -418,11 +450,11 @@ Pro的话差距只会更大...</p>
     <div class="copyright-info-content border-box">
         <div class="copyright-info-top border-box">
             <div class="copyright-post-title border-box text-ellipsis">
-                切换到Linux工作环境
+                flatter里的潜在bug
             </div>
 
             <div class="copyright-post-link border-box text-ellipsis">
-                b156821.html
+                7887971f.html
             </div>
         </div>
 
@@ -438,7 +470,7 @@ Pro的话差距只会更大...</p>
                 <div class="type">
                     发布于
                 </div>
-                <div class="content">2024-11-15 02:24</div>
+                <div class="content">2025-05-07 16:36</div>
             </div>
 
 
@@ -477,10 +509,6 @@ Pro的话差距只会更大...</p>
                                         <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
                                     </li>
                                 
-                                    <li class="tag-item border-box">
-                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Linux/">Linux</a>
-                                    </li>
-                                
                             </ul>
                         
                     </div>
@@ -517,31 +545,15 @@ Pro的话差距只会更大...</p>
                 
                     <div class="post-nav border-box">
                         
-                            <div class="prev-post">
-                                <a class="prev"
-                                   rel="prev"
-                                   href="/c4610b76.html"
-                                   title="RSA LSB Oracle Attack"
-                                >
-                                    <span class="left arrow-icon flex-center">
-                                        <i class="fas fa-chevron-left"></i>
-                                    </span>
-                                    <span class="title flex-center">
-                                        <span class="post-nav-title-item text-ellipsis">RSA LSB Oracle Attack</span>
-                                        <span class="post-nav-item">上一篇</span>
-                                    </span>
-                                </a>
-                            </div>
-                        
                         
                             <div class="next-post">
                                 <a class="next"
                                    rel="next"
-                                   href="/6cbf80c.html"
-                                   title="Compile gmp-ecm on macOS"
+                                   href="/84e3dc4f.html"
+                                   title="校赛平台运维杂记"
                                 >
                                     <span class="title flex-center">
-                                        <span class="post-nav-title-item text-ellipsis">Compile gmp-ecm on macOS</span>
+                                        <span class="post-nav-title-item text-ellipsis">校赛平台运维杂记</span>
                                         <span class="post-nav-item">下一篇</span>
                                     </span>
                                     <span class="right arrow-icon flex-center">
@@ -569,7 +581,7 @@ Pro的话差距只会更大...</p>
             <div class="pc-post-toc right-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E5%87%86%E5%A4%87"><span class="nav-text">系统准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="nav-text">软件安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#gui%E5%92%8C%E5%B0%8F%E5%B7%A5%E5%85%B7"><span class="nav-text">GUI和小工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sagemath"><span class="nav-text">Sagemath!</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#misc%E4%BA%BA%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB"><span class="nav-text">Misc人的自我修养</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#crypto%E4%BA%BA%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB"><span class="nav-text">Crypto人的自我修养</span></a></li></ol></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9D%80%E6%89%8B%E5%A4%8D%E7%8E%B0"><span class="nav-text">着手复现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%9D%E8%AF%95%E8%A7%A3%E5%86%B3"><span class="nav-text">尝试解决</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sleep1"><span class="nav-text">sleep(1)😆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ascan"><span class="nav-text">AScan😊</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%90%E5%9B%A0"><span class="nav-text">成因?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E6%97%A5%E8%B0%88"><span class="nav-text">后日谈</span></a></li></ol>
     </div>
 </div>
 
@@ -747,7 +759,7 @@ Pro的话差距只会更大...</p>
             <div class="tablet-post-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E5%87%86%E5%A4%87"><span class="nav-text">系统准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="nav-text">软件安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#gui%E5%92%8C%E5%B0%8F%E5%B7%A5%E5%85%B7"><span class="nav-text">GUI和小工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sagemath"><span class="nav-text">Sagemath!</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#misc%E4%BA%BA%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB"><span class="nav-text">Misc人的自我修养</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#crypto%E4%BA%BA%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB"><span class="nav-text">Crypto人的自我修养</span></a></li></ol></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9D%80%E6%89%8B%E5%A4%8D%E7%8E%B0"><span class="nav-text">着手复现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%9D%E8%AF%95%E8%A7%A3%E5%86%B3"><span class="nav-text">尝试解决</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sleep1"><span class="nav-text">sleep(1)😆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ascan"><span class="nav-text">AScan😊</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%90%E5%9B%A0"><span class="nav-text">成因?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E6%97%A5%E8%B0%88"><span class="nav-text">后日谈</span></a></li></ol>
     </div>
 </div>
 
