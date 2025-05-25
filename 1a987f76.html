@@ -9,7 +9,7 @@
     
     <title>
         
-            flatter里的潜在bug |
+            2025 HITsz CTF 赛后记录 |
         
         Swizzer&#39;s euphonium
     </title>
@@ -48,7 +48,119 @@
     KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
     KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
   </script>
-<meta name="generator" content="Hexo 6.3.0"></head>
+<meta name="generator" content="Hexo 6.3.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
 
 
 <body>
@@ -268,7 +380,7 @@
             <div class="post-content-bottom border-box">
                 
                     <div class="post-title">
-                        flatter里的潜在bug
+                        2025 HITsz CTF 赛后记录
                     </div>
                 
 
@@ -294,13 +406,13 @@
         
             <span class="meta-info-item post-create-date">
                 <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
-                <span class="datetime">2025-05-07 16:36:04</span>
+                <span class="datetime">2025-05-24 22:49:57</span>
             </span>
 
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Wed May 07 2025 20:41:06 GMT+0800">2025-05-07 20:41:06</span>
+                    <span class="datetime" data-updated="Mon May 26 2025 02:01:13 GMT+0800">2025-05-26 02:01:13</span>
                 </span>
             
         
@@ -320,7 +432,7 @@
             <span class="post-tag meta-info-item border-box">
                 <ul class="post-tag-ul">
                     
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a></li>
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/CTF/">CTF</a></li>
                         
                     
                 </ul>
@@ -330,12 +442,12 @@
         
         
             <span class="meta-info-item post-wordcount">
-                <i class="icon fas fa-file-word"></i>&nbsp;<span>1.6k 字</span>
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>3k 字</span>
             </span>
         
         
             <span class="meta-info-item post-min2read">
-                <i class="icon fas fa-clock"></i>&nbsp;<span>7 分钟</span>
+                <i class="icon fas fa-clock"></i>&nbsp;<span>10 分钟</span>
             </span>
         
         
@@ -357,96 +469,102 @@
                     
 
                     
-                         <p>前几天看了TGCTF的一道RSA，顺带发现了flatter的某些bug😢</p>
+                         <p>三两杂感。</p>
 <span id="more"></span>
-<p>题目是基于512bit素数p,q的RSA，给出p的低256位，要求分解n求解明文。明显是打CopperSmith，只不过界压得非常紧。当然，原题写的比较Misc，p和q在生成时额外给了些低位的信息。</p>
+<h2 id="缘起">缘起</h2>
+<p>CTF实践课是2023年以来HITsz开设的一门创新竞赛实验课程(全称太长我记不住，姑且叫CTF实践课吧)。自Del0n1x成军后，这门课的结课赛就一直由我们负责，从平台运维、赛题设置到赛事筹办、临场答疑，一手操办。当然，所谓的结课赛，其实就是以CTF形式呈现的类似期末测验的东西。前两年确实只是面向课内的"期末测验"，但今年的结课赛从单纯的面向课内学生变成了面向全校，名义上也从结课赛一跃而成为<code>HITsz CTF</code>。不过时间上还是老样子，只持续8h左右，比起正经的48h
+CTF还是差了不少。</p>
+<h2 id="赛前筹备">赛前筹备</h2>
+<h3 id="基础设施">基础设施</h3>
+<p><a href="https://eupho.me/84e3dc4f.html">之前</a>其实提到过一点，赛事平台在中途从摇摇欲坠的学校服务器搬迁到了我的homelab。其实homelab的64G内存就是在决定迁移后才额外买条子扩容的，原本homelab的内存只有32G而已。</p>
+<p>因为只有一台机子所以还是用<code>docker compose up</code>直接起了个GZCTF的demo，而没有选择k8s集群化部署。不知道是不是这个原因，在课程剩余的一个月时间中平台多次出现与<a class="link" target="_blank" rel="noopener" href="https://github.com/GZTimeWalker/GZCTF/issues/417">issues/417<i class="fas fa-external-link-alt"></i></a>类似的报错，一番排查也找不到原因——而且每当这个时候，切换一下GZCTF的版本就能缓解...所以最终的权宜之计就是每次报错就切一次版本🤣</p>
+<h3 id="题目设置">题目设置</h3>
+<p><a class="link" target="_blank" rel="noopener" href="https://pid-blog.com/article/course-contest-experiences">pid师傅有篇文章<i class="fas fa-external-link-alt"></i></a>写得很有参考价值。毫不夸张地说，这一个月来我都在反复咀嚼回味这篇文章。经历了去年Crypto方向惨痛的非预期教训，再加上今年我需要负责Misc+Crypto两个方向的所有命题工作(甚至还有1/3的Reverse题目)，所以题目质量被我提到了相当高的优先级。</p>
+<p>什么算好的题目呢？我的预想是，首先要与课程讲的内容有一定联系，不能让人家上了一学期之后发现考的东西跟讲的东西八竿子打不着，那样的话本课程又要差评如潮了；同时要保证解法/考察点足够的有趣，就算没有思路也可以在题目的引导下去探索把玩。当然，在此基础上还要保持合理的难度梯度，按pid的说法，50%的题目是大部分人花点时间就能解决的。当然我的选择更苛刻一点——50%的题目是头部选手花点时间能解决的；剩下的50%中的每一道题，即使头部选手花费一整天时间也不一定能解决。</p>
+<p>审慎地考虑许久，最终我决定拉低Misc方向整体的难度，目标是所有题目都有解；而Crypto方向则是2道简单题，预期7-8解；1道中等题，预期2-3解；以及3道难题，预期0解。其他方向不是我负责，不过基本也是跟Crypto类似的难度梯度。并且这次为了鼓励选手每道题都看看，所有题目的初始分值都是统一的，再也不会有"看到是高分题目所以很难干脆不做了"的情况出现了😋</p>
 <blockquote>
-<p>不过其实根本不需要那些信息就能做XD</p>
+<p>当然代价就是落后的队伍也很难通过一道难题翻盘了</p>
 </blockquote>
-<p>思路就是朴实无华地爆破p的MSB，这样在CopperSmith时使用的格就会小一点，再把CopperSmith里的LLL换成flatter加速一下，就有机会在可接受时间内求解了。(当然，事后我才知道这个想法在WACON
-CTF 2023里已经出现过了)</p>
+<p>明确目标后就是漫长的出题过程。Misc和Crypto前前后后施工了一个月有余，直到开赛前一晚还在缝缝补补；Reverse则是直接扔了两个很久之前出好的难题。最终，Misc上了1道签到题，1道DTMF隐写+TTS的音频套娃题，1道去年结课赛考过的工具查找题，1道zip明文攻击+LSB隐写的图片套娃题，1道PyJail，还有1道考察Visual
+Studio项目中.suo文件导致的RCE。Crypto则是偷了两道国外比赛的简单题(有注明作者！)，改编了课上的一个格密码例题作为中等题，改编了HITCONCTF和ACTF的两道题的非预期解，又自己出了道LFSR考察联结多项式，作为3个难题。</p>
+<p>除了CTF传统的几大方向，这次还设置了两道线下赛的实操题目作为彩蛋——一是复现Windows
+7
+x32下的永恒之蓝漏洞，一是破解实验室AP设备的WiFi密码。因为是实操，所以两道题的分值均是普通题目的两倍。</p>
+<figure>
+<img lazyload="" alt="废土风的靶机，这上面居然能跑Win7 x32" data-src="../assets/022346c78617331cced1f6aaa080135f.jpeg">
+<figcaption aria-hidden="true">废土风的靶机，这上面居然能跑Win7
+x32</figcaption>
+</figure>
+<p>林林总总32道题，<span class="math inline"><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0;" xmlns="http://www.w3.org/2000/svg" width="2.119ex" height="1.887ex" role="img" focusable="false" viewBox="0 -833.9 936.6 833.9"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="mn"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></g><g data-mml-node="mn" transform="translate(533,363) scale(0.707)"><path data-c="35" d="M164 157Q164 133 148 117T109 101H102Q148 22 224 22Q294 22 326 82Q345 115 345 210Q345 313 318 349Q292 382 260 382H254Q176 382 136 314Q132 307 129 306T114 304Q97 304 95 310Q93 314 93 485V614Q93 664 98 664Q100 666 102 666Q103 666 123 658T178 642T253 634Q324 634 389 662Q397 666 402 666Q410 666 410 648V635Q328 538 205 538Q174 538 149 544L139 546V374Q158 388 169 396T205 412T256 420Q337 420 393 355T449 201Q449 109 385 44T229 -22Q148 -22 99 32T50 154Q50 178 61 192T84 210T107 214Q132 214 148 197T164 157Z"></path></g></g></g></g></svg></mjx-container></span>是个好数字。我觉得大概率不会有队伍AK，如果有一支解题数大于10的队伍且没有爆零的队伍，就算成功。</p>
+<h3 id="宣传动员">宣传动员</h3>
+<p>比赛前一周队友写好了公众号推文，我在得知此事后花了半个晚上紧急糊了张海报出来，从而得以构建<code>公众号-年级群-QQ空间</code>的完整宣传矩阵。遗憾的是，我们的宣传效果微乎其微，最终公开赛道报名的几位还是去年选过课的ldx😔</p>
+<figure>
+<img lazyload="" alt="会有人想看我们的海报吗.jpg" data-src="../assets/比赛海报.png">
+<figcaption aria-hidden="true">会有人想看我们的海报吗.jpg</figcaption>
+</figure>
+<p>不过事后看来报名的选手质量相当之高，用质量换数量，倒也可以接受(才不是因为宣传工作不到位呢)</p>
+<h2 id="赛中战况">赛中战况</h2>
+<h3 id="上午">上午</h3>
+<p>开赛10min后，签到题的解题数量为0😢</p>
+<p>本来我预想中签到题应该是15min左右就被打穿的简单题，因为真的只需要BurpSuite抓包-修改-重放三步走，而Burp是Web课上讲的滚瓜烂熟的工具。但是赛中巡场才发现，很多人的设备上根本没有Burp，也没有意识到实验室设备上提供了Burp；少部分人想起来实验室电脑上有Burp，但是其中会用的人又是少数派。我意识到不对劲，迅速放出了签到题的提示，并且开始解答选手关于Burp使用的疑问。</p>
 <blockquote>
-<p>exp</p>
+<p>饶是不至于爆零</p>
 </blockquote>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> sage.<span class="built_in">all</span> <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> re <span class="keyword">import</span> findall</span><br><span class="line"><span class="keyword">from</span> subprocess <span class="keyword">import</span> check_output, CalledProcessError</span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line">n = ...</span><br><span class="line">c = ...</span><br><span class="line">p_lb = ...</span><br><span class="line">PR = PolynomialRing(Zmod(n), <span class="string">&quot;x&quot;</span>)</span><br><span class="line">x = PR.gen()</span><br><span class="line">f = x*<span class="number">2</span>**<span class="number">256</span> + p_lb</span><br><span class="line">f = f.monic()</span><br><span class="line">count = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">flatter</span>(<span class="params">M</span>):</span><br><span class="line">    <span class="keyword">global</span> count</span><br><span class="line">    <span class="comment"># compile https://github.com/keeganryan/flatter and put it in $PATH</span></span><br><span class="line">    z = <span class="string">&quot;[[&quot;</span> + <span class="string">&quot;]\n[&quot;</span>.join(<span class="string">&quot; &quot;</span>.join(<span class="built_in">map</span>(<span class="built_in">str</span>, row)) <span class="keyword">for</span> row <span class="keyword">in</span> M) + <span class="string">&quot;]]&quot;</span></span><br><span class="line">    ret = check_output([<span class="string">&quot;flatter&quot;</span>], <span class="built_in">input</span>=z.encode())</span><br><span class="line">    <span class="keyword">return</span> matrix(M.nrows(), M.ncols(), <span class="built_in">map</span>(<span class="built_in">int</span>, findall(<span class="string">b&quot;-?\\d+&quot;</span>, ret)))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">small_roots</span>(<span class="params">self, X=<span class="literal">None</span>, beta=<span class="number">1.0</span>, epsilon=<span class="literal">None</span>, **kwds</span>):</span><br><span class="line">    <span class="keyword">from</span> sage.misc.verbose <span class="keyword">import</span> verbose</span><br><span class="line">    <span class="keyword">from</span> sage.matrix.constructor <span class="keyword">import</span> Matrix</span><br><span class="line">    <span class="keyword">from</span> sage.rings.real_mpfr <span class="keyword">import</span> RR</span><br><span class="line"></span><br><span class="line">    N = self.parent().characteristic()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> self.is_monic():</span><br><span class="line">        <span class="keyword">raise</span> ArithmeticError(<span class="string">&quot;Polynomial must be monic.&quot;</span>)</span><br><span class="line"></span><br><span class="line">    beta = RR(beta)</span><br><span class="line">    <span class="keyword">if</span> beta &lt;= <span class="number">0.0</span> <span class="keyword">or</span> beta &gt; <span class="number">1.0</span>:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">&quot;0.0 &lt; beta &lt;= 1.0 not satisfied.&quot;</span>)</span><br><span class="line"></span><br><span class="line">    f = self.change_ring(ZZ)</span><br><span class="line"></span><br><span class="line">    P, (x,) = f.parent().objgens()</span><br><span class="line"></span><br><span class="line">    delta = f.degree()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> epsilon <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        epsilon = beta / <span class="number">8</span></span><br><span class="line">    verbose(<span class="string">&quot;epsilon = %f&quot;</span> % epsilon, level=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    m = <span class="built_in">max</span>(beta**<span class="number">2</span> / (delta * epsilon), <span class="number">7</span> * beta / delta).ceil()</span><br><span class="line">    verbose(<span class="string">&quot;m = %d&quot;</span> % m, level=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    t = <span class="built_in">int</span>((delta * m * (<span class="number">1</span> / beta - <span class="number">1</span>)).floor())</span><br><span class="line">    verbose(<span class="string">&quot;t = %d&quot;</span> % t, level=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> X <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        X = (<span class="number">0.5</span> * N ** (beta**<span class="number">2</span> / delta - epsilon)).ceil()</span><br><span class="line">    verbose(<span class="string">&quot;X = %s&quot;</span> % X, level=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># we could do this much faster, but this is a cheap step</span></span><br><span class="line">    <span class="comment"># compared to LLL</span></span><br><span class="line">    g = [x**j * N ** (m - i) * f**i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(m) <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(delta)]</span><br><span class="line">    g.extend([x**i * f**m <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(t)])  <span class="comment"># h</span></span><br><span class="line"></span><br><span class="line">    B = Matrix(ZZ, <span class="built_in">len</span>(g), delta * m + <span class="built_in">max</span>(delta, t))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(B.nrows()):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(g[i].degree() + <span class="number">1</span>):</span><br><span class="line">            B[i, j] = g[i][j] * X**j</span><br><span class="line"></span><br><span class="line">    B = flatter(B)</span><br><span class="line">    <span class="comment"># B = B.LLL(**kwds)</span></span><br><span class="line"></span><br><span class="line">    f = <span class="built_in">sum</span>([ZZ(B[<span class="number">0</span>, i] // X**i) * x**i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(B.ncols())])</span><br><span class="line">    R = f.roots()</span><br><span class="line"></span><br><span class="line">    ZmodN = self.base_ring()</span><br><span class="line">    roots = <span class="built_in">set</span>([ZmodN(r) <span class="keyword">for</span> r, m <span class="keyword">in</span> R <span class="keyword">if</span> <span class="built_in">abs</span>(r) &lt;= X])</span><br><span class="line">    Nbeta = N**beta</span><br><span class="line">    <span class="keyword">return</span> [root <span class="keyword">for</span> root <span class="keyword">in</span> roots <span class="keyword">if</span> N.gcd(ZZ(self(root))) &gt;= Nbeta]</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">copp_factor</span>(<span class="params">leak=<span class="number">6</span></span>):</span><br><span class="line">    <span class="keyword">for</span> hb <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span> &lt;&lt; leak):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;copp&quot;</span>, hb, <span class="built_in">int</span>(time.time()))</span><br><span class="line">        shift = <span class="number">512</span> - leak</span><br><span class="line">        P = Zmod(n)[<span class="string">&quot;x&quot;</span>]</span><br><span class="line">        x = P.gen()</span><br><span class="line">        f = p_lb + (hb &lt;&lt; shift) + x*<span class="number">2</span>**<span class="number">256</span></span><br><span class="line">        f = f.monic()</span><br><span class="line">        X = <span class="number">2</span> ** (<span class="number">256</span> - leak)</span><br><span class="line">        beta = <span class="number">0.499</span></span><br><span class="line">        eps = <span class="number">0.01</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            rs = small_roots(f, X=X, beta=beta, epsilon=eps)</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(rs):</span><br><span class="line">                <span class="keyword">return</span> p_lb + (hb &lt;&lt; shift) + <span class="built_in">int</span>(rs[<span class="number">0</span>])*<span class="number">2</span>**<span class="number">256</span></span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;flatter blowed up...&quot;</span>)</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"><span class="built_in">print</span>(copp_factor())</span><br></pre></td></tr></table></figure>
-<p>一切看起来都很美好，但是这段代码在Mac上跑的时候就会出问题🤧</p>
-<figure>
-<img  
-                       lazyload
-                       alt="image"
-                       data-src="../assets/7a7c470c3b161e943333fdbd40042af4.png"
-                       
-alt="blow up~" 
-                 >
-<figcaption aria-hidden="true">blow up~</figcaption>
-</figure>
-<p>当然最终不影响解出原题，不过flatter跑飞这件事还是有点奇怪。报错也是最经典的segfault，怎么办呢？</p>
-<h2 id="着手复现">着手复现</h2>
-<p>运行以上exp就会知道这玩意儿不能很稳定地复现，每次都有概率在不同的轮次炸掉。换个环境看看呢？如果是在Linux上，就不会有任何问题：</p>
-<figure>
-<img  
-                       lazyload
-                       alt="image"
-                       data-src="../assets/image-25.png"
-                        alt="Arch伟大，无需多言" 
-                 >
-<figcaption aria-hidden="true">Arch伟大，无需多言</figcaption>
-</figure>
-<p>如果在Mac上跑个x86_64的Linux
-docker，里面再跑flatter，同样也没有任何问题。</p>
-<p>选择炸掉的某一轮打印出来相应的矩阵，手动输入flatter看看：</p>
-<figure>
-<img  
-                       lazyload
-                       alt="image"
-                       data-src="../assets/e38df5e3a7ce1bb502034526af0ec2e5.png"
-                       
-alt="很是不幸" 
-                 >
-<figcaption aria-hidden="true">很是不幸</figcaption>
-</figure>
-<p>甚至立马就炸了🤣多执行几次会发现炸掉的概率在1/10左右</p>
-<p>总之，姑且是有个最小可复现的输入了。</p>
-<h2 id="尝试解决">尝试解决</h2>
-<h3 id="sleep1">sleep(1)😆</h3>
-<p>我的第一直觉是，这玩意儿大概率跟系统进程/线程调度有关系，并且八成是多线程的锅。最简单的降低并发的办法就是每次调用flatter之后sleep一下。一轮flatter大概要十几秒，我选择每轮调用后sleep(1)。不幸的是，这样还是会随机地炸掉。</p>
-<h3 id="ascan">AScan😊</h3>
-<p>至少我们得搞清segfault的时候发生了什么。编译flatter时加入<code>-fsanitize=address -g</code>选项：</p>
-<figure>
-<img  
-                       lazyload
-                       alt="image"
-                       data-src="../assets/74f2299fe3266e1203a8e36a55962f53.png"
-                       
-alt="log一下" 
-                 >
-<figcaption aria-hidden="true">log一下</figcaption>
-</figure>
-<p>八九不离十就是线程并发的问题了。在<a
-target="_blank" rel="noopener" href="https://lov2.netlify.app"><span class="citation"
-data-cites="lov3">@lov3</span></a>师傅的帮助下，去源码里找到了对应的多线程实现，简单加了个互斥锁：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">diff --git a/src/problems/lattice_reduction/fplll_impl.cpp b/src/problems/lattice_reduction/fplll_impl.cpp</span><br><span class="line">index 237379b..aaa6e9c 100644</span><br><span class="line">--- a/src/problems/lattice_reduction/fplll_impl.cpp</span><br><span class="line">+++ b/src/problems/lattice_reduction/fplll_impl.cpp</span><br><span class="line">@@ -6,7 +6,7 @@ namespace flatter &#123;</span><br><span class="line"> namespace LatticeReductionImpl &#123;</span><br><span class="line"> </span><br><span class="line"> const std::string FPLLL::impl_name() &#123;return &quot;FPLLL&quot;;&#125;</span><br><span class="line">-</span><br><span class="line">+static std::mutex fplll_execution_mutex;</span><br><span class="line"> FPLLL::FPLLL(const LatticeReductionParams&amp; p, const ComputationContext&amp; cc) :</span><br><span class="line">     Base(p, cc)</span><br><span class="line"> &#123;</span><br><span class="line">@@ -65,7 +65,7 @@ void FPLLL::solve() &#123;</span><br><span class="line">     fplll::ZZ_mat&lt;mpz_t&gt; fplll_U;</span><br><span class="line">     fplll_U.gen_identity(n);</span><br><span class="line"> </span><br><span class="line">-</span><br><span class="line">+    std::lock_guard&lt;std::mutex&gt; lock(fplll_execution_mutex);</span><br><span class="line">     // Because of a bug in FPLLL, our code segfaults if parallelized enumeration</span><br><span class="line">     // is concurrently performed on more than one lattice. The following line</span><br><span class="line">     // disables parallelized enumeration.</span><br></pre></td></tr></table></figure>
-<p>重新编译运行，问题解决。</p>
-<h2 id="成因">成因?</h2>
-<p>总之先提了个<a class="link" 
- target="_blank" rel="noopener" href="https://github.com/keeganryan/flatter/issues/25" >issue<i class="fas fa-external-link-alt"></i></a>，待续...</p>
-<p>lov3师傅猜测是fplll库并非线程安全的，但是我总觉得不止于此。毕竟，这个问题只在我的Mac上出现，而在我手头的Linux设备上都是正常的。除了操作系统的区别，还有一个最重要的区别是，Macbook的CPU是大小核设计，而我现有的Linux设备都是全大核的(如果是Mac上跑的Linux
-docker，其模拟出来的CPU在用户态程序眼里似乎也是全核相同的)。当然还有x86_64和ARM的架构区别，不过这就更难调试了。</p>
-<p>如果是fplll/flatter自身的问题而非操作系统调度的问题，如何解释该问题是Mac独占的呢？进一步来说，应该搞一个x86
-macOS以严格控制变量测试...</p>
-<p>以及，log里记录的thread 12
-crashed，这个线程是否就是跑在小核上的呢？</p>
-<hr />
+<p>Web、Crypto和Reverse的做题进度则差了更多，Crypto的两道简单题在开赛2h后依然0解(我在开赛1h后直接放出了其中一题的解题脚本，但是甚至没人愿意运行一下QAQ)，Web的签到题在开赛1h后才有1解，Reverse的签到题更是在开赛2.5h+3条提示的加持下才有1解。</p>
+<p>当然，Web的情况多多少少有所预料，因为那个签到题的js代码大部分是混淆过的，只有与flag相关的两三个函数是没有混淆的。面对一大坨混淆代码还要意识到其中一部分代码没有混淆，这对于选手来说并不是很trivial。Reverse则最为抽象，明明给出的是Verilog源码，但很多选手看到sv文件还是选择IDA打开😥</p>
 <blockquote>
-<p>Update 2025/05/07 19:53</p>
+<p>这一点不是很合理，你深的计组充斥着大量Vivado和Verilog。而大二已经学了计组这门课，不应该意识不到sv文件是Verilog源码</p>
 </blockquote>
-<p>在R5 5600上用<a class="link"   target="_blank" rel="noopener" href="https://github.com/dockur/macos" >docker
-macos<i class="fas fa-external-link-alt"></i></a>搭建了个macOS Ventura 13.7.5
-x86_64，测试依然会出现segfault。由此可以排除CPU架构的问题。</p>
-<h2 id="后日谈">后日谈</h2>
-<p>至少现在我在Mac上还是用着简单的加锁版flatter(虽然这玩意儿很大程度上影响了flatter的性能)。</p>
-<p>顺便，在一番测试后发现，flatter的并行线程数没必要开的很大——在R5
-5600x上用<code>export OMP_NUM_THREADS=8</code>控制在8线程，flatter的速度和12线程满载几乎完全一致；而在大小核设计的M芯片上，限制线程数则更为必要。M芯片的大小核设计，会导致flatter全核满载的速度受到小核拖累，反倒不如限制线程数保证全都跑在大核上来得更快。</p>
+<p>至于Crypto，只能说配置sage环境难倒了太多人。即使课上和赛前都强调了sage环境和相应的Python包如何安装，但是赛场上还是有相当大一部分人缺环境。从做题情况来看，赛前对选手初等数论水平的估计也太过乐观了。并且，赛后我才发现Crypto的另一道简单题其实可以被LLM秒掉...</p>
+<blockquote>
+<p>这意味着很多人甚至压根没看题，或者不太懂得充分利用AI工具</p>
+</blockquote>
+<p>我们赛前不是没有强调过AI工具的重要性，并且也是鼓励使用AI辅助的，不过诚如pid所说：</p>
+<blockquote>
+<p>AI 就像杀人书 （一件 LOL
+的装备，属性随击杀数增强），或者有几个版本的阿卡丽 （LOL
+中的一个可操控角色，在高手手中很强，新手手中又很弱），需要使用者自身具备足够的基础才能激发出更大的效用。</p>
+</blockquote>
+<p>不过这也不是问题。做题情况差，放提示就好了。并且得益于互动性题目足够多(井字棋，LLM，MineCraft，OSINT...)，我觉得对后段选手来说体验也不会太坐牢。从提交记录来看，选手的积极性还是很不错的。大言不惭地说，我们成功保住了做题体验这一下限，所以这场比赛至少成功了一半。</p>
+<p>随着提示的陆续放出+top2队伍猛猛发力，到了午间，赛前预计的有解的题目已经全部被打通。</p>
+<h3 id="下午">下午</h3>
+<p>简单题被扫荡完毕后，下午选手们的做题速度明显放缓不少。13:00左右就已经有队伍开始申请实操题，想来是传统题目已然难以推进。这也正合我们心意，毕竟都线下赛了，不试试有意思的实景渗透怎么行呢？</p>
+<blockquote>
+<p>更何况两道实景题都是双倍于普通题目的分数</p>
+</blockquote>
+<p>一点小失误是，这两道实景题对macOS都非常不友好，特别是永恒之蓝，几乎是Linux
+only的玩具(metasploit yes!)，这就苦了一些Mac+Windows做题的队伍😣</p>
+<p>这个失误也直接导致一些队伍放弃了做永恒之蓝的念头，最后只有一支队伍打通。另一道实景题则相对更有人气一些，最终有四支队伍都进行了尝试，并且有两支队伍成功打通🥰</p>
+<p>rank 1的队伍打通了所有实景题，符合预期。</p>
+<blockquote>
+<p>不如说就是因为打通了两道实景题所以才是rank 1?</p>
+</blockquote>
+<blockquote>
+<p>还有一个小插曲。我们的永恒之蓝靶机是32位的，题面里也说明了这一点。而上台挑战的队伍无一例外都先尝试了64位的payload，碰了一鼻子灰2333</p>
+</blockquote>
+<p>打通实景题后，排名几乎稳定，直到比赛结束。</p>
+<p>与此同时，GZCTF v1.1.3
+在8.5h的比赛过程中稳定运行，没有再出现之前的报错。安稳的完赛，让我心里最大的一块石头落了地。</p>
+<h2 id="赛后小结">赛后小结</h2>
+<p>Wp还没有上交完成，所以这里只是以赛中观察汇就的管中窥豹之辞。</p>
+<ul>
+<li>因为一些原因，Pwn事实上几乎是零解，不过具体原因请允许我讳莫如深，总之很不乐观就对了</li>
+<li>Reverse的签到题难住了所有人，不过在层层提示下还是有4个解；中等题爆零，难题则有一题有1解，可喜可贺</li>
+<li>Crypto的简单题在一题给了题解一题AI可秒的情况下各自3解，中等题1解，难题爆零，远低于预期</li>
+<li>Web的简单题一个6解，一个1解，中等题1解，难题爆零，比预期略差</li>
+<li>Misc最难题在有提示的情况下2解，符合预期</li>
+<li>AI简单题成为了本场比赛事实上的签到题</li>
+<li>OSINT比预想中简单，也比预想中有意思</li>
+</ul>
+<p>放一张积分趋势图：</p>
+<figure>
+<img lazyload="" alt="请允许我不打码放出队伍名" data-src="../assets/image-26.png">
+<figcaption aria-hidden="true">请允许我不打码放出队伍名</figcaption>
+</figure>
+<p>top
+2的竞争颇为激烈，且分属两个赛道，这是我喜闻乐见的；除了管理员账号，也没有零解队伍。这次比赛，虽不能妄言成功，至少也不算失败。</p>
+<p>办赛是为了交流学习，让选手学到东西才是第一要务。基于这种考虑，Crypto方向的题解，在比赛结束后我就立刻放了出去。其他方向等wp收集完成后应该也会放出，不过那就是后话了。</p>
+<p>进一步的分析？或许我会在wp收集完之后再来更新本文吧~</p>
 
                     
                 </div>
@@ -457,11 +575,11 @@ x86_64，测试依然会出现segfault。由此可以排除CPU架构的问题。
     <div class="copyright-info-content border-box">
         <div class="copyright-info-top border-box">
             <div class="copyright-post-title border-box text-ellipsis">
-                flatter里的潜在bug
+                2025 HITsz CTF 赛后记录
             </div>
 
             <div class="copyright-post-link border-box text-ellipsis">
-                7887971f.html
+                1a987f76.html
             </div>
         </div>
 
@@ -477,7 +595,7 @@ x86_64，测试依然会出现segfault。由此可以排除CPU架构的问题。
                 <div class="type">
                     发布于
                 </div>
-                <div class="content">2025-05-07 16:36</div>
+                <div class="content">2025-05-24 22:49</div>
             </div>
 
 
@@ -513,7 +631,7 @@ x86_64，测试依然会出现segfault。由此可以排除CPU架构的问题。
                             <ul class="post-tags-box border-box">
                                 
                                     <li class="tag-item border-box">
-                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/CTF/">CTF</a>
                                     </li>
                                 
                             </ul>
@@ -552,31 +670,15 @@ x86_64，测试依然会出现segfault。由此可以排除CPU架构的问题。
                 
                     <div class="post-nav border-box">
                         
-                            <div class="prev-post">
-                                <a class="prev"
-                                   rel="prev"
-                                   href="/1a987f76.html"
-                                   title="2025 HITsz CTF 赛后记录"
-                                >
-                                    <span class="left arrow-icon flex-center">
-                                        <i class="fas fa-chevron-left"></i>
-                                    </span>
-                                    <span class="title flex-center">
-                                        <span class="post-nav-title-item text-ellipsis">2025 HITsz CTF 赛后记录</span>
-                                        <span class="post-nav-item">上一篇</span>
-                                    </span>
-                                </a>
-                            </div>
-                        
                         
                             <div class="next-post">
                                 <a class="next"
                                    rel="next"
-                                   href="/84e3dc4f.html"
-                                   title="校赛平台运维杂记"
+                                   href="/7887971f.html"
+                                   title="flatter里的潜在bug"
                                 >
                                     <span class="title flex-center">
-                                        <span class="post-nav-title-item text-ellipsis">校赛平台运维杂记</span>
+                                        <span class="post-nav-title-item text-ellipsis">flatter里的潜在bug</span>
                                         <span class="post-nav-item">下一篇</span>
                                     </span>
                                     <span class="right arrow-icon flex-center">
@@ -604,7 +706,7 @@ x86_64，测试依然会出现segfault。由此可以排除CPU架构的问题。
             <div class="pc-post-toc right-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9D%80%E6%89%8B%E5%A4%8D%E7%8E%B0"><span class="nav-text">着手复现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%9D%E8%AF%95%E8%A7%A3%E5%86%B3"><span class="nav-text">尝试解决</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sleep1"><span class="nav-text">sleep(1)😆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ascan"><span class="nav-text">AScan😊</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%90%E5%9B%A0"><span class="nav-text">成因?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E6%97%A5%E8%B0%88"><span class="nav-text">后日谈</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%98%E8%B5%B7"><span class="nav-text">缘起</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%9B%E5%89%8D%E7%AD%B9%E5%A4%87"><span class="nav-text">赛前筹备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD"><span class="nav-text">基础设施</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E8%AE%BE%E7%BD%AE"><span class="nav-text">题目设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%A3%E4%BC%A0%E5%8A%A8%E5%91%98"><span class="nav-text">宣传动员</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%9B%E4%B8%AD%E6%88%98%E5%86%B5"><span class="nav-text">赛中战况</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8A%E5%8D%88"><span class="nav-text">上午</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E5%8D%88"><span class="nav-text">下午</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%9B%E5%90%8E%E5%B0%8F%E7%BB%93"><span class="nav-text">赛后小结</span></a></li></ol>
     </div>
 </div>
 
@@ -782,7 +884,7 @@ x86_64，测试依然会出现segfault。由此可以排除CPU架构的问题。
             <div class="tablet-post-toc">
                 <div class="post-toc-wrap border-box">
     <div class="post-toc border-box">
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9D%80%E6%89%8B%E5%A4%8D%E7%8E%B0"><span class="nav-text">着手复现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%9D%E8%AF%95%E8%A7%A3%E5%86%B3"><span class="nav-text">尝试解决</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sleep1"><span class="nav-text">sleep(1)😆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ascan"><span class="nav-text">AScan😊</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%90%E5%9B%A0"><span class="nav-text">成因?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E6%97%A5%E8%B0%88"><span class="nav-text">后日谈</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%98%E8%B5%B7"><span class="nav-text">缘起</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%9B%E5%89%8D%E7%AD%B9%E5%A4%87"><span class="nav-text">赛前筹备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD"><span class="nav-text">基础设施</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E8%AE%BE%E7%BD%AE"><span class="nav-text">题目设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%A3%E4%BC%A0%E5%8A%A8%E5%91%98"><span class="nav-text">宣传动员</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%9B%E4%B8%AD%E6%88%98%E5%86%B5"><span class="nav-text">赛中战况</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8A%E5%8D%88"><span class="nav-text">上午</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E5%8D%88"><span class="nav-text">下午</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%9B%E5%90%8E%E5%B0%8F%E7%BB%93"><span class="nav-text">赛后小结</span></a></li></ol>
     </div>
 </div>
 
