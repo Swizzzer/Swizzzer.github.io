@@ -1,0 +1,125 @@
+---
+import I18nKey from "@i18n/i18nKey";
+import { i18n } from "@i18n/translation";
+import type { MarkdownHeading } from "astro";
+import WidgetLayout from "./WidgetLayout.astro";
+
+interface Props {
+	headings: MarkdownHeading[];
+	class?: string;
+	style?: string;
+}
+
+const { headings, class: className, style } = Astro.props;
+const minDepth = Math.min(...headings.map((h) => h.depth));
+const maxLevel = 3;
+let heading1Count = 1;
+function removeTailingHash(text: string) {
+	return text.replace(/#*$/, "");
+}
+---
+<WidgetLayout name={i18n(I18nKey.toc)} id="toc" class={className} style={style}>
+    <div class="flex flex-col overflow-y-auto max-h-[300px] toc-container"> <!-- 添加滚动条 -->
+        {headings.filter((heading) => heading.depth < minDepth + maxLevel).map((heading) =>
+                <a href={`#${heading.slug}`} class="px-2 flex gap-2 relative transition w-full min-h-9 rounded-xl
+            hover:bg-[var(--toc-btn-hover)] active:bg-[var(--toc-btn-active)] py-2
+        ">
+                    <div class:list={["w-5 h-5 shrink-0 rounded-lg text-xs flex items-center justify-center font-bold",
+                        {
+                            "bg-[var(--toc-badge-bg)] text-[var(--btn-content)]": heading.depth == minDepth,
+                            "ml-4": heading.depth == minDepth + 1,
+                            "ml-8": heading.depth == minDepth + 2,
+                        }
+                    ]}>
+                        {heading.depth == minDepth && heading1Count++}
+                        {heading.depth == minDepth + 1 && <div class="w-2 h-2 rounded-[0.1875rem] bg-[var(--toc-badge-bg)]"></div>}
+                        {heading.depth == minDepth + 2 && <div class="w-1.5 h-1.5 rounded-sm bg-black/5 dark:bg-white/10"></div>}
+                    </div>
+                    <div class:list={["text-sm", {
+                        "text-90": heading.depth == minDepth || heading.depth == minDepth + 1,
+                        "text-70": heading.depth == minDepth + 2,
+                    }]}>{removeTailingHash(heading.text)}</div>
+                </a>
+        )}
+    </div>
+</WidgetLayout>
+
+<style>
+/* 滚动条样式 */
+.toc-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.toc-container::-webkit-scrollbar-track {
+    background: var(--scrollbar-track-bg);
+    border-radius: 10px;
+}
+
+.toc-container::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb-bg);
+    border-radius: 10px;
+}
+
+.toc-container::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover-bg);
+}
+
+/* 其他样式 */
+[data-heading-link].active {
+    @apply text-[var(--primary)] font-bold pl-3 relative;
+}
+
+[data-heading-link].active::before {
+    content: '';
+    @apply absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-4 bg-[var(--primary)] rounded-md transition;
+}
+</style>
+
+<script>
+function updateTocHighlight() {
+    const headings = Array.from(document.querySelectorAll('h1[id], h2[id], h3[id], h4[id]'));
+    const tocLinks = document.querySelectorAll('[data-heading-link]');
+    
+    const scrollPos = window.scrollY;
+    const currentHeading = headings.reduce((current, heading) => {
+        const headingTop = heading.getBoundingClientRect().top + scrollPos - 100;
+        return scrollPos >= headingTop ? heading : current;
+    }, headings[0]);
+
+    tocLinks.forEach(link => {
+        link.classList.toggle('active', currentHeading?.id === link.getAttribute('data-heading-link'));
+    });
+}
+
+// 使用防抖优化滚动事件
+let scrollTimeout;
+window.addEventListener('scroll', () => {
+    if (scrollTimeout) window.cancelAnimationFrame(scrollTimeout);
+    scrollTimeout = window.requestAnimationFrame(updateTocHighlight);
+});
+
+document.addEventListener('DOMContentLoaded', updateTocHighlight);
+
+document.querySelectorAll('[data-heading-link]').forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const headingId = link.getAttribute('data-heading-link');
+        document.getElementById(headingId)?.scrollIntoView({ behavior: 'smooth' });
+        history.pushState(null, '', `#${headingId}`);
+    });
+});
+
+// 监听主题变化并更新滚动条样式
+function updateScrollbarTheme() {
+    const isDarkMode = document.documentElement.classList.contains('dark');
+    document.documentElement.style.setProperty('--scrollbar-track-bg', isDarkMode ? '#333' : '#f1f1f1');
+    document.documentElement.style.setProperty('--scrollbar-thumb-bg', isDarkMode ? '#666' : '#888');
+    document.documentElement.style.setProperty('--scrollbar-thumb-hover-bg', isDarkMode ? '#999' : '#555');
+}
+
+// 初始化滚动条样式
+updateScrollbarTheme();
+
+// 监听主题切换事件
+window.addEventListener('themeChange', updateScrollbarTheme);
+</script>
