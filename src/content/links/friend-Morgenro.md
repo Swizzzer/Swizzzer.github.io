@@ -1,6 +1,6 @@
 ---
   name: Morgenro
   url: https://morgenro.github.io/
-  slogan: ""
+  intro: ""
   avatar: https://morgenro.github.io/img/AiHaibara1.jpg
 ---

@@ -24,7 +24,7 @@ const linksCollection = defineCollection({
 		name: z.string(),
 		url: z.string().url(),
 		avatar: z.string().url(),
-		slogan: z.string(),
+		intro: z.string(),
 	}),
 });
 export const collections = {

@@ -10,7 +10,7 @@ const allLinks = await getCollection("links");
 <MainGridLayout title={i18n(I18nKey.links)} description={i18n(I18nKey.links)}>
     <div class="prose prose-neutral dark:prose-invert max-w-none mb-8">
         <h1 class="text-[var(--text-title)]">{i18n(I18nKey.links)}</h1>
-        <p class="text-[var(--text-main)]">很高兴能与这些朋友们一同前行，他们给了我很多启发。</p>
+        <p class="text-[var(--text-main)]">很高兴能与这些朋友们一同前行，仰望你们展翅高飞的背影。</p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -37,9 +37,9 @@ const allLinks = await getCollection("links");
                         <div class="font-bold text-lg truncate text-gray-900 dark:text-gray-100">
                             {link.data.name}
                         </div>
-                        {/* 👇 关键修改点 2: Slogan */}
+                        {/* 👇 关键修改点 2: intro */}
                         <div class="text-sm truncate text-gray-600 dark:text-gray-400">
-                            {link.data.slogan}
+                            {link.data.intro}
                         </div>
                     </div>
                 </a>
