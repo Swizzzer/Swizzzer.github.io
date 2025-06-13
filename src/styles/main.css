@@ -139,7 +139,3 @@
 .collapsed {
     height: var(--collapsedHeight);
 }
-
-html {
-zoom: .9; /* Standard Property */
-}
