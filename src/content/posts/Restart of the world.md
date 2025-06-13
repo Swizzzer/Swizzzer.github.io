@@ -2,7 +2,6 @@
 title: Restart of the world
 published: 2025-06-10
 description: 'Welcome to my new blog~'
-category: 杂记
 draft: false 
 ---
 
