@@ -416,6 +416,12 @@ print("Decrypted Flag:", plaintext.decode())
 
 ```
 
+> Update: 2025.06.15
+
+:::note
+赛后实验了一下发现我这种解法很overkill，Coppersmith参数开到0.006之后即使不用爆bits也能直接出🤣而在flatter的加持下，即使beta开到这么小用时也很短
+:::
+
 ## 为什么出题人的rsa总是ez
 
 `task`
