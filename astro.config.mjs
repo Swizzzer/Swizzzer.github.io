@@ -101,7 +101,12 @@ export default defineConfig({
 			},
 		}),
 		svelte(),
-		sitemap(),
+		sitemap({
+			serialize(item) {
+				item.lastmod = new Date().toISOString();
+				return item;
+			},
+		}),
 	],
 	markdown: {
 		remarkPlugins: [
