@@ -9,16 +9,22 @@ published: 2025-02-14
 CRT一般是在已知
 
 $$x\equiv{a_1}\pmod{p_1}$$
+
 $$x\equiv{a_2}\pmod{p_2}$$
+
 $$\vdots$$
+
 $$x\equiv{a_m}\pmod{p_m}$$
+
 时用于求
+
 $$x\equiv{a}\pmod{\prod{p_i}}$$
+
 的解的方法。但是，如果已知的条件并非一一对应的$(a_i,p_i)$，而是经过了shuffle的呢？
 
 Noisy CRT就是为了解决此种情况而提出的（一次shuffle就可以看作一次noise的掺入不是吗），这一点是基于一个观察：
 
-我们在正常的CRT求解时，其实很像是在每个$\mathbb{Z}mod(N_i)$里找了一个basis，最终用这些basis去线性表示我们最终的解。具体地来说，是这么一回事：
+我们在正常的CRT求解时，其实很像是在每个$\mathbb{Z}_{mod}(N_i)$里找了一个basis，最终用这些basis去线性表示我们最终的解。具体地来说，是这么一回事：
 
 先取 $T_i$ 符合
 $$
@@ -33,19 +39,24 @@ $$
 默认情况下我们是用直接的CRT求T的，但是在noisy CRT情况下，因为经过了shuffle，所以我们需要再把$T_i$摊开一下：
 $$x\equiv \sum_{i=1}\sum_{j=1}\delta_{i,j} r_{i,j}a_i\pmod{\prod{p_i}}$$
 其中$r_{i,j}$是正常CRT下我们求出的T，$\delta$在r和a对应时取1，不对应时取0。这时我们构造格
-$$\left(\begin{array}{ccccc}
+
+$$
+\left(\begin{array}{ccccc}
 \prod{p_i} & 0 & \ldots & \ldots & 0 \\
 r_{1,1} a_1 & B & 0 & \ldots & 0 \\
 r_{1,2} a_1 & 0 & B & \ddots & \vdots \\
 \vdots & \vdots & \ddots & \ddots & 0 \\
 r_{m, m} a_n & 0 & \ldots & 0 & B
-\end{array}\right)$$
+\end{array}\right)
+$$
+
 那么$(x,\overrightarrow{\delta})$就在这个格子里,适当选取B优化我们的格子就很有可能规约出我们想要的x。
 
 > 有线性组合的地方就有格！
 
 以上的情况实际上是shuffle了以下CRT矩阵的列(并且是nx1大小的矩阵):
-$$\left(\begin{array}{ccccc}
+$$
+\left(\begin{array}{ccccc}
 N_1\bmod{p_1}&N_2\bmod{p_1}&\cdots&N_m\bmod{p_1}\\
 N_1\bmod{p_2}&N_2\bmod{p_2}&\cdots&\\
 \vdots\\
