@@ -8,6 +8,7 @@ category: 'Writeups'
 draft: false 
 
 ---
+惯例先贴队友的WP:[smileyCTF2025-DNA(reverse)](https://let.doctxing.win/#/blogs/ctfreverse002/)
 
 ## Misc
 
