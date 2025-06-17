@@ -1,5 +1,3 @@
-import fs from "node:fs";
-import path from "node:path";
 import sitemap from "@astrojs/sitemap";
 import svelte from "@astrojs/svelte";
 import tailwind from "@astrojs/tailwind";
@@ -9,7 +7,6 @@ import swup from "@swup/astro";
 import expressiveCode from "astro-expressive-code";
 import icon from "astro-icon";
 import { defineConfig } from "astro/config";
-import matter from "gray-matter";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeComponents from "rehype-components"; /* Render the custom directive content */
 import rehypeKatex from "rehype-katex";
@@ -26,6 +23,7 @@ import { GithubCardComponent } from "./src/plugins/rehype-component-github-card.
 import { parseDirectiveNode } from "./src/plugins/remark-directive-rehype.js";
 import { remarkExcerpt } from "./src/plugins/remark-excerpt.js";
 import { remarkReadingTime } from "./src/plugins/remark-reading-time.mjs";
+
 // https://astro.build/config
 export default defineConfig({
 	site: "https://eupho.me/",
@@ -104,34 +102,8 @@ export default defineConfig({
 		}),
 		svelte(),
 		sitemap({
-			async serialize(item) {
-				if (item.url.startsWith("/posts/")) {
-					try {
-						// 解析对应的 Markdown 文件路径
-						const filePath = path.join(
-							process.cwd(),
-							"src/pages",
-							`${item.url}.md`,
-						);
-						const raw = fs.readFileSync(filePath, "utf-8");
-						const { data } = matter(raw);
-
-						if (data.updated || data.lastUpdated) {
-							item.lastmod = new Date(
-								data.updated || data.lastUpdated,
-							).toISOString();
-						} else {
-							// fallback: 使用文件修改时间
-							const stats = fs.statSync(filePath);
-							item.lastmod = stats.mtime.toISOString();
-						}
-					} catch (err) {
-						console.warn(`无法为 ${item.url} 读取更新时间，使用构建时间代替`);
-						item.lastmod = new Date().toISOString();
-					}
-				} else {
-					item.lastmod = new Date().toISOString();
-				}
+			serialize(item) {
+				item.lastmod = new Date().toISOString();
 				return item;
 			},
 		}),
