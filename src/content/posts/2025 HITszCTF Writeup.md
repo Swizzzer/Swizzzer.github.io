@@ -2,7 +2,7 @@
 title: 2025 HITszCTF Writeup
 published: 2025-06-17
 image: 'assets/image-32.png'
-tags: ["Crypto", "Misc", "流密码", "格"]
+tags: ["Crypto", "Misc", "流密码", "Lattice"]
 category: 'Writeups'
 draft: false 
 lang: ''
