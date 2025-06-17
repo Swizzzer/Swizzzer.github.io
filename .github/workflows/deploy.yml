@@ -49,3 +49,4 @@ jobs:
           sitemap-location: 'https://eupho.me/sitemap-0.xml'
           key: ${{ secrets.INDEXNOW_KEY }}
           key-location: https://eupho.me/${{ secrets.INDEXNOW_KEY }}.txt
+          lastmod-required: false
