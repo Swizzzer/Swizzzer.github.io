@@ -7,7 +7,11 @@ image: "assets/image-27.png"
 description: "跟队友合力AK了Crypto、Misc、Pwn和Forensics，最终成功拿下rank #1"
 ---
 
-先贴个队友的WP:[2025 HNCTF Web方向全部题解](https://sakuraraindrop.github.io/2025/06/08/HNCTF2025/)
+队友的WP:
+
+[2025 HNCTF Web方向全部题解](https://sakuraraindrop.github.io/2025/06/08/HNCTF2025/)
+
+[2025 HNCTF Reverse - F**K](https://let.doctxing.win/#/blogs/ctfreverse001/)
 
 
 # Crypto
